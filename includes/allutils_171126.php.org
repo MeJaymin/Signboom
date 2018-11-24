@@ -2,8 +2,8 @@
 
   /************** Load Setup Data *****************/
   $Qry = "SELECT * FROM signboom_parm WHERE ID = 1"; 
-  mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
-  $result = mysqli_query( $DBConn, $Qry) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+  mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
+  $result = mysql_query($Qry, $DBConn) or die(mysql_error());
   /* just in case we can't read in the values below, have some reasonasble defaults in place */
   $setupfee = 20.0;
   $gfloorsetupfee = 75.0;
@@ -15,7 +15,7 @@
   $discountfactorb = 1.0;
   $sqfttimea = 175;
   $sqfttimeb = 750;
-  while ($row = mysqli_fetch_array($result,  MYSQLI_BOTH)) { 
+  while ($row = mysql_fetch_array($result, MYSQL_BOTH)) { 
     $setupfee = $row['setupfee'];
     $gfloorsetupfee = $row['gfloorsetupfee'];
     $packfee = $row['packagingfee'];
@@ -25,24 +25,24 @@
     $discountfactora = $row['discountfactora'];
     $discountfactorb = $row['discountfactorb'];
   } 
-  ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
+  mysql_free_result($result);
 
   /************** Get Zone Multiplier *****************/
   $Qry = sprintf("SELECT * FROM signboom_zone WHERE Zone='%s'", $defZone); 
-  mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
-  $result = mysqli_query( $DBConn, $Qry) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+  mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
+  $result = mysql_query($Qry, $DBConn) or die(mysql_error());
   $defZoneAdd = 0;
-  while ($row = mysqli_fetch_array($result,  MYSQLI_BOTH)) {;
+  while ($row = mysql_fetch_array($result, MYSQL_BOTH)) {;
     $defZoneAdd = $row['XTRA'];
   }
-  ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
+  mysql_free_result($result);
 
   /************** Load product categories *****************/
   $Qry = "SELECT * FROM signboom_category WHERE enabled = 1 ORDER BY displayorder"; 
-  mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
-  $result = mysqli_query( $DBConn, $Qry) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+  mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
+  $result = mysql_query($Qry, $DBConn) or die(mysql_error());
   $i = 0;
-  while ($row = mysqli_fetch_array($result,  MYSQLI_BOTH)) { 
+  while ($row = mysql_fetch_array($result, MYSQL_BOTH)) { 
     $i++;
     $fcategory[$i]->ID = $row['ID'];
     $fcategory[$i]->code = $row['code'];
@@ -50,16 +50,16 @@
     $fcategory[$i]->description = $row['description'];
     $fcategory[$i]->printable = $row['printable'];
   } 
-  ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
+  mysql_free_result($result);
 
   /************** Load all products *****************/
   $i = 0;
   $Qry = "SELECT * FROM signboom_allproducts WHERE Enabled = 1 OR Enabled = 2 ORDER BY Category, SortGroup, SortOrder"; 
-  mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
-  $result = mysqli_query( $DBConn, $Qry) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+  mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
+  $result = mysql_query($Qry, $DBConn) or die(mysql_error());
   $first_product = true;
   $product_group = '';
-  while ($row = mysqli_fetch_array($result,  MYSQLI_BOTH)) { 
+  while ($row = mysql_fetch_array($result, MYSQL_BOTH)) { 
 
     // initialization
     if ($first_product)
@@ -100,27 +100,27 @@
     $fproduct[$i]->batch_day = $row['BatchDay'];
 
   } 
-  ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
+  mysql_free_result($result);
 
   /************** Load finishing options categories *****************/
   $Qry = "SELECT * FROM signboom_finishing_sets ORDER BY Id";
-  mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
-  $result = mysqli_query( $DBConn, $Qry) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+  mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
+  $result = mysql_query($Qry, $DBConn) or die(mysql_error());
   $i = 0;
-  while ($row = mysqli_fetch_array($result,  MYSQLI_BOTH)) { 
+  while ($row = mysql_fetch_array($result, MYSQL_BOTH)) { 
     $i++;
     $foptioncategory[$i]->id = $row['Id'];
     $foptioncategory[$i]->code = $row['Code'];
     $foptioncategory[$i]->name = $row['Name'];
   } 
-  ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
+  mysql_free_result($result);
 
   /************** Load Finishing Options *****************/
   $Qry = "SELECT * FROM signboom_finishing ORDER BY Category, SortGroup, SortOrder"; 
-  mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
-  $result = mysqli_query( $DBConn, $Qry) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+  mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
+  $result = mysql_query($Qry, $DBConn) or die(mysql_error());
   $i = 0;
-  while ($row = mysqli_fetch_array($result,  MYSQLI_BOTH)) { 
+  while ($row = mysql_fetch_array($result, MYSQL_BOTH)) { 
     $i++;
     $ffinishingoption[$i]->id = $row['Id'];
     $ffinishingoption[$i]->category = $row['Category'];
@@ -140,23 +140,23 @@
     $ffinishingoption[$i]->batch_day = $row['BatchDay'];
     $ffinishingoption[$i]->laminate_product_code = $row['LaminateProductCode'];
   } 
-  ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
+  mysql_free_result($result);
 
   /************** Load Product vs Finishing Options Matrix *****************/
   /* Value 2 means this is a default finishing option for that product. */
   /* Value 1 means this is an allowed finishing option for that product. */
   $Qry = "SELECT signboom_product_finishing.Id as Id, signboom_product_finishing.ProductCode as ProductCode, signboom_product_finishing.FinishingOptionCode as FinishingOptionCode, signboom_product_finishing.Value as Value, signboom_finishing.SortOrder as SortOrder FROM signboom_product_finishing, signboom_finishing WHERE signboom_product_finishing.FinishingOptionCode = signboom_finishing.Code ORDER BY SortOrder"; 
-  mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
-  $result = mysqli_query( $DBConn, $Qry) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+  mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
+  $result = mysql_query($Qry, $DBConn) or die(mysql_error());
   $i = 0;
-  while ($row = mysqli_fetch_array($result,  MYSQLI_BOTH)) { 
+  while ($row = mysql_fetch_array($result, MYSQL_BOTH)) { 
     $i++;
     $fproductoption[$i]->id = $row['Id'];
     $fproductoption[$i]->product_code = $row['ProductCode'];
     $fproductoption[$i]->finishing_option_code = $row['FinishingOptionCode'];
     $fproductoption[$i]->value = $row['Value'];
   } 
-  ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
+  mysql_free_result($result);
 
 
   /************** Load category selector *****************/

@@ -3,9 +3,9 @@
   // Load Customer Data
   $loginUsername = $_SESSION['MM_Username'];
   $Qry = sprintf("SELECT * FROM signboom_user WHERE email='%s'",  get_magic_quotes_gpc() ? $loginUsername : addslashes($loginUsername)); 
-  mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
-  $result = mysqli_query( $DBConn, $Qry) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
-  $row = mysqli_fetch_array($result,  MYSQLI_BOTH);
+  mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
+  $result = mysql_query($Qry, $DBConn) or die(mysql_error());
+  $row = mysql_fetch_array($result, MYSQL_BOTH);
   $acctID  =  $row['ID'];
   $acctname =  $row['AcctName'];
   $acctcompany =  $row['company'];
@@ -16,26 +16,26 @@
   $acctzip =  $row['postalzip'];
   $acctpst =  $row['pstnum'];
   $acctdct =  $row['dct'];
-  ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
+  mysql_free_result($result);
 
   // Load default Freight Charges & Zone Info
   $Qry = sprintf("SELECT * FROM signboom_rates WHERE City='%s' and Province='%s'", $row['city'], $row['provstate']); 
-  mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
-  $result = mysqli_query( $DBConn, $Qry) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+  mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
+  $result = mysql_query($Qry, $DBConn) or die(mysql_error());
   $defFreightCharge = 0;
   $defZone = "";
-  while ($row = mysqli_fetch_array($result,  MYSQLI_BOTH)) {;
+  while ($row = mysql_fetch_array($result, MYSQL_BOTH)) {;
     $defFreightCharge = $row['Charge'];
     $defZone = $row['Zone'];
   }
-  ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
+  mysql_free_result($result);
   
   // Load Customer Address List
   $Qry = sprintf("SELECT * FROM signboom_shipto WHERE acctid=".$acctID); 
-  mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
-  $result = mysqli_query( $DBConn, $Qry) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+  mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
+  $result = mysql_query($Qry, $DBConn) or die(mysql_error());
   $i = 0;
-  while ($row = mysqli_fetch_array($result,  MYSQLI_BOTH)) { 
+  while ($row = mysql_fetch_array($result, MYSQL_BOTH)) { 
     $i++;
     $shipto[$i]->ID = $row['ID'];
     $shipto[$i]->name = $row['name'];
@@ -45,32 +45,32 @@
     $shipto[$i]->zip = $row['postalzip'];
     $shipto[$i]->country = $row['country'];
   } 
-  ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
+  mysql_free_result($result);
 
   $Qry = 'SELECT * FROM signboom_discount WHERE Enabled = 1'; 
-  mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
-  $result = mysqli_query( $DBConn, $Qry) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+  mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
+  $result = mysql_query($Qry, $DBConn) or die(mysql_error());
   $i = 0;
-  while ($row = mysqli_fetch_array($result,  MYSQLI_BOTH)) { 
+  while ($row = mysql_fetch_array($result, MYSQL_BOTH)) { 
     $i++;
     $discount[$i]->ID = $row['ID'];
     $discount[$i]->Desc = $row['Desc'];
     $discount[$i]->Footage = $row['Footage'];
     $discount[$i]->Dct = $row['Dct'];
   } 
-  ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
+  mysql_free_result($result);
 
   // Load Holidays
   $today = date("Y-m-d"); 
   $Qry = "SELECT * FROM signboom_holiday WHERE holiday >='".$today."'"; 
-  mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
-  $result = mysqli_query( $DBConn, $Qry) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+  mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
+  $result = mysql_query($Qry, $DBConn) or die(mysql_error());
   $i = 0;
-  while ($row = mysqli_fetch_array($result,  MYSQLI_BOTH)) { 
+  while ($row = mysql_fetch_array($result, MYSQL_BOTH)) { 
     $i++;
     $holiday[$i] = $row['holiday'];
   } 
-  ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
+  mysql_free_result($result);
 
   // Get full province name from two digit code
   function GetProv($prov, $arrProvState) {

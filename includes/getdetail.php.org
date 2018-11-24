@@ -7,8 +7,8 @@ function getOptionName($option_code) {
     if (strlen($option_code) == 0) return $option_name;
 
     $query_option = "SELECT OptionName FROM signboom_finishing WHERE Code = '$option_code'";
-    $result_option = mysqli_query( $DBConn, $query_option) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
-    $row_option = mysqli_fetch_array($result_option,  MYSQLI_BOTH);
+    $result_option = mysql_query($query_option, $DBConn) or die(mysql_error());
+    $row_option = mysql_fetch_array($result_option, MYSQL_BOTH);
     $option_name = $row_option['OptionName'] . ", ";
     return $option_name;
   }
@@ -18,8 +18,8 @@ function getOrderDetails($the_order_id, &$detail)
   global $DBConn;
 
   $Qry = "SELECT * FROM signboom_linedetail WHERE orderid = $the_order_id ORDER BY product";
-  $rsdetail = mysqli_query( $DBConn, $Qry) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
-  $rowdtl = mysqli_fetch_assoc($rsdetail);
+  $rsdetail = mysql_query($Qry, $DBConn) or die(mysql_error());
+  $rowdtl = mysql_fetch_assoc($rsdetail);
   $i = 0;
   do {
     $i++;
@@ -60,6 +60,6 @@ function getOrderDetails($the_order_id, &$detail)
     $detail[$i]->wastearea = $rowdtl['wastearea'];
     $detail[$i]->wastecost = $rowdtl['wastecost'];
   }
-  while ($rowdtl = mysqli_fetch_assoc($rsdetail));
+  while ($rowdtl = mysql_fetch_assoc($rsdetail));
 }
 ?>

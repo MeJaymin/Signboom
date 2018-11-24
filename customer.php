@@ -5,6 +5,7 @@
   setcookie("userid", $_SESSION['MM_Username'], time() + (3600 * 24 * 60)); 
   require_once( "includes/utils.php" );
   require_once( "includes/inc-signboom.php" );
+  require_once('helpers/db_helper.php');
 
 ?>
 
@@ -92,38 +93,38 @@
 	//LoadInitalCustomerData();
 
     $RS__query=sprintf("SELECT * FROM signboom_user WHERE email='%s'",  get_magic_quotes_gpc() ? $loginUsername : addslashes($loginUsername)); 
-    mysql_select_db($database_DBConn, $DBConn);
-    $RS = mysql_query($RS__query, $DBConn) or die(mysql_error());
-    $FoundUser = !mysql_num_rows($RS);
+    mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+     $RS = mysqli_query( $DBConn, $RS__query) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+    $FoundUser = !mysqli_num_rows($RS);
       if ($FoundUser) {
       header("Location: ".$MM_redirectLoginFailed );
       exit();
     }
-    $userLevel = mysql_result($RS,0,'userLevel');
-    $acctID=mysql_result($RS,0,'ID');
-    $firstName=mysql_result($RS,0,'firstName');
-    $lastName=mysql_result($RS,0,'lastName');
-    $email=mysql_result($RS,0,'email');
-    $company=mysql_result($RS,0,'company');
-    $AcctName=mysql_result($RS,0,'AcctName');
-    $country=mysql_result($RS,0,'country');
-    $url=mysql_result($RS,0,'url');
-    $address=mysql_result($RS,0,'address');
-    $provstate=mysql_result($RS,0,'provstate');
-    $city=mysql_result($RS,0,'city');
-    $phone1=mysql_result($RS,0,'phone1');
-    $phone2=mysql_result($RS,0,'phone2');
-    $htmlmail=mysql_result($RS,0,'htmlmail');
-    $defcourier=mysql_result($RS,0,'defcourier');
-    $courieracct=mysql_result($RS,0,'courieracct');
-    $postalzip=mysql_result($RS,0,'postalzip');
-    $hintq=mysql_result($RS,0,'hintq');
-    $hinta=mysql_result($RS,0,'hinta');
-    $dct=mysql_result($RS,0,'dct');
-    $pstnum=mysql_result($RS,0,'pstnum');
-    $userName=mysql_result($RS,0,'userName');
-    $acctDisable=mysql_result($RS,0,'acctDisable');
-    $htmlmail=mysql_result($RS,0,'htmlmail');
+    $userLevel = mysqli_result($RS, 0, 'userLevel');
+    $acctID=mysqli_result($RS, 0, 'ID');
+    $firstName=mysqli_result($RS, 0, 'firstName');
+    $lastName=mysqli_result($RS, 0, 'lastName');
+    $email=mysqli_result($RS, 0, 'email');
+    $company=mysqli_result($RS, 0, 'company');
+    $AcctName=mysqli_result($RS, 0, 'AcctName');
+    $country=mysqli_result($RS, 0, 'country');
+    $url=mysqli_result($RS, 0, 'url');
+    $address=mysqli_result($RS, 0, 'address');
+    $provstate=mysqli_result($RS, 0, 'provstate');
+    $city=mysqli_result($RS, 0, 'city');
+    $phone1=mysqli_result($RS, 0, 'phone1');
+    $phone2=mysqli_result($RS, 0, 'phone2');
+    $htmlmail=mysqli_result($RS, 0, 'htmlmail');
+    $defcourier=mysqli_result($RS, 0, 'defcourier');
+    $courieracct=mysqli_result($RS, 0, 'courieracct');
+    $postalzip=mysqli_result($RS, 0, 'postalzip');
+    $hintq=mysqli_result($RS, 0, 'hintq');
+    $hinta=mysqli_result($RS, 0, 'hinta');
+    $dct=mysqli_result($RS, 0, 'dct');
+    $pstnum=mysqli_result($RS, 0, 'pstnum');
+    $userName=mysqli_result($RS, 0, 'userName');
+    $acctDisable=mysqli_result($RS, 0, 'acctDisable');
+    $htmlmail=mysqli_result($RS, 0, 'htmlmail');
     
     $shipID = 0;
     $shipName = "";
@@ -142,8 +143,8 @@
 //  }
 
   $Qry = sprintf("SELECT * FROM signboom_shipto WHERE acctid=".$acctID); 
-  mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
-  $result = mysql_query($Qry, $DBConn) or die(mysql_error());
+  mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+  $result = mysqli_query( $DBConn, $Qry) or die(mysqli_error($GLOBALS["___mysqli_ston"])); 
   
   $i = 0;
   $shipto[$i]->ID = 0;
@@ -153,7 +154,7 @@
   $shipto[$i]->state = "";
   $shipto[$i]->zip = "";
   $shipto[$i]->country = "";
-  while ($row = mysql_fetch_array($result, MYSQL_BOTH)) { 
+   while ($row = mysqli_fetch_array($result,  MYSQLI_BOTH)) {
     $i++;
     $shipto[$i]->ID = $row['ID'];
     $shipto[$i]->name = $row['name'];
@@ -163,7 +164,7 @@
     $shipto[$i]->zip = $row['postalzip'];
     $shipto[$i]->country = $row['country'];
   } 
-  mysql_free_result($result);
+   ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false); 
 
   /*
   require_once( "includes/inc-mysql.php" );

@@ -1,4 +1,4 @@
-<?php
+<?
   /* checkEmail( email address )
     RETURNS:
     0 - success

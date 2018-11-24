@@ -1,7 +1,7 @@
-<?php
+<?
 
-  define( "GLOBAL_DB_NAME", "signboom_v1p5");
-  define( "GLOBAL_COMPANY_NAME", "Signboom" );
+  define( GLOBAL_DB_NAME, "signboom_v1p5");
+  define( GLOBAL_COMPANY_NAME, "Signboom" );
 
   $userLevels=array(
     "0"=>"- Select Access Level -",
@@ -178,7 +178,6 @@
 // MAIL CONFIG
 ///////////////////////////////////////
   $global_sender="signboom";
-  $global_welcome_email_footer="";
   // Don't think global_admin_email is used anywhere.  Set it to my email to test.  Alison.
   $global_admin_email="usablewebdesigns@yahoo.com";
   $global_welcome_email_subject="Activate Your New Signboom Account";

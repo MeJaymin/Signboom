@@ -2,39 +2,39 @@
 	require_once('Connections/DBConn.php');
 
 	$Qry = sprintf("SELECT * FROM signboom_rates WHERE City='%s' and Province='%s'", $_REQUEST['city'], $_REQUEST['st']); 
-	mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
-  	$result = mysqli_query( $DBConn, $Qry) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+	mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
+  	$result = mysql_query($Qry, $DBConn) or die(mysql_error());
 	$Charge = 0;
 	$Zone = "";
-	while ($row = mysqli_fetch_array($result,  MYSQLI_BOTH)) {
+	while ($row = mysql_fetch_array($result, MYSQL_BOTH)) {
 		$Charge = $row['Charge'];
 		$Zone = $row['Zone'];
 	}
-	((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
+	mysql_free_result($result);
 // Get Zone Multiplier
 	$Qry = sprintf("SELECT * FROM signboom_zone WHERE Zone='%s'", $Zone); 
-	mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
-  	$result = mysqli_query( $DBConn, $Qry) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+	mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
+  	$result = mysql_query($Qry, $DBConn) or die(mysql_error());
 	$defZoneAdd = 0;
-	while ($row = mysqli_fetch_array($result,  MYSQLI_BOTH)) {;
+	while ($row = mysql_fetch_array($result, MYSQL_BOTH)) {;
 		$defZoneAdd = $row['XTRA'];
 	}
-	((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
+	mysql_free_result($result);
 
 // If nothing is found, load up list of cities
    	if (($Charge == 0) && ($_REQUEST['newcust'])) {
 		$Qry = sprintf("SELECT * FROM signboom_rates WHERE Province='%s' ORDER BY City", $_REQUEST['st']); 
-		mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
-	  	$result = mysqli_query( $DBConn, $Qry) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+		mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
+	  	$result = mysql_query($Qry, $DBConn) or die(mysql_error());
 		//$Cities[0] = null;
 		$Zone = "";
 		$i = 0;
-		while ($row = mysqli_fetch_array($result,  MYSQLI_BOTH)) {
+		while ($row = mysql_fetch_array($result, MYSQL_BOTH)) {
 			$Cities[$i] = $row['City'];
 			$i++;
 			//$Cities[$i]->Charge = $row['Charge'];
 		}
-		((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
+		mysql_free_result($result);
 	}
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">

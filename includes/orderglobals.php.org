@@ -1,4 +1,4 @@
-<?php
+<?
 	global $HTTP_POST_VARS;
 	global $database_DBConn;
 	global $DBConn;
