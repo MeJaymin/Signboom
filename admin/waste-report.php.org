@@ -1,0 +1,121 @@
+<?php 
+  include ('authadmin.php'); 
+  include('../production/includes/date_picker.htm');
+
+  // Variables for controlling period over which we are reporting.
+  // If nothing specified, default to the current month.
+  if (isset($_GET['StartDate']) && isset($_GET['EndDate'])) {
+    $start_date = $_GET['StartDate'];
+    $end_date = $_GET['EndDate'];
+    $start_date_time = $start_date . " 00:00:00";
+    $end_date_time = $end_date . " 23:59:59";
+    if ($my_debug) echo "Period has been specified.<br>";
+  }
+  else {
+    $start_date = date("Y-m-d", mktime(0, 0, 0, date("m"),  1, date("Y"))); // 1st day of THIS month 
+    $end_date =   date("Y-m-d", mktime(0, 0, 0, date("m") + 1,  0, date("Y"))); // last day of THIS month = 0th of next month 
+    $start_date_time = date("Y-m-d H:i:s", mktime(0,   0,  0, date("m"),  1, date("Y")));  // start of start date 
+    $end_date_time =   date("Y-m-d H:i:s", mktime(23, 59, 59, date("m")+1,      0, date("Y")));  // end of end date 
+    if ($my_debug) echo "No period has been specified.<br>";
+  }
+  if ($my_debug) echo "Start Date: $start_date   End Date: $end_date<br>";
+
+$query_jobs = <<< End_Of_Query
+  (SELECT signboom_ordermast.ID AS orderid, signboom_linedetail.id AS jobid, 
+          signboom_ordermast.timecompleted AS completeddate, 
+          signboom_linedetail.product AS product, 
+          signboom_linedetail.cost AS cost, signboom_linedetail.dctcost AS discountcost,
+          signboom_linedetail.printedarea AS printedarea, signboom_linedetail.wastearea AS wastearea,
+          signboom_linedetail.wastecost AS wastecost, 
+          signboom_ordermast.refnum AS refnum, signboom_ordermast.rushtype AS rushtype
+   FROM   signboom_linedetail, signboom_ordermast 
+   WHERE (signboom_ordermast.timecompleted >= '$start_date_time') AND 
+         (signboom_ordermast.timecompleted <='$end_date_time') AND 
+         (signboom_ordermast.ID = signboom_linedetail.orderid) AND 
+         (signboom_ordermast.ordercompleted = 'yes') AND (signboom_ordermast.hidden != 'yes')
+  ) 
+  ORDER BY product ASC, orderid ASC, jobid ASC
+End_Of_Query;
+  if ($my_debug) echo "<br><br>Query: " . $query_jobs . "<br><br>";
+
+  $jobs = mysql_query($query_jobs, $DBConn) or die(mysql_error());
+  $num_jobs = mysql_num_rows($jobs);
+  if ($my_debug) echo "Number of files in results of query: $num_jobs<br>";
+
+  $total_printed_area_sqft = 0.0;
+  $total_waste_area_sqft = 0.0;
+  $total_waste_cost = 0.0;
+  $current_product_name = "";
+  $data = "";
+  $display_notes = false;
+
+  for ($i = 0; $i < $num_jobs; $i++) 
+  {
+    // Grab a file from the query results.
+    $row = mysql_fetch_assoc($jobs);
+    if ($row == FALSE) echo "Could not read file information from database.";
+    $order_id = $row['orderid'];
+    $job_id = $row['jobid'];
+    $product = $row['product'];
+    $printed_area = $row['printedarea'];
+    $waste_area = $row['wastearea'];
+    $waste_cost = $row['wastecost'];
+
+    if ($product != $current_product_name) 
+    {
+      // SPECIAL CASE - FIRST PRODUCT
+      if ($current_product_name == "")  
+      {
+        $current_product_name = $product; 
+        $product_printed_area_sqft = $printed_area;
+        $product_waste_area_sqft = $waste_area;
+        $product_waste_cost = $waste_cost;
+        $notes_for_this_product = "";
+      }
+      else
+      {
+        // PRINT OUT TOTALS FOR THIS PRODUCT AND THEN START NEW TOTALS
+        // This it a bit of a hack, but time is short right now.  To follow the controller-template model properly, 
+        // this should be an array, which is then formatted using code in the template.
+        $ratio = $product_waste_area_sqft / $product_printed_area_sqft * 100;
+        $temp = sprintf("<tr><td>%s</td><td style=\"text-align: right;\">%.0f</td><td style=\"text-align: right;\">%.0f</td><td style=\"text-align: right;\">%.0f</td><td style=\"text-align: right;\">%.2f</td><td>%s</td></tr>", $current_product_name, $product_printed_area_sqft, $product_waste_area_sqft, $ratio, $product_waste_cost, $notes_for_this_product);
+        $data .= $temp;
+        $product_printed_area_sqft = $printed_area;
+        $product_waste_area_sqft = $waste_area;
+        $product_waste_cost = $waste_cost;
+        $current_product_name = $product;
+        $notes_for_this_product = "";
+      }
+    }
+    else
+    {
+      $product_printed_area_sqft += $printed_area;
+      $product_waste_area_sqft += $waste_area;
+      $product_waste_cost += $waste_cost;
+    }
+
+    $total_printed_area_sqft += $printed_area;
+    $total_waste_area_sqft += $waste_area;
+    $total_waste_cost += $waste_cost;
+
+    if ($waste_cost == "") 
+    {
+      $temp2 = sprintf("<tr><td>%d</td><td>%d</td><td>%s</td><td style=\"text-align: right;\">%.0f</td><td style=\"text-align: right;\">%.0f</td></tr>", $order_id, $job_id, $product, $printed_area, $waste_area);
+      $notes .= $temp2;
+      $notes_for_this_product = "***";
+      $display_notes = true;
+    }
+
+  }
+
+  // SPECIAL CASE - FINAL PRODUCT 
+  $ratio = $product_waste_area_sqft / $product_printed_area_sqft * 100;
+  $temp = sprintf("<tr><td>%s</td><td style=\"text-align: right;\">%.0f</td><td style=\"text-align: right;\">%.0f</td><td style=\"text-align: right;\">%.0f</td><td style=\"text-align: right;\">%.2f</td><td>%s</td></tr>", $current_product_name, $product_printed_area_sqft, $product_waste_area_sqft, $ratio, $product_waste_cost, $notes_for_this_product);
+  $data .= $temp;
+
+  // Display the parameters
+  include ('templates/waste-report.php'); 
+  
+  // Free memory. 
+  mysql_free_result($result);
+?>

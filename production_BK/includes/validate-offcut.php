@@ -1,0 +1,48 @@
+<?php
+        if ($button_name == 'submit_create_offcut')
+        {
+          // Code populates these two variables.
+	  $date_added = date('Y-m-d');
+	  $person = $_SESSION["MM_Username"];
+	  $query_user = "SELECT AcctName FROM signboom_user WHERE email = '$person'";
+	  $result_user = mysql_query($query_user, $DBConn) or die(mysql_error());
+          $row_user  = mysql_fetch_array($result_user, MYSQL_BOTH);
+          $person_added = $row_user['AcctName'];
+        }
+        else // editing offcut information; not allowed to change date and person
+        {
+	  $date_added = mysql_real_escape_string($_POST['date_added']); 
+          $person_added = mysql_real_escape_string($_POST['person_added']);
+        }
+
+        //Read the rest of the data from what was posted.
+        $material = mysql_real_escape_string($_POST['material']);
+        $width = mysql_real_escape_string($_POST['width']);
+        $length = mysql_real_escape_string($_POST['length']);
+        $quantity = mysql_real_escape_string($_POST['quantity']);
+        $paid_for = mysql_real_escape_string($_POST['paid_for']);
+        $description = mysql_real_escape_string($_POST['description']);
+
+	if (strlen(trim($quantity)) == 0)  $quantity = '1';
+
+	// Validate posted data.
+	$valid = false;
+	if (strlen(trim($material)) == 0)
+	  echo "<script language=\"javascript\">alert(\"You must choose a Product (Media).\");</script>";
+        else if (!isPrintableProduct($material))
+	  echo "<script language=\"javascript\">alert(\"Product '$material' is not a valid product. You must enter the correct product code for a printable product.\");</script>";
+        else if (!isValidDimension($width)) 
+	  echo "<script language=\"javascript\">alert(\"Width '$width' is not valid. It must be a numeric value.\");</script>";
+	else if ($width == 0)
+	  echo "<script language=\"javascript\">alert(\"The width of the offcut cannot be zero.\");</script>";
+        else if (!isValidDimension($length)) 
+	  echo "<script language=\"javascript\">alert(\"Length '$length' is not valid. It must be a numeric value.\");</script>";
+	else if ($length == 0)
+	  echo "<script language=\"javascript\">alert(\"The length of the offcut cannot be zero.\");</script>";
+        else if (!ctype_digit($quantity)) 
+	  echo "<script language=\"javascript\">alert(\"Quantity '$quantity' is not valid. It must be an integer.\");</script>";
+        else if (($paid_for != "0") && ($paid_for != "1") && ($paid_for != ""))
+	  echo "<script language=\"javascript\">alert(\"Paid For must be either Yes or No.\");</script>";
+        else
+	  $valid = true;
+?>

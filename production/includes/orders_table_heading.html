@@ -1,0 +1,45 @@
+  <tr>
+    <td class="heading">Account Name</td>
+    <td class="heading">Id</td>
+    <td class="heading">Ordered</td>
+    <td class="heading">Ready</td>
+<?php 
+/* TO DO */
+if ($order_page == "LATES") { 
+    echo '<td class="heading">Completed Date</td>';
+}
+?>
+    <td class="heading">Ref Num</td>
+    <td class="heading">Notes</td>
+    <td class="heading">Ship</td>
+    <td class="heading">City</td>
+    <?php 
+    if ($queue == 'Pack') 
+    {
+      echo ' <td class="heading">Packed</td>';
+      $span = 9;
+    }
+    else if ($queue == 'Ready') 
+    {
+      echo ' <td class="heading">Confirmed</td>';
+      $span = 9;
+    }
+    else if ($queue == 'Invoice') 
+    {
+      echo ' <td class="heading">Invoiced</td>';
+      $span = 9;
+    }
+    else if ($queue == 'Pending') 
+    {
+      echo ' <td class="heading">Queue</td>';
+      $span = 9;
+    }
+    else
+    {
+      $span = 8;
+    }
+    ?>
+  </tr>
+  <tr>
+    <td colspan="<?php echo $span; ?>" style="background-color: #ffffff;"><hr></td>
+  </tr>

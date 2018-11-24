@@ -1,0 +1,396 @@
+  body {
+    font-family: 'Muli', Decker, 'Century Gothic', Arial, sans-serif;
+    font-size: 14pt;
+    font-weight: 300;
+  }
+  table.withborder {
+    border: solid 1px #CCCCCC;
+    margin: 0px auto;
+    border-collapse: collapse;
+    background-color: #FFFFFF;
+  }
+  table.withborder tr {
+    border: solid 0px #FFFFFF;
+  }
+  table.withborder td {
+    border: solid 0px #FFFFFF;
+    text-align: center;
+  }
+  table.withborder td a {
+    color: #0000FF;
+  }
+  table.withborder td a.red {
+    color: #FF0000;
+  }
+  .table_title {
+    color: #FFFFFF;
+    background-color: #777777;
+    text-transform: uppercase;
+    text-align: center;
+  }
+  table tr td.heading {
+    text-align: center;
+  }
+  table tr td.heading_grey {
+    background-color: #DDDDDD;
+    text-align: center;
+  }
+  table tr td.grey_col {
+    background-color: #DDDDDD;
+    text-align: center;
+  }
+  .lineitem_std {
+    text-align: center;
+  }
+  .lineitem_rush {
+    color: #ff8800;
+    text-align: center;
+  }
+  .lineitem_hot {
+    color: #FF0000;
+    text-align: center;
+  }
+  #page {
+    width: 960px;
+    margin: 10px auto;
+  }
+  #page_wide {
+    width: 1100px;
+    margin: 10px auto;
+  }
+  #logo {
+    padding-top: 15px;
+    float: left;
+  }
+  #banner_image {
+    float: right;
+  }
+  #cheat_sheet {
+    float: right;
+    margin-left: 30px;
+    width: 470px;
+    width: 600px;
+    border: solid 1px #999999;
+  }
+  #cheat_sheet div#heading {
+    color: #ffffff;
+    background-color: #e42e25; 
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  #cheat_sheet div#summary {
+    padding: 0 20px 20px 20px;
+  }
+  #browser_window {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%; 
+    height: 100%; 
+    z-index: 100; 
+    background-color: #000000;
+    filter: alpha(opacity=80);
+    -moz-opacity:0.8;
+    opacity: 0.8;
+  }
+  div.drop_box {
+    float: left;
+    width: 200px;
+    border: solid 1px #777777;
+    margin-left: 20px;
+    margin-bottom: 20px;
+  }
+  div.first {
+    margin-left: 0px;
+  }
+  div.drop_box div.heading {
+    height: 20px;
+    line-height: 20px;
+    color: #ffffff;
+    background-color: #000000; 
+    text-align: center;
+    padding: 5px 5px;
+    font-size: 13pt;
+  }
+  div.rigid div.heading {
+    background-color: #703996; 
+  }
+  div.flexible div.heading {
+    background-color: #1db151; 
+  }
+  div.adhesive div.heading {
+    background-color: #1071b8; 
+  }
+  div.paper div.heading {
+    background-color: #c12026;
+  }
+  div.other div.heading {
+    background-color: #000000; 
+  }
+  a {
+    color: #e42e25; 
+    color: #000000;
+  }
+  tr.lineitem_hot td a {
+    color: #FF0000;
+  }
+  tr.lineitem_rush td a {
+    color: #FF8800;
+  }
+  h1 {
+    color: #e42e25; 
+    font-size: 20pt;
+    font-weight: normal;
+  }
+  h2 {
+    color: #00aaea; 
+    font-size: 16pt;
+    font-weight: normal;
+  }
+
+  .inverse {
+    background-color: #000000;
+    color: #FFFFFF;
+    font-weight: bold;
+  }
+
+  .shaded {
+    background-color: #999999;
+    font-weight: bold;
+  }
+
+div.drop_box div:nth-child(2) {
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+}
+
+div.drop_box div:nth-child(2).hover {
+    color: #999999;
+}
+
+.drag_drop_not_avail
+{
+  display: block;
+}
+
+img
+{
+  max-width: 100%;
+}
+
+pre
+{
+  width: 95%;
+  height: 8em;
+  font-family: monospace;
+  font-size: 0.9em;
+  padding: 1px 2px;
+  margin: 0 0 1em auto;
+  border: 1px inset #666;
+  background-color: #eee;
+  overflow: auto;
+}
+
+.list
+{
+  padding: 0 10px;
+  margin: 1em 0;
+  //border: 1px solid #999;
+}
+
+#progress p
+{
+  display: block;
+  width: 240px;
+  padding: 2px 5px;
+  margin: 2px 0;
+  border: 1px inset #446;
+  border-radius: 5px;
+  background: #eee url("progress.png") 100% 0 repeat-y;
+}
+
+#progress p.success
+{
+  background: #0c0 none 0 0 no-repeat;
+}
+
+#progress p.failed
+{
+  background: #c00 none 0 0 no-repeat;
+}
+#content {
+  width: 960px; 
+}
+#content_wide {
+  width: 1100px; 
+}
+
+table tr.heading td {
+  font-weight: 400;
+  color: #703996; 
+  text-align: center;
+}
+table tr td {
+  padding: 5px 10px;
+}
+table tr td.alignright {
+  text-align: right;
+}
+table tr td.flaghot {
+  color: #e42e25;
+}
+table tr td.flagrush{
+  color: #f55926;
+}
+table#submission_list_vancouver, table#submission_list_whistler {
+  border-collapse: collapse;
+}
+
+div#subtotal, div#rush_hot, div#gst, div#total {
+  float: left;
+  margin-bottom: 10px;
+}
+div.divlabel {
+  float: left;
+  min-width: 100px;
+  margin-right: 8px;
+  margin-bottom: 10px;
+}
+
+div#total {
+  margin-bottom: 30px;
+}
+
+div#submitbutton input {
+  font-size: 14pt; 
+  line-height: 18pt; 
+  color: #ffffff; 
+  background-color: #cc0000; 
+  border: solid 1px #aa0000; 
+  float: right; 
+  margin-right: 30px; 
+  font-family: 'Muli', Decker, 'Century Gothic', Arial, sans-serif;
+  font-weight: 300;
+}
+
+div#uploading_in_progress {
+  width: 460px; 
+  padding: 20px; 
+  margin: 0 auto; 
+  background-color: #ffffff; 
+  border: solid 1px #999999; 
+  z-index: 1001; 
+  position: fixed;  
+  top: 200px; 
+  display: none;
+}
+
+/**************** Styling of top menu *******************/
+#top-menu {
+   clear: both;
+   float: left;
+   margin: 0;
+   padding: 0;
+   width: 100%;
+   z-index: 80; /* This makes the dropdown menus appear above the page content below */
+   position: relative;
+}
+
+#top-menu ul {
+   margin: 0;
+   padding: 0;
+   list-style: none;
+   float: right;
+   position: relative;
+   right: 50%;
+}
+#top-menu ul li {
+   margin: 0 0 0 1px;
+   padding: 0;
+   float: left;
+   position: relative;
+   left: 50%;
+   top: 1px;
+}
+#top-menu ul li a {
+   display: block;
+   margin: 0;
+   padding: 3px 10px;
+   background: #ffffff;
+   font-size: 14pt;
+   color: #e42e25;
+   color: #000000;
+   text-decoration:  none;
+   line-height:  20px;
+}
+#top-menu ul li a.link_rigid {
+   color: #703996; 
+}
+#top-menu ul li a.link_flexible {
+   color: #1db151; 
+}
+#top-menu ul li a.link_adhesive {
+   color: #1071b8; 
+}
+#top-menu ul li a.link_paper {
+   color: #c12026;
+}
+#top-menu ul li.active a {
+}
+#top-menu ul li.current_page_item {
+   border-bottom: solid 5px #e5f3f5;
+}
+#top-menu ul li a: hover {
+}
+#top-menu ul li: hover a,
+#top-menu ul li.hover a { /* This line is required for IE 6 and below */
+   color: #666666;
+}
+
+/* Submenu items */
+#top-menu ul ul {
+   display:none; /* Sub menus are hiden by default */
+   position:absolute;
+   top:1.7em;
+   left:0;
+   right:auto; /*resets the right:50% on the parent ul */
+   border:1px solid #aaa; /* sub menu item horizontal lines */
+   background: #ffffff;
+   z-index: 90; /* This makes the dropdown menus appear above the page content below */
+}
+#top-menu ul ul li {
+   left:auto;  /*resets the left:50% on the parent li */
+   margin:0; /* Reset the 1px margin from the top menu */
+   clear:left;
+   width:100%;
+}
+#top-menu ul ul li a,
+#top-menu ul li.active li a,
+#top-menu ul li:hover ul li a,
+#top-menu ul li.hover ul li a { /* This line is required for IE 6 and below */
+   line-height:1.4em; /* overwrite line-height value from top menu */
+   border-bottom:1px solid #aaa; /* sub menu item horizontal lines */
+}
+#top-menu ul ul li a:hover,
+#top-menu ul li.active ul li a:hover,
+#top-menu ul li:hover ul li a:hover,
+#top-menu ul li.hover ul li a:hover { /* This line is required for IE 6 and below */
+   background:#4075ba; /* Sub menu items background colour */
+   color:#fff;
+}
+
+/* Flip the last submenu so it stays within the page */
+#top-menu ul ul.last {
+   left:auto; /* reset left:0; value */
+   right:0; /* Set right value instead */
+}
+
+/* Make the sub menus appear on hover */
+#top-menu ul li:hover ul,
+#top-menu ul li.hover ul { /* This line is required for IE 6 and below */
+   display:block; /* Show the sub menus */
+}
+
+/******************************************************************/

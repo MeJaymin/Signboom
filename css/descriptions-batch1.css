@@ -1,0 +1,195 @@
+/* NOTE: VERY specific selectors here to ensure we don't stomp on legacy styles */
+
+/* 
+
+Green:
+ - light:  #DFF0D8
+ - medium: #D6E9C6
+ - dark:   #468847
+
+Blue:
+- light:  #D9EDF7
+- medium: #BCE8F1
+- dark:   #3A87AD
+
+Yellow:
+- light:  #FCF8E3
+- medium: #FBEED5
+- dark:   #C09853
+
+Red:
+- light:  #F2DEDE
+- medium: #EED3D7
+- dark:   #B94A48
+
+*/
+
+#product_description {
+	position: absolute;
+	top: 90px;
+	/* 	left: 350px; */
+	left: 50%;
+	width: 450px;
+	/*	visibility: hidden; */
+	/* 	overflow: hidden; */
+	border:1px solid #CCC;
+	background-color:#F9F9F9;
+	border:1px solid #333;
+	padding: 10px 10px 0 10px;
+	z-index: 2;
+	margin-left: -225px;
+}
+
+#category_description .details,
+#product_description .details,
+#option_description .details {
+	padding: 0;
+	margin: 0;
+	overflow: auto;
+}
+
+
+#category_description p,
+#product_description p,
+#option_description p {
+	padding: 0;
+	margin: 0 0 10px 0;
+}
+
+#category_description ul,
+#product_description ul,
+#option_description ul {
+	padding: 0;
+	margin: 0 0 0 15px;
+}
+
+#category_description li,
+#product_description li,
+#option_description li {
+	padding: 0;
+	margin: 0 0 5px 0;
+}
+
+#category_description h2, #category_description h3, #category_description h4,
+#product_description h2, #product_description h3, #product_description h4,
+#option_description h2, #option_description h3, #option_description h4 {
+	padding: 0;
+	margin: 0 0 10px 0;
+}
+
+#category_description .description,
+#product_description .description,
+#option_description .description {
+	max-height: 250px;
+	overflow: auto;
+	border: 1px solid #ddd;
+	padding: 10px;
+	margin: 0 0 10px 0;
+	background: #fefefe;
+}
+
+##category_description .extras,
+#product_description .extras,
+#option_description .extras {
+	padding: 10px 0 10px 0;
+	border: 1px solid #ddd;
+	border-width: 1px 0 1px 0;
+}
+
+category_description .extras a,
+#product_description .extras a,
+#option_description .extras a {
+	display: block;
+	text-decoration: none;
+	color: #444;
+	font-weight: bold;
+}
+
+#category_description .extras a:hover,
+#product_description .extras a:hover,
+#option_description .extras a:hover {
+	color: #000;
+	text-decoration: underline;
+}
+
+#category_description .extras a:before,
+#product_description .extras a:before,
+#option_description .extras a:before {
+	content: url('http://www.signboom.com/images/pdf_16x16.jpg');
+	padding-right: 5px;
+}
+
+#category_description img,
+#product_description img,
+#option_description img {
+	float: right;
+	width: 200px;
+	padding-left: 10px;
+	padding-bottom: 10px;
+}
+
+/* Standard Finishing */
+#category_description .finishing,
+#product_description .finishing,
+#option_description .finishing {
+	background: #FBEED5;
+	border: 1px solid #C09853;
+	padding: 10px;
+	margin-bottom: 10px;
+}
+
+#category_description .finishing h4,
+#product_description .finishing h4,
+#option_description .finishing h4 {
+	padding-bottom: 2px;
+	border-bottom: 1px solid #C09853;
+}
+
+/* Limitations */
+#category_description .limitations,
+#product_description .limitations,
+#option_description .limitations {
+	background: #F2DEDE;
+	border: 1px solid #B94A48;
+	padding: 10px;
+	margin-bottom: 10px;
+}
+
+#category_description .limitations h4,
+#product_description .limitations h4,
+#option_description .limitations h4 {
+	padding-bottom: 2px;
+	border-bottom: 1px solid #f57f79;
+}
+
+#category_description .batch_notice,
+#product_description .batch_notice,
+#option_description .batch_notice{
+	background: #FFFFFF;
+	border: 1px solid #CC0000;
+	padding: 10px;
+	margin-bottom: 10px;
+}
+#category_description .batch_notice h4,
+#product_description .batch_notice h4,
+#option_description .batch_notice h4 {
+	color: #cc0000;
+	padding-bottom: 2px;
+	border-bottom: 1px solid #CC0000;
+}
+
+.closediv {
+	text-align: center;
+/* 	height: 30px; */
+	padding: 10px;
+}
+
+.closediv a, .faux-btn {
+	padding: 7px 15px;
+	border: 1px solid #aaa;
+	background: #f1f1f1;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	display: inline-block;
+}

@@ -1,0 +1,33 @@
+    <img style="margin-top: 20px;" src="images/logo3d.gif" width="308" height="54"> 
+    <img style="float: right;" border="0" src="images/pdw-logo.jpg" width="225" height="98" alt="PDW">
+
+    <?php
+    $current_page = $_SERVER['PHP_SELF'];
+    if ($current_page == '/pdw/index.php') 
+    {
+      $home_url = '#';
+      $target = 'target="_blank"'; 
+    }
+    else
+    {
+      $home_url = 'index.php';
+      $target = '';
+    }
+    ?>
+
+    <div id="top-menu">
+      <ul>
+        <li><a class="link_all"      onClick="filterProducts('all')"      href="<?php echo $home_url; ?>">All Media</a></li>
+        <li><a class="link_adhesive" onClick="filterProducts('adhesive')" href="<?php echo $home_url; ?>?filter=adhesive">Vinyl</a></li>
+        <li><a class="link_flexible" onClick="filterProducts('flexible')" href="<?php echo $home_url; ?>?filter=flexible">Flexible</a></li>
+        <li><a class="link_rigid"    onClick="filterProducts('rigid')"    href="<?php echo $home_url; ?>?filter=rigid">Rigid</a></li>
+        <li><a href="dashboard.php"      <?php echo $target; ?>>Dashboard</a></li>
+        <li><a href="all_orders.php"     <?php echo $target; ?>>Orders</a></li>
+        <li><a href="media.php"     <?php echo $target; ?>>Media</a></li>
+        <li><a href="height.php"     <?php echo $target; ?>>Height</a></li>
+        <li><a href="width.php"     <?php echo $target; ?>>Width</a></li>
+        <li><a href="product_totals.php" <?php echo $target; ?>>Summary</a></li>
+        <li><a href="logout.php">Logout</a></li>
+      </ul>
+    </div>
+    <br style="clear: both;"><hr><br>

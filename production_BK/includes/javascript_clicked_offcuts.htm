@@ -1,0 +1,67 @@
+  <script language="JavaScript" type="text/JavaScript">
+
+  function CheckboxTicked(line_number, which_box, offcut_id)
+  {
+    // Get id of box that was checked.
+    box = eval("document.offcuts_form." + which_box + "_" + line_number); 
+
+    // Skip-ahead feature.  If you tick the Used box, the earlier Claimed box must also get ticked for that offcut.
+    if (box.checked) 
+    {
+      //alert("You ticked the " + which_box + " box on line number " + line_number + " for offcut ID " + offcut_id);
+      if (which_box == "claimed") 
+      {
+        // Remember claimed has just been ticked.
+        varname = 'ticked_claimed_' + line_number;
+        CheckboxTicked[varname] = true;
+      }
+      else if (which_box == "used") 
+      {
+        // Remember used has just been ticked.
+        varname = 'ticked_used_' + line_number;
+        CheckboxTicked[varname] = true;
+
+        // If claimed box is not yet ticked, tick it as well. 
+        box2 = eval("document.offcuts_form.claimed_" + line_number); 
+        if (box2.checked == false)
+        {
+          box2.checked = true;
+          // Remember claimed has just been ticked. 
+          varname = 'ticked_claimed_' + line_number;
+          CheckboxTicked[varname] = true;
+        }
+      }
+    }
+
+    // Correction feature.  Ticks can be corrected before the Submit button is clicked.
+    else // box was unticked
+    { 
+      //alert("You UNticked the " + which_box + " box on line number " + line_number + " for offcut ID " + offcut_id);
+      if (which_box == "used") 
+      {
+        // Remember used has just been unticked.
+        varname = 'ticked_used_' + line_number;
+        CheckboxTicked[varname] = false;
+      }
+      else if (which_box == "claimed") 
+      {
+        // Remember claimed has just been unticked.
+        varname = 'ticked_claimed_' + line_number;
+        CheckboxTicked[varname] = false;
+
+        // If used box is is ticked, untick it as well. 
+        box2 = eval("document.offcuts_form.used_" + line_number); 
+        if (box2.checked == true)
+        {
+          box2.checked = false;
+          // Remember used has just been ticked. 
+          varname = 'ticked_used_' + line_number;
+          CheckboxTicked[varname] = false;
+        }
+      }
+    }
+
+  }
+
+  </script>
+

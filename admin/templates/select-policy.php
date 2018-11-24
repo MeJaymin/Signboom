@@ -1,0 +1,55 @@
+<!doctype html>
+
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <title>Signboom: Version 1.5 Administration</title>
+    <?php include ('head.html'); ?>
+  </head>
+
+<body>
+
+  <div id="page">
+
+    <?php include ('banner-menu.php'); ?>
+
+    <div id="content">
+
+      <h1>Edit Policies</h1>
+      <?php 
+      $category = "";
+      $category_count = 0;
+      while ($row = mysqli_fetch_array($result,  MYSQLI_BOTH)) 
+      { 
+        if ($category == "") 
+        {
+          $category = $row['Category'];
+          echo '<div class="column"><b>' . $category . '</b><br><br>';
+          $category_count++;
+        }
+        else if ($category != $row['Category']) 
+        {
+          $category = $row['Category'];
+          if ($category_count % 2 == 0) 
+            echo '</div><br style="clear: both;"><div class="column"><b>' . $category . '</b><br><br>';
+          else
+            echo '</div><div class="column"><b>' . $category . '</b><br><br>';
+          $category_count++;
+        }
+        echo 'Policy #' . $row['ID'] . ': ' . $row['Title'];
+        echo ' <a href="edit-policy.php?id=' . $row['ID'] .'">EDIT</a><br>';
+      } 
+      echo '</div>';
+      ?>
+    </div>
+  
+  </div>
+
+  <?php include ('js/modernizr-snippet.js'); ?>
+
+</body>
+
+</html>
+
+

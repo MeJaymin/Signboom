@@ -1,0 +1,9 @@
+<?php
+
+mysql_select_db($database_DBConn, $DBConn);
+$current_page = $_SERVER["PHP_SELF"];
+$my_debug = 0;
+
+$tracking_start_date = date("Y-m-d", mktime(0, 0, 0, 7, 29, 2010));
+
+?>

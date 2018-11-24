@@ -1,0 +1,351 @@
+/* ----------------------------------------------------------------------------
+	CSS Reset - VITAL! If you want to keep your sanity, never skip a reset.
+	MUST go first. Normalizes padding, margins, etc to be consistant across
+	various browsers. Then you apply your own style to the reset, or
+	'normalized' foundation.
+	-------------------------------------------------------------------------
+	http://meyerweb.com/eric/tools/css/reset/ 
+	v2.0 | 20110126
+	License: none (public domain)
+	------------------------------------------------------------------------- */
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+/* 	font: inherit; */
+/* 	vertical-align: baseline; */
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+/* ----------------------------------------------------------------------------
+	OK, Reset over... Knock yourself out from here on. :)
+   ------------------------------------------------------------------------- */
+#header-wrap {
+	margin: 0 auto;
+	margin-top: 20px;
+/* 	margin-bottom: 20px; */
+}
+
+fieldset {
+	border: 1px solid #555;
+	padding: 10px;
+}
+
+.fieldset_tall {
+	text-align: right;
+}
+
+.fieldset_tall input,
+.fieldset_tall select {
+	margin-left: 10px;
+	margin-bottom: 10px;
+}
+
+.fieldset_tall .shipto,
+.fieldset_tall #addaddressbox {
+	text-align: left;
+}
+
+#txtattn,
+#name,
+#txtcompname,
+#strcompany,
+#txtaddr,
+#txtcity,
+#txtprovstate,
+#txtcountry,
+#txtpostalcode,
+#txtzipcode,
+#addaddress {
+	width: 240px !important;	
+}
+
+.fieldset_tall select {
+	width: 245px !important;
+}
+
+.fieldset_tall input.mycheckbox {
+	width: 25px !important;
+	margin-left: 105px;
+}
+
+.fieldset_tall label {
+	display: block;
+	float: left;
+	width: 100px;
+}
+
+.addaddressbox {
+	text-align: left;
+}
+
+#new_ship_to {
+	float: left;
+	width: 380px;
+	margin-top: 20px;
+}
+
+#new_quote_button {
+	margin-bottom: 20px;
+}
+
+#new_print_service {
+	float: left;
+	width: 340px;
+	margin-top: 20px;
+	margin-left: 16px;
+}
+
+#stdready,
+#rushready,
+#hotready {
+	width: 150px;
+}
+
+#txtref {
+	width: 310px;
+}
+
+#new_order_summary {
+	float: left;
+	width: 300px;
+	margin-left: 16px;
+	margin-top: 20px;
+}
+
+
+/* ----------------------------------------------------------------------------
+	TABLE STYLES
+   ------------------------------------------------------------------------- */
+#header-table td {
+	vertical-align: middle;
+}
+
+
+#order-table {
+	background-image: url('../images/fade_tall.gif');
+	background-position: bottom;
+	background-repeat: repeat-x;
+	background-color: #FFFFFF;
+	border-collapse: collapse;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #000000;
+}
+
+#order-table th,
+#order-table td {
+	padding: 10px 0 0 5px;
+	vertical-align: middle;
+	/* 	vertical-align: baseline; */
+}
+
+#order-table th {
+	padding: 7px;
+	color: #FFFFFF;
+	text-align: center;
+	background-color: #E70089;
+	background-image: url('../images/pink_heading.gif');
+	background-position: left center;
+	background-repeat: repeat-x;
+}
+
+/* ----------------------------------------------------------------------------
+	General Styling
+   ------------------------------------------------------------------------- */
+
+
+
+/* ----------------------------------------------------------------------------
+	ORDER FORM STYLES
+	Modified from order_form_styles.css
+   ------------------------------------------------------------------------- */
+.myinput {
+	font-size: 1.0em;
+}
+
+pop_up_new {
+	position:absolute; 
+	visibility:hidden; 
+	left: 193px; 
+	top: 199px;
+	width:635px; 
+	height:88px; 
+	z-index:1; 
+	padding: 10px 10px 10px 10px; 
+	border: 1px solid black; 
+}
+
+.select100,
+.select110,
+.select140,
+.select160,
+.select200,
+.select263 {
+/* 	font-size: 1.0em; */
+	font-size: 14px;
+	vertical-align:middle;	
+}
+
+
+.select100 {
+	width:100px;
+}
+
+.select110 {
+	width:110px;
+}
+
+.select140 {
+	width:140px;
+}
+
+.select160 {
+	width:160px;
+}
+
+.select200 {
+	width:200px;
+}
+
+.select263 {
+	width:233px;
+}
+
+.bigbutton {
+	width: 180px;
+	height: 50px;
+	color: #00AAEA;
+	font-size: 130%;
+	font-weight: bold;
+}
+
+.pinktext {
+	color: #E70089;
+	font-weight: bold;
+}
+
+.bluetext {
+	color: #00AAEA;
+	font-weight: bold;
+}
+
+.smalltext {
+	font-size: 30%;
+}
+
+.spacer {
+	float: left;
+	width: 8px;
+	height: 10px;
+}
+
+.clearboth { 
+	clear: both; 
+}
+
+a.in_table {
+	color: #FFFFFF;
+	text-decoration: underline;
+}
+
+a.in_table:hover {
+	color: #CCCCCC;
+}
+
+input.quotebutton {
+	width: 150px;
+	height: 53px;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: transparent url('../images/quote_order.gif') no-repeat top left;
+	cursor: pointer; /* hand-shaped cursor */
+	cursor: hand; /* IE 5.x */
+}
+
+input.quotebutton:hover {
+	background: transparent url('../images/quote_order_hover.gif') no-repeat top left;
+}
+
+input.submitbutton {
+	width: 150px;
+	height: 53px;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: transparent url('../images/submit_order.gif') no-repeat top left;
+	cursor: pointer; /* hand-shaped cursor */
+	cursor: hand; /* IE 5.x */
+}
+
+input.submitbutton:hover {
+	background: transparent url('../images/submit_order_hover.gif') no-repeat top left;
+}
+
+#new_summary {
+/* 	width: 210px; */
+}
+
+.select_separator {
+	background:  #ffffff url('../images/pixel.gif') 50% 50% repeat-x;
+	background-attachment: scroll;
+}
+
+#finishing-popup-1, #finishing-popup-2,
+#finishing-popup-3, #finishing-popup-4,
+#finishing-popup-5, #finishing-popup-6,
+#finishing-popup-7, #finishing-popup-8,
+#finishing-popup-9, #finishing-popup-10 {
+	position: absolute;
+	top: 100px;
+	left: 700px;
+	width: 480px;
+	padding: 20px 10px;
+	z-index: 4;
+	background-color: #ffffff;
+	border: solid 1px #666666;
+}
+
+.div_hidden {
+	display: none;
+}
+
+.div_displayed {
+	display: block;
+}

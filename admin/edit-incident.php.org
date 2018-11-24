@@ -1,0 +1,121 @@
+<?php 
+  include ('authadmin.php'); 
+  include ('helper-functions.php'); 
+  include('../production/includes/date_picker.htm');
+  //include('../includes/inc-signboom.php');
+  mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
+
+  $found_an_error = false;
+  $error_message = "";
+  $created = false;
+  $edited = false;
+  $edit_mode = "edit";
+
+  $incident_list = array();
+  $query_list = "SELECT OrderId FROM signboom_incidents WHERE 1 ORDER BY Date DESC";
+  $result_list = mysql_query($query_list, $DBConn) or die(mysql_error());
+  while ($row = mysql_fetch_array($result_list, MYSQL_BOTH))
+  {
+    $incident_list[] = $row['OrderId'];
+  }
+
+  if (isset($_REQUEST['incident_id']) || isset($_REQUEST['order_id']))
+  {
+    $incident_id =  trim($_REQUEST['incident_id']);
+    $order_id = trim($_REQUEST['order_id']);
+    if (strlen(trim($incident_id)) > 0)
+    {
+      $query1 = "SELECT * FROM signboom_incidents WHERE IncidentId = '$incident_id'";
+    }
+    else if (strlen(trim($order_id)) > 0)
+    {
+      $query1 = "SELECT * FROM signboom_incidents WHERE OrderId = '$order_id'";
+    }
+    else
+    {
+      $error_message = "You must fill in either the incident ID or the order ID.";
+      include ('templates/select-incident.php'); 
+      exit();
+    }
+
+    $result1 = mysql_query($query1);
+    $num_rows = mysql_num_rows($result1);
+    if ($num_rows <= 0)
+    {
+      $error_message = "There is not an incident with that information.<br>";
+      include ('templates/select-incident.php'); 
+    }
+    else 
+    {
+      if (isset($_POST['submit_edit_incident'])) 
+      {
+        //$incident_id = mysql_real_escape_string($_POST['incident_id']); Autoincrement by database.
+        $incident_date = mysql_real_escape_string($_POST['incident_date']);
+        $order_id = mysql_real_escape_string(trim($_POST['order_id']));
+        $incident_value = mysql_real_escape_string($_POST['incident_value']);
+        $upload_notes = mysql_real_escape_string($_POST['upload_notes']);
+        $incident_type = mysql_real_escape_string($_POST['incident_type']);
+        $accountable = mysql_real_escape_string($_POST['accountable']);
+        $caused = mysql_real_escape_string($_POST['caused']);
+        $comments = mysql_real_escape_string($_POST['comments']);
+
+        $found_an_error = true;
+        if (!isValidDate(trim($incident_date)))
+          $error_message = "That is not a valid date.";
+        else if (!isValidOrderId(trim($order_id)))
+          $error_message = "There is no order in the system with order ID '$order_id'.";
+        else if ((strlen(trim($incident_value)) > 0) && (!is_numeric($incident_value)))
+          $error_message = "The value '$incident_value' is not valid. Please leave out the dollar sign.";
+        else if (strlen($incident_type) == 0)
+          $error_message = "You must enter an incident type.";
+        else
+        {
+           $found_an_error = false;
+$start_query = <<< End_Of_Query
+UPDATE signboom_incidents SET 
+  Date = '$incident_date',
+  OrderId = '$order_id',
+  Value = '$incident_value',
+  UploadNotes = '$upload_notes',
+  Type = '$incident_type',
+  Accountable = '$accountable',
+  Caused = '$caused',
+  Comments = '$comments'
+End_Of_Query;
+        $end_query = " WHERE IncidentId = '$incident_id'";
+        $query = $start_query . $end_query;
+        //echo "QUERY: $query<br>";
+        $result = mysql_query($query, $DBConn) or die(mysql_error());
+        $edited = true;
+	}
+      }
+
+      // Display information form database for this incident.
+      if (!$found_an_error) // Leave entered data in place if an error was found.
+      {
+        // Get the details of that incident from the database.
+        $result = mysql_query($query1, $DBConn) or die(mysql_error());
+        //echo "QUERY: $query1<br>";
+        $row = mysql_fetch_array($result, MYSQL_BOTH); 
+        $incident_id = $row['IncidentId'];
+        $incident_date = $row['Date'];
+        $order_id = $row['OrderId'];
+        $incident_value = trim($row['Value']);
+        $upload_notes = $row['UploadNotes'];
+        $incident_type = $row['Type'];
+        $accountable = $row['Accountable'];
+        $caused = $row['Caused'];
+        $comments = $row['Comments'];
+      }
+
+      include ('templates/edit-incident.php'); 
+
+      // Free memory. 
+      mysql_free_result($result);
+    }
+  }
+  else
+  {
+    include ('templates/select-incident.php'); 
+  }
+?>

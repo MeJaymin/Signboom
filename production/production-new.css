@@ -1,0 +1,179 @@
+  body, .menu {
+    font-family: 'Open Sans', Verdana, Helvetica, Arial, sans-serif;
+    font-size: 12pt;
+    font-weight: normal;
+    color: #000000;
+  }
+  table.withborder, table.withborder tr td {
+    border: solid 1px #aaa;
+    border-collapse: collapse;
+    margin: 0 auto;
+  }
+  table, table tr td {
+    font-family: 'Open Sans', Verdana, Helvetica, Arial, sans-serif;
+    padding: 5px 10px;
+    font-size: 12pt;
+    background-color: #fff;
+    text-align: center;
+  }
+  table tr td.number {
+    text-align: right;
+  }
+  table tr td.dark_grey_cell {
+    background-color: #cdcdcd;
+  }
+  table tr td.light_grey_cell {
+    background-color: #efefef;
+  }
+  table tr td.white_cell {
+    background-color: #ffffff;
+  }
+  table tr td.heading_pink  {
+    font-family: 'Open Sans', Verdana, Helvetica, Arial, sans-serif;
+    color: #E70089;
+    font-weight: bold;
+    background-color: transparent;
+    text-transform: none;
+  }
+  table tr td.table_title {
+    font-family: 'Open Sans', Verdana, Helvetica, Arial, sans-serif;
+    color: #ffffff;
+    font-weight: bold;
+    background-color: #E70089;
+    text-transform: none;
+    text-align: center;
+  }
+  table tr td.heading {
+    font-family: 'Open Sans', Verdana, Helvetica, Arial, sans-serif;
+    color: #000000;
+    text-align: center;
+  }
+  table tr td a {
+    font-weight: normal;
+  }
+  h1 {
+    font-weight: normal;
+  }
+  div.menu {
+    clear: both;
+    margin: 0 auto;
+  }
+  div.menu a {
+    text-decoration: none;
+  }
+  .legend {
+    font-weight: bold;
+  }
+  .lineitem_std {
+    text-align: center;
+  }
+  .lineitem_first_order {
+    color: #00CC00;
+    text-align: center;
+  }
+  .lineitem_returning_customer {
+    color: #009900;
+    text-align: center;
+  }
+  .lineitem_checklist {
+    background-color: #B3E8FF !important;
+    padding: 0 5px;
+  }
+  .lineitem_incident {
+    background-color: #FFFF00 !important;
+    padding: 0 5px;
+  }
+  .lineitem_custom_finish {
+    font-weight: bold; 
+    color: #DE0587;
+  }
+  .lineitem_rush {
+    font-weight: bold; 
+    color: #ff8800;
+    text-align: center;
+  }
+  .lineitem_hot{
+    font-weight: bold; 
+    color: #CC0000;
+    text-align: center;
+  }
+  .lineitem_unconfirmed, .lineitem_flagged {
+    font-weight: bold;
+    color: #E70089;
+    text-align: center;
+  }
+  .lineitem_today {
+    font-weight: bold; 
+    color: #990099;
+    text-align: center;
+  }
+  .lineitem_late {
+    background-color: #FFFF00 !important;
+    padding: 0 5px;
+  }
+ .inverse {
+    background-color: #000000 !important;
+    color: #FFFFFF;
+    font-weight: bold;
+    padding: 0 5px;
+  }
+  table tr td.date {
+    min-width: 7em;
+  }
+  table.evenodd {
+    border: none;
+    border-collapse: collapse;
+    line-height: 1.6;
+  }
+  table.evenodd tr:nth-child(odd), table.evenodd tr:nth-child(odd) td {
+    background-color: #ffffff;
+  }
+  table.evenodd tr:nth-child(even), table.evenodd tr:nth-child(even) td {
+    background-color: #eeeeee;
+  }
+  table.evenodd tr td {
+    padding: 0 3px;
+  }
+  table.evenodd tr.subtotals td {
+    font-weight: bold;
+    background-color: #02b0ed;
+    color: #ffffff;
+    text-align: right;
+  }
+  .narrow_column {
+    width: 300px;
+    margin-top: 25px;
+    float: left;
+    line-height: 24px;
+  }
+
+/************* Form Layout *************************/
+ul.vertical {
+  padding: 1em 1em 0 1em;
+  list-style: none;
+  font-size: 12pt;
+}
+ul.vertical li {
+  float: left; /* to ensure parent li expands to hold floated child label */
+  clear: left; /* see page 130 The Art and Science of CSS */
+  width: 100%; /* see page 130 The Art and Science of CSS */
+  padding-bottom: 0.1em;
+  line-height: 18pt;
+  text-align: left;
+}
+ul.vertical li label {
+  float: left;
+  width: 220px;
+  margin-right: 1em;
+  line-height: 18pt;
+  text-align: right;
+}
+ul.vertical li input[type=text] {
+  width: 320px;
+  text-align: left;
+}
+ul.vertical li textarea {
+  width: 400px;
+  height: 300px;
+}
+

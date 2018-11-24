@@ -1,0 +1,14 @@
+Redirect 301 /pdw/ /pdw/alogin.php
+
+# Begin cache control #
+ExpiresActive on
+ExpiresActive off
+<FilesMatch ".*">
+Header unset Cache-Control
+Header unset Expires
+Header unset Last-Modified
+FileETag None
+Header unset Pragma
+</FilesMatch>
+# End cache control #
+Options +Indexes

@@ -1,0 +1,165 @@
+<?php
+  function validate_email($email, $check_domain = false)
+  {
+      $regex = '/^((\"[^\"\f\n\r\t\v\b]+\")|([\w\!\#\$\%\&\'\*\+\-\~\/\^\`\|\{\}]+'.
+               '(\.[\w\!\#\$\%\&\'\*\+\-\~\/\^\`\|\{\}]+)*))@((\[(((25[0-5])|'.
+               '(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|'.
+               '([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))'.
+               '\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9])))\])|(((25[0-5])|'.
+               '(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|'.
+               '([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))'.
+               '\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9])))|'.
+               '((([A-Za-z0-9\-])+\.)+[A-Za-z\-]+))$/';
+      if (preg_match($regex, $email)) {
+          if ($check_domain && function_exists('checkdnsrr')) {
+              list (, $domain)  = explode('@', $email);
+              if (checkdnsrr($domain, 'MX') || checkdnsrr($domain, 'A')) {
+                  return true;
+              }
+              return false;
+          }
+          return true;
+      }
+      return false;
+  }
+
+  // Connect to the database.
+  include('../Connections/DBConn.php');
+  mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
+
+  // initialize variables
+  $display_input_form = false;
+  $message_to_user = "";
+  $email_footer = "<br><br>This email was sent by: Signboom Industries Ltd., #103 - 19652 86th Avenue, Langley, B.C., Canada, V2Y 1Z5.<br><br>You are receiving this email because you have an active Signboom account.";
+  $headers  = "From: signboom@signboom.com\r\n";
+  $headers .= "Content-type: text/html\r\n"; 
+
+  // check if one of the buttons has been clicked 
+  $tried = $_POST['tried'];
+  $email_title = $_POST['email_title'];
+  $email_addresses = $_POST['email_addresses'];
+  $email_message = $_POST['email_message'];
+  $emails_valid = true;
+
+  // if so, validate the form contents
+  if ($tried) {
+    if (empty($email_title)) {
+      $message_to_user .= "<p style=\"color: #ff0000; font-weight: bold;\">Please choose an email title.</p>";
+    }
+    elseif (empty($email_addresses)) {
+      $message_to_user .= "<p style=\"color: #ff0000; font-weight: bold;\">Please enter at least your own email address in the CC list so you are sent a copy of the email.</p>";
+    }
+    elseif (empty($email_message)) {
+      $message_to_user .= "<p style=\"color: #ff0000; font-weight: bold;\">Please enter an email message.</p>";
+    }
+    else {
+      $validated = "yes";
+    }
+  }
+
+  if ($tried && $validated) {
+
+    // create an array of the CC email addresses, from a comma separated list
+    $array_addresses = explode(',', $email_addresses);
+
+    // validate the email addresses in that array
+    while (list($key, $value) = each($array_addresses)) {
+      $one_email = trim($value);
+      if (validate_email($one_email) == false) {
+        $message_to_user .= "<p style=\"color: #ff0000; font-weight: bold;\">'$one_email' is  NOT a valid email address</p><br>";
+        $emails_valid = false;
+      }
+    }
+
+  }
+
+  if ($tried && $validated && $emails_valid) {
+
+
+    // Ask user to wait on this page.
+    $message_to_user .= "<p style=\"color: #ff0000; font-weight: bold;\">PLEASE STAY ON THIS PAGE until you see the message saying that the mailout has been completed.<br>This could take several minutes.<br>The message will be displayed in red below the list of email addresses to which your email has been sent.</p>";
+
+
+    if ($_POST['clients']) {
+      $recognized_input = TRUE;
+      // Query the user database for all clients.
+      $myQuery = "SELECT email, AcctName FROM signboom_user WHERE MailingList LIKE 'Yes' AND acctDisable = 0";
+      //$myQuery = "SELECT email, AcctName FROM signboom_user WHERE firstName = 'Alison' AND lastName = 'Taylor' AND MailingList LIKE 'Yes' AND acctDisable = 0";
+      $result = mysql_query($myQuery);
+      $num_rows = mysql_num_rows($result);
+      $message_to_user .= "Total number of clients in mailing list is: $num_rows<br><br>";
+
+      // Send the message to each address 
+      $message_to_user .= "<b>Sent to Customers:</b><br>\n";
+      $i = 0;
+      while ($myrow = mysql_fetch_array($result)) {
+        $email_address = $myrow['email'];
+        $account_name = $myrow['AcctName'];
+        $unsubscribe_option = '<br><br><a href="http://www.signboom.com/unsubscribe.php?account=' . $account_name . '&email=' . $email_address . '">Click here to be immediately unsubscribed from future Signboom email announcements.</a><br>Note: You will continue to receive confirmation emails for any orders you place with us.';
+        $text = $email_message . $email_footer . $unsubscribe_option;
+        mail($email_address, $email_title, $text, $headers);
+        $message_to_user .= "$i: $email_address<br>";
+        $i++;
+      }
+      // Disconnect from the database.
+      mysql_close ($DBConn);
+    }
+
+
+    /*
+    elseif ($_POST['invalidpst']) {
+      $recognized_input = TRUE;
+      // Query the user database for all clients.
+      $myQuery = "SELECT email, pstnum FROM signboom_user WHERE pstnum !=''";
+      $result = mysql_query($myQuery);
+      $num_rows = mysql_num_rows($result);
+
+      $message_to_user .= "<b>Sent to Customers:</b><br>\n";
+      $i = 0;
+      while($myrow = mysql_fetch_array($result)) {
+        $email_address = $myrow['email'];
+        $pst_num= $myrow['pstnum'];
+        if (ereg('[^0-9]', $pst_num)) {
+          $message_to_user .= "$i: $email_address PST='$pst_num'<br>";
+          mail($email_address, $email_title, $email_message, $headers);
+          $i++;
+        }
+      }
+      // Disconnect from the database.
+      mysql_close ($DBConn);
+    }
+    */
+
+    elseif ($_POST['cc']) {
+      $recognized_input = TRUE;
+    }
+
+    else {
+      $recognized_input = FALSE;
+    }
+
+    // If the we know what button was clicked, send to the CC list.  Otherwise, don't.
+    if ($recognized_input == FALSE) {   
+      reset($array_addresses);
+      $message_to_user .= "The software could not figure out which button you pressed.  Nothing has been sent.<br>\n";
+    }
+    else {
+      $message_to_user .="<br><br><b>Sent to CC Addresses:</b><br>\n";
+      reset($array_addresses);
+      while (list($key, $value) = each($array_addresses)) {
+        $message_to_user .= "$key: $value<br>\n";
+        mail($value, $email_title, $email_message, $headers);
+      }
+    }
+
+    // Tell user they can now leave the page.
+    $message_to_user .= "<p style=\"color: #ff0000; font-weight: bold;\">THE MAILOUT HAS BEEN COMPLETED.<br>You can now leave this page.</p>";
+
+  }
+  else {
+     $display_input_form = true;
+  }
+
+  include ('templates/email-announcement.php'); 
+
+?>

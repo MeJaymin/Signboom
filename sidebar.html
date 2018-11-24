@@ -1,0 +1,59 @@
+<div id="vertical_separator">
+&nbsp;
+</div>
+
+<div id="sidebar">
+
+  <div style="text-align: center;">
+  <?php
+ini_set("url_rewriter.tags","");
+ini_set(session.use_trans_sid, false);
+session_save_path("/home/users/web/b516/as.signboom/phpsessions");
+session_start();
+  if (isset($_SESSION['MM_Username'])) {  
+    printf("<a href=\"Connections/doLogout.php\" onClick=\"this.blur()\" \n");
+      printf("onMouseOver=\"document.login_image.src='images/log_out_hover2.gif';\" \n");
+      printf("onMouseOut=\"document.login_image.src='images/log_out2.gif';\"> \n");
+      printf("<img border=\"0\" src=\"images/log_out2.gif\" name=\"login_image\" width=\"99\" height=\"25\" alt=\"Log Out\"> \n");
+    printf("</a> \n");
+  }
+  else {
+    printf("<a href=\"login.php\" onClick=\"this.blur()\" ");
+      printf("onMouseOver=\"document.login_image.src='images/log_in_hover2.gif';\" ");
+      printf("onMouseOut=\"document.login_image.src='images/log_in2.gif';\"> ");
+      printf("<img border=\"0\" src=\"images/log_in2.gif\" name=\"login_image\" width=\"99\" height=\"25\" alt=\"Log In\"> ");
+    printf("</a> ");
+  }
+  ?>
+  </div>
+
+  <br><br>
+  <img border="0" src="images/products_and_services.gif" width="167" height="17" alt="Products and Services"><br><br>
+  <b>
+  <a class="side_menu" href="adhesive.php">Adhesive</a><br>
+  <a class="side_menu" href="rigid_signs.php">Rigid Signs</a><br>
+  <a class="side_menu" href="banners.php">Finished Banners</a><br>
+  <a class="side_menu" href="specialty.php">Specialty Signage</a><br>
+  <a class="side_menu" href="shipping_options.php">Shipping Options</a><br>
+  <a class="side_menu" href="creative_services.php">Creative Services</a><br>
+  </b>
+  <br><br>
+  <img border="0" src="images/technical_information.gif" width="157" height="17" alt="Technical Information"><br><br>
+  <b>
+  <a class="side_menu" href="colour_accuracy.php">Colour Accuracy</a><br>
+  <a class="side_menu" href="how_to_create_pdf.php">How to Create PDF Files</a><br>
+  <a class="side_menu" href="contour_cuts.php">Contour Cuts</a><br>
+  <a class="side_menu" href="working_large.php">Working Large</a><br>
+  <a class="side_menu" target="_blank" href="documents/Signboom_Ink_Layers.pdf">Working with Ink Layers</a><br>
+  <a class="side_menu" target="_blank" href="documents/White_Ink_Instructions.pdf">White Ink Instructions</a>
+  </b>
+  <br><br>
+  <a href="index.php" onClick="this.blur()" 
+        onMouseOver="document.home_image.src='images/home_hover.gif';" 
+        onMouseOut="document.home_image.src='images/home.gif';"> 
+        <img border="0" src="images/home.gif" name="home_image" width="147" height="17" alt="Back to Home Page">
+      </a> 
+  <br><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;<img border="0" src="images/cmyk_cubes.jpg" width="100" height="75" alt="">
+</div>
+

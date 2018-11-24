@@ -1,0 +1,72 @@
+<?php 
+  include ('authadmin.php'); 
+  include ('helper-functions.php'); 
+  include('../production/includes/date_picker.htm');
+  mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
+
+  $hide_incident_id = true;
+  $error_message = "";
+  $edited = false;
+  $created = false;
+  $edit_mode = "create";
+  if (isset($_POST['submit_create_incident'])) 
+  {
+    $incident_date = mysql_real_escape_string($_POST['incident_date']);
+    $order_id = mysql_real_escape_string($_POST['order_id']);
+    $incident_value = mysql_real_escape_string($_POST['incident_value']);
+    $upload_notes  = mysql_real_escape_string($_POST['upload_notes']);
+    $incident_type = mysql_real_escape_string($_POST['incident_type']);
+    $accountable = mysql_real_escape_string($_POST['accountable']);
+    $caused = mysql_real_escape_string($_POST['caused']);
+    $comments = mysql_real_escape_string($_POST['comments']);
+
+    if (!isValidDate(trim($incident_date)))
+      $error_message = "That is not a valid date.";
+    else if (!isValidOrderId(trim($order_id)))
+      $error_message = "There is no order in the system with order ID '$order_id'.";
+    else if ((strlen(trim($incident_value)) > 0) && (!is_numeric($incident_value)))
+      $error_message = "The value '$incident_value' is not valid. Please leave out the dollar sign.";
+    else if (strlen($incident_type) == 0)
+      $error_message = "You must enter an incident type.";
+    else
+    {
+    $query = "INSERT INTO signboom_incidents SET Date = '$incident_date', OrderId = '$order_id', Value = '$incident_value', UploadNotes = '$upload_notes', Type = '$incident_type', Accountable = '$accountable', Caused = '$caused', Comments = '$comments'";
+      //echo "Query: $query<br><br>";
+      $result = mysql_query($query, $DBConn) or die(mysql_error());
+      $created = true;
+      $edit_mode = "edit";
+
+      // Get the information of that product from the database.
+      $query = "SELECT * FROM signboom_incidents WHERE IncidentID = '$incident_id'";
+      $result = mysql_query($query, $DBConn) or die(mysql_error());
+      $row = mysql_fetch_array($result, MYSQL_BOTH); 
+      $incident_id = $row['IncidentId'];
+      $incident_date = $row['Date'];
+      $order_id = $row['OrderId'];
+      $incident_value = trim($row['Value']);
+      $upload_notes = $row['UploadNotes'];
+      $incident_type = $row['Type'];
+      $accountable = $row['Accountable'];
+      $caused = $row['Caused'];
+      $comments = $row['Comments'];
+    }
+  }
+  else
+  {
+    $incident_date = "";
+    $order_id = "";
+    $incident_value = "";
+    $upload_notes = "";
+    $incident_type = "";
+    $accountable = "";
+    $caused = "";
+    $comments = "";
+  }
+
+  // Display the product description in an editor. 
+  include ('templates/edit-incident.php'); 
+
+  // Free memory. 
+  mysql_free_result($result);
+
+?>

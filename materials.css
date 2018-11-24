@@ -1,0 +1,132 @@
+/* NOTE: VERY specific selectors here to ensure we don't stomp on legacy styles */
+
+/* 
+
+Green:
+ - light:  #DFF0D8
+ - medium: #D6E9C6
+ - dark:   #468847
+
+Blue:
+- light:  #D9EDF7
+- medium: #BCE8F1
+- dark:   #3A87AD
+
+Yellow:
+- light:  #FCF8E3
+- medium: #FBEED5
+- dark:   #C09853
+
+Red:
+- light:  #F2DEDE
+- medium: #EED3D7
+- dark:   #B94A48
+
+*/
+
+body {
+	color: #333333;
+	font-family: Arial,Tahoma,Verdana,Arial;
+	font-size: 90%;
+}
+
+#product_description {
+	position: absolute;
+	top: 90px;
+	left: 350px;
+	width: 450px;
+	/*    visibility: hidden; */
+	overflow: hidden;
+	border:1px solid #CCC;
+	background-color:#F9F9F9;
+	border:1px solid #333;
+	padding: 10px 10px 0 10px;
+	z-index: 2;
+}
+
+#product_description .details {
+	padding: 0;
+	margin: 0;
+	overflow: auto;
+}
+
+
+#product_description p {
+	padding: 0;
+	margin: 0 0 10px 0;
+}
+
+#product_description ul {
+	padding: 0;
+	margin: 0 0 0 15px;
+}
+
+#product_description li {
+	padding: 0;
+	margin: 0 0 5px 0;
+}
+
+#product_description h2,
+#product_description h3,
+#product_description h4 {
+	padding: 0;
+	margin: 0 0 10px 0;
+}
+
+#product_description .description {
+	max-height: 250px;
+	overflow: auto;
+	border: 1px solid #ddd;
+	padding: 10px;
+	margin: 0 0 10px 0;
+	background: #fefefe;
+}
+
+#product_description .extras {
+	padding: 10px 0 10px 0;
+	border: 1px solid #ddd;
+	border-width: 1px 0 1px 0;
+}
+
+#product_description .extras a {
+	display: block;
+	text-decoration: none;
+}
+
+#product_description .extras a:before {
+	content: url('http://www.signboom.com/images/pdf_16x16.jpg');
+	padding-right: 5px;
+}
+
+
+#product_description img {
+	float: right;
+	width: 200px;
+	padding-left: 10px;
+	padding-bottom: 10px;
+}
+
+/* Standard Finishing */
+#product_description .finishing {
+	background: #FBEED5;
+	border: 1px solid #C09853;
+	padding: 10px;
+	margin-bottom: 10px;
+}
+
+#product_description .finishing h4 {
+	padding-bottom: 2px;
+	border-bottom: 1px solid #C09853;
+}
+/* Limitations */
+#product_description .limitations {
+	background: #F2DEDE;
+	border: 1px solid #B94A48;
+	padding: 10px;
+	margin-bottom: 10px;
+}
+
+#product_description .limitations h4 {
+	padding-bottom: 2px;
+	border-bottom: 1px solid #f57f79;
+}

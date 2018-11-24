@@ -1,0 +1,47 @@
+    <tr class="heading">
+      <td>Other</td>
+      <td>Mounting</td>
+      <td>Sides</td>
+      <td>Layers</td>
+      <td>Cutting</td>
+      <td>Laminate</td>
+      <td>Product</td>
+      <td>Ready</td>
+      <td>Notes</td>
+      <td>Id</td>
+      <td>Ship</td>
+      <td>City</td>
+      <td>Account</td>
+      <td style="width: 16em;">Filename</td>
+      <td>Qty</td>
+      <td>Height</td>
+      <td>Width</td>
+      <td>Sq&nbsp;Ft</td>
+      <td>Cost</td>
+<?php 
+  if ($this_is_single_order_page)
+  {
+    echo '<td>Queue</td>';
+  }
+  else  if (($queue == 'Files') || ($queue == 'Today'))
+  {
+    echo '<td>Queue</td>';
+  }
+  else if ($queue == 'RIP')
+  {
+    echo '<td>Proofed</td>';
+    echo '<td>RIPed</td>';
+  }
+  else
+  {
+    echo '<td>' . $queue . 'ed</td>';
+  }
+?>
+    </tr>
+    <tr>
+<?php if ((!$this_is_single_order_page) && ($queue == 'RIP')): ?>
+      <td colspan="21" style="background-color: #ffffff;"><hr></td>
+<?php else: ?>
+      <td colspan="20" style="background-color: #ffffff;"><hr></td>
+<?php endif; ?>
+    </tr>

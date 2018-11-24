@@ -1,0 +1,297 @@
+body {
+  font-family: Arial, Tahoma, Verdana, Arial;
+  font-size: 90%;
+  color: #333333;
+  background-color: #FFFFFF;
+}
+h1 {
+  font-family: Arial, Tahoma, Verdana, Arial;
+  font-size: 18pt;
+  color: #333333;
+}
+h2 {
+  font-family: Arial, Tahoma, Verdana, Arial;
+  font-size: 14pt;
+  color: #e7009d;
+}
+#page {
+  width: 960px; 
+  width: 1020px; 
+  margin: 20px auto;
+}
+#logo {
+  float: left;
+  width: 308px; 
+}
+#banner_image {
+  float: left;
+  width: 652px; 
+  font-size: 200%;
+  color: #1282F0;
+  text-align: right;
+}
+#top-menu {
+  width: 960px; 
+  width: 1020px; 
+}
+#content {
+  width: 960px; 
+}
+
+  /**************** Styling of top menu *******************/
+#top-menu {
+   clear: both;
+   float: left;
+   margin: 0;
+   padding: 0;
+   width: 100%;
+   z-index: 1000; /* This makes the dropdown menus appear above the page content below */
+   position: relative;
+}
+
+#top-menu ul {
+   margin: 0;
+   padding: 0;
+   list-style: none;
+   float: right;
+   position: relative;
+   right: 50%;
+}
+#top-menu ul li {
+   margin: 0 0 0 1px;
+   padding: 0;
+   float: left;
+   position: relative;
+   left: 50%;
+   top: 1px;
+}
+#top-menu ul li a {
+   display: block;
+   margin: 0;
+   padding: 3px 10px;
+   background: #ffffff;
+   font-size: 14pt;
+   color: #1282F0;
+   color: #e7009d;
+   text-decoration:  none;
+   line-height:  20px;
+}
+#top-menu ul li.active a {
+}
+#top-menu ul li.current_page_item {
+   border-bottom: solid 5px #e5f3f5;
+}
+#top-menu ul li a: hover {
+}
+#top-menu ul li: hover a,
+#top-menu ul li.hover a { /* This line is required for IE 6 and below */
+   color: #666666;
+}
+
+/* Submenu items */
+#top-menu ul ul {
+   display:none; /* Sub menus are hiden by default */
+   position:absolute;
+   top:1.7em;
+   left:0;
+   right:auto; /*resets the right:50% on the parent ul */
+   border:1px solid #aaa; /* sub menu item horizontal lines */
+   background: #ffffff;
+   z-index: 1001; /* This makes the dropdown menus appear above the page content below */
+}
+#top-menu ul ul li {
+   left:auto;  /*resets the left:50% on the parent li */
+   margin:0; /* Reset the 1px margin from the top menu */
+   clear:left;
+   width:100%;
+}
+#top-menu ul ul li a,
+#top-menu ul li.active li a,
+#top-menu ul li:hover ul li a,
+#top-menu ul li.hover ul li a { /* This line is required for IE 6 and below */
+   line-height:1.4em; /* overwrite line-height value from top menu */
+   border-bottom:1px solid #aaa; /* sub menu item horizontal lines */
+}
+#top-menu ul ul li a:hover,
+#top-menu ul li.active ul li a:hover,
+#top-menu ul li:hover ul li a:hover,
+#top-menu ul li.hover ul li a:hover { /* This line is required for IE 6 and below */
+   background:#4075ba; /* Sub menu items background colour */
+   color:#fff;
+}
+
+/* Flip the last submenu so it stays within the page */
+#top-menu ul ul.last {
+   left:auto; /* reset left:0; value */
+   right:0; /* Set right value instead */
+}
+
+/* Make the sub menus appear on hover */
+#top-menu ul li:hover ul,
+#top-menu ul li.hover ul { /* This line is required for IE 6 and below */
+   display:block; /* Show the sub menus */
+}
+
+/******************************************************************/
+.spacer {
+  float: left;
+  width: 8px;
+  height: 10px;
+}
+.clearboth { 
+  clear: both; 
+}
+.heading {
+  color: #F11289;
+  font-weight: bold;
+}
+.highlighted {
+  color: #E70089;
+  color: #00AAEA;
+  color: #cc0000;
+  font-weight: bold;
+}
+.highlighted_pink {
+  color: #E70089;
+  font-weight: bold;
+}
+a {
+  color: #1282F0;
+  text-decoration: none;
+}
+a.side_menu {
+  line-height: 130%;
+  color: #333333;
+  text-decoration: none;
+}
+a:hover {
+  color: #A7A7A7;
+}
+
+ol li, ul li {
+  margin-top: 1em;
+}
+.product {
+  color: #00AAEA;
+  font-weight: bold;
+}
+.option {
+  color: #E70089;
+  font-weight: bold;
+}
+.pinktext {
+  color: #E70089;
+  font-weight: bold;
+}
+.bluetext {
+  color: #00AAEA;
+  font-weight: bold;
+}
+legend {
+  margin-bottom: 0px;
+}
+fieldset {
+  padding-top: 0px;
+  margin-bottom: 20px;
+  border-color: #999999;
+}
+.fieldset_tall {
+  background-image: url(images/fade_tall.gif); 
+  background-position: bottom; 
+  background-repeat: repeat-x;
+}
+.fieldset_medium {
+  background-image: url(images/fade_medium.gif); 
+  background-position: bottom; 
+  background-repeat: repeat-x;
+}
+.fieldset_short {
+  background-image: url(images/fade_short.gif); 
+  background-position: bottom; 
+  background-repeat: repeat-x;
+}
+.column {
+  width: 460px;
+  margin-top: 25px;
+  float: left;
+  line-height: 24px;
+}
+.narrow_column {
+  width: 300px;
+  margin-top: 25px;
+  float: left;
+  line-height: 24px;
+}
+select option.select_separator {
+  background:  #ffffff url('http://www.signboom.com/images/pixel.gif') 50% 50% repeat-x;
+  background-attachment: scroll;
+}
+
+/************* Form Layout *************************/
+ul.vertical {
+  padding: 1em 1em 0 1em;
+  list-style: none;
+}
+ul.vertical li {
+  float: left; /* to ensure parent li expands to hold floated child label */
+  clear: left; /* see page 130 The Art and Science of CSS */
+  width: 100%; /* see page 130 The Art and Science of CSS */
+  padding-bottom: 0.1em;
+  line-height: 14px;
+}
+ul.vertical li label {
+  float: left;
+  width: 180px;
+  margin-right: 1em;
+  line-height: 18px;
+  text-align: right;
+}
+ul.vertical li input[type=text] {
+  width: 320px;
+}
+ul.vertical li textarea {
+  width: 600px;
+  height: 300px;
+}
+
+/************* Edit Product Finishing Table *************************/
+table.edit_product_finishing {
+  border-collapse: collapse;
+  margin: 40px auto;
+}
+table.edit_product_finishing tr td {
+  padding: 5px 50px;
+}
+table.edit_product_finishing tr th {
+  padding: 5px 20px;
+  text-align: center;
+  font-weight: bold;
+  background-color: #1282f0;
+  color: #ffffff;
+}
+table.edit_product_finishing tr:nth-child(2n+1) {
+  background-color: #eeeeee;
+}
+table.edit_product_finishing tr:nth-child(2n) {
+  background-color: #ffffff;
+}
+input[type='submit'].delete_button {
+  background: url(http://www.signboom.com/admin/images/delete.png) no-repeat;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  border: none;
+  color: transparent;
+}
+input[type='submit'].default_button {
+  background: url(http://www.signboom.com/admin/images/make-default.png) no-repeat;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  border: none;
+  color: transparent;
+}
+fieldset ul.vertical {
+  margin: 0;
+  padding: 0;
+}
