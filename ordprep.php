@@ -12,28 +12,38 @@
   include('includes/testmode.php');
   include('includes/build_message.php');
   include('includes/getdetail.php');
+  require_once('helpers/db_helper.php');
 
   $Qry = 'SELECT * FROM signboom_discount WHERE Enabled = 1'; 
-  mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
-  $result = mysql_query($Qry, $DBConn) or die(mysql_error());
+  mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+  $result = mysqli_query( $DBConn, $Qry) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
   $i = 0;
-  while ($row = mysql_fetch_array($result, MYSQL_BOTH)) { 
+  while ($row = mysqli_fetch_array($result,  MYSQLI_BOTH)) { 
     $i++;
+    if(!isset($discount[$i]))
+    {
+      $discount[$i] = new stdClass();
+      $discount[$i]->ID = "";
+      $discount[$i]->Desc = "";
+      $discount[$i]->Footage = "";
+      $discount[$i]->Dct = "";
+    }
+    
     $discount[$i]->ID = $row['ID'];
     $discount[$i]->Desc = $row['Desc'];
     $discount[$i]->Footage = $row['Footage'];
     $discount[$i]->Dct = $row['Dct'];
   } 
-  mysql_free_result($result);
+  ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
 
-  mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
+  mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
   $ordtype = $_POST['ordertype'];
   $email =$_POST['emailr'];
   $colname_rs = (get_magic_quotes_gpc()) ? $_POST['emailr'] : addslashes($_POST['emailr']);
   $query_rs = sprintf('SELECT * FROM signboom_user WHERE email = "%s"', $colname_rs);
-  $rsUser = mysql_query($query_rs, $DBConn) or die(mysql_error());
+  $rsUser = mysqli_query( $DBConn, $query_rs) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
 
-  $row_rs = mysql_fetch_assoc($rsUser);
+  $row_rs = mysqli_fetch_assoc($rsUser);
 
   $custkey = $row_rs['ID'];
   $firstname = $row_rs['firstName'];        
@@ -67,8 +77,8 @@
     $colname_rs = strtoupper((get_magic_quotes_gpc()) ? $_POST['shiptozip'] : addslashes($_POST['shiptozip']));
     $query_rs .= ' and postalzip="'.$colname_rs.'"';
     //echo $query_rs."<br>";
-    $rsShip = mysql_query($query_rs, $DBConn) or die(mysql_error());
-    if (mysql_num_rows($rsShip) == 0) {
+    $rsShip = mysqli_query( $DBConn, $query_rs) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+    if (mysqli_num_rows($rsShip) == 0) {
       $updQ  = "INSERT INTO signboom_shipto ( ";
       $updQ .= "acctid, acctname, name, address, city, state, country, postalzip";
       $updQ .= ") VALUES (";    
@@ -81,7 +91,7 @@
       $updQ .= "'".$_POST['shiptocountry']."', ";
       $updQ .= "'".strtoupper($_POST['shiptozip'])."' ";
       $updQ .= ")";
-      $result = mysql_query($updQ, $DBConn) or die(mysql_error());
+      $result = mysqli_query( $DBConn, $updQ) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
       //echo $updQ;
       //exit();
     }
@@ -92,7 +102,8 @@
   
   // Convert ready date to datetime format:
   if (($_POST['readydate'] == "Call") || (strlen(trim($_POST['readydate'])) == 0)){
-    $readydatetime = "0000/00/00 00:00:00";
+    //$readydatetime = "0000/00/00 00:00:00";
+    $readydatetime = date('Y-m-d H:m:s');
   }
   else {
     sscanf($_POST['readydate'], "%d/%d/%d %d%s", $month, $day, $year, $time, $ampm);
@@ -102,7 +113,6 @@
       $hour = $time + 12;
     $readydatetime = sprintf("%4d/%02d/%02d %2d:00:00", $year, $month, $day, $hour);
   }
-
   // Convert special characters to their HTML codes, so we don't mess up the alert function.
   $special_chars =      array("&",      "\"",     "'",      "%",      "(",      ")",      "\r\n",   "\r",     "\n");
   $replacement_values = array("&#038;", "&#034;", "&#039;", "&#037;", "&#040;", "&#041;", "&#010;", "&#010;", "&#010;");
@@ -131,7 +141,7 @@
   
   // Now update the users table with date of (this) most recent order.
   $updQ2 = "UPDATE signboom_user SET mostRecentOrder = '$today' WHERE AcctName = '$acctid'";
-  $result2 = mysql_query($updQ2, $DBConn);
+  $result2 = mysqli_query( $DBConn, $updQ2);
   
 
   $updQ  = "INSERT INTO signboom_ordermast ( ";
@@ -188,14 +198,14 @@
   }
   else {
 	  
-    $result = mysql_query($updQ, $DBConn) or die(mysql_error());
-    $orderid = mysql_insert_id($DBConn);
-
+    $result = mysqli_query( $DBConn, $updQ) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+    $orderid = ((is_null($___mysqli_res = mysqli_insert_id($DBConn))) ? false : $___mysqli_res);
+    //echo $orderid; die;
     if ($acctid == 'INCIDENT')
     {
       $order_total = str_replace('$', '', $_POST['fsubtotal']);
       $insert_query = "INSERT INTO signboom_incidents SET Date = DATE_SUB(NOW(), INTERVAL 3 HOUR), OrderId = '$orderid', Value = '$order_total', UploadNotes = '$fnotes', Type = '', Accountable = '', Caused = '', Comments = ''";
-      $result_insert = mysql_query($insert_query, $DBConn);
+      $result_insert = mysqli_query( $DBConn, $insert_query);
 	  
     }
 
@@ -257,8 +267,8 @@
         if ($l_items[$quanidx] != "") {
 	
         $category_query = "SELECT Category FROM signboom_allproducts WHERE Code = '" . $l_items[$prodidx] . "'";
-        $category_result = mysql_query($category_query, $DBConn) or die(mysql_error());
-        $category = mysql_result($category_result, 0, 'Category');
+        $category_result = mysqli_query( $DBConn, $category_query) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+        $category = mysqli_result($category_result,  0,  'Category');
         if (($category == 'STANDS') || ($category == 'ACCESS'))
             $starting_queue = 'Finish';
         else
@@ -320,7 +330,7 @@
           echo "<script language=\"javascript\">alert(\"" . $updQ . "\");</script>";
         }
         else {
-          $result = mysql_query($updQ, $DBConn) or die(mysql_error());
+          $result = mysqli_query( $DBConn, $updQ) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
         }
       }
     }
@@ -329,24 +339,25 @@
   if ($this_is_a_test != 1) {
 
     $Query = 'SELECT * FROM signboom_ordermast WHERE ID = "' . $orderid.'" AND Token = "'.$dbToken.'"';
-    $result = mysql_query($Query, $DBConn) or die(mysql_error());
-    $refnum = mysql_result($result,0,'refnum');
-    $orderid = mysql_result($result,0,'ID');
-    $accountid = mysql_result($result,0,'AcctName');
+    $result = mysqli_query( $DBConn, $Query) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+    $refnum = mysqli_result($result, 0, 'refnum');
+    $orderid = mysqli_result($result, 0, 'ID');
+    $accountid = mysqli_result($result, 0, 'AcctName');
     $subjectline = "Signboom Order Entry #$orderid - $accountid -  '$refnum'";
-
     $detail = array();
     getOrderDetails($orderid, $detail);
-
+    //die('2');
     $msg = bldmsg($result, $detail, $rsUser);
 
-    mail("orders@signboom.com", $subjectline, $msg, "From: " . mysql_result($rsUser,0,'email') . "\r\n"); // Sandra
-    mail("tammy@signboom.com", $subjectline, $msg, "From: " . mysql_result($rsUser,0,'email') . "\r\n"); // Tammy
+    mail("jayminsejpal@gmail.com", $subjectline, $msg, "From: " . mysqli_result($rsUser, 0, 'email') . "\r\n");
+    //Developer Jaymin
+    mail("orders@signboom.com", $subjectline, $msg, "From: " . mysqli_result($rsUser, 0, 'email') . "\r\n"); // Sandra
+    mail("tammy@signboom.com", $subjectline, $msg, "From: " . mysqli_result($rsUser, 0, 'email') . "\r\n"); // Tammy
     //if ($copy_to_kim) Copy all orders to Kim per Len's request on 170822.
-    mail("kim@signboom.com", $subjectline, $msg, "From: " . mysql_result($rsUser,0,'email') . "\r\n"); // Kim
-    mail("leonardjamesmoore@gmail.com", $subjectline, $msg, "From: " . mysql_result($rsUser,0,'email') . "\r\n"); // Leonard
-    mail("orders.signboom@gmail.com", $subjectline, $msg, "From: " . mysql_result($rsUser,0,'email') . "\r\n"); // Staff, because emails to @signboom addresses aren't getting through reliably (July 2018)
-    mail("alison_j_taylor@hotmail.com", $subjectline, $msg, "From: " . mysql_result($rsUser,0,'email') . "\r\n"); // Alison for testing
+    mail("kim@signboom.com", $subjectline, $msg, "From: " . mysqli_result($rsUser, 0, 'email') . "\r\n"); // Kim
+    mail("leonardjamesmoore@gmail.com", $subjectline, $msg, "From: " . mysqli_result($rsUser, 0, 'email') . "\r\n"); // Leonard
+    mail("orders.signboom@gmail.com", $subjectline, $msg, "From: " . mysqli_result($rsUser, 0, 'email') . "\r\n"); // Staff, because emails to @signboom addresses aren't getting through reliably (July 2018)
+    mail("alison_j_taylor@hotmail.com", $subjectline, $msg, "From: " . mysqli_result($rsUser, 0, 'email') . "\r\n"); // Alison for testing
 
     $ftotal = str_replace('$', '', $_POST['ftotal']);
     if ($ftotal > 1500)
@@ -364,12 +375,12 @@
 
   function GetProductInfo($sz) {  // used to be GetSigrProduct
     include('Connections/DBConn.php');
-    mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
+    mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
     $query_rs = sprintf('SELECT * FROM `signboom_allproducts` WHERE ID = "%s"', $sz);
-    $rs = mysql_query($query_rs, $DBConn) or die(mysql_error());
-    $row_rs = mysql_fetch_assoc($rs);
+    $rs = mysqli_query( $DBConn, $query_rs) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+    $row_rs = mysqli_fetch_assoc($rs);
     $temp = $row_rs['code'];
-    mysql_free_result($rs);  
+    ((mysqli_free_result($rs) || (is_object($rs) && (get_class($rs) == "mysqli_result"))) ? true : false);  
     return addslashes($temp);
   }
   
@@ -443,6 +454,6 @@
 </body>
 </html>
 <?php
-mysql_free_result($rsUser);
-mysql_free_result($result);
+((mysqli_free_result($rsUser) || (is_object($rsUser) && (get_class($rsUser) == "mysqli_result"))) ? true : false);
+((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
 ?>

@@ -1,5 +1,6 @@
 <?php 
 require('authprodn.php');
+mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -40,14 +41,14 @@ require('authprodn.php');
   <?php 
     $query_incidents = "SELECT signboom_ordermast.ID, signboom_incidents.IncidentId, signboom_incidents.Date, signboom_incidents.Value, signboom_incidents.UploadNotes, signboom_incidents.Type, signboom_incidents.Accountable, signboom_incidents.Caused, signboom_incidents.Comments FROM signboom_ordermast, signboom_incidents WHERE signboom_ordermast.AcctName = 'INCIDENT' AND (signboom_incidents.OrderId = signboom_ordermast.ID) ORDER BY signboom_incidents.Date DESC";
 
-    $incidents = mysql_query($query_incidents, $DBConn) or die("queryDashboard: Could not read incidents from database:" . mysql_error() . "<br><br>" . $query_incidents);
-      $number_of_incidents = mysql_num_rows($incidents);
+    $incidents = mysqli_query( $DBConn, $query_incidents) or die("queryDashboard: Could not read incidents from database:" . mysqli_error($GLOBALS["___mysqli_ston"]) . "<br><br>" . $query_incidents);
+      $number_of_incidents = mysqli_num_rows($incidents);
 	  
 		$protocol = isset($_SERVER["HTTPS"]) ? 'https' : 'http';
 		$host = $_SERVER['SERVER_NAME'];
 
     // All the incidents are shown on one page.
-    while ($row_incident = mysql_fetch_assoc($incidents))
+    while ($row_incident = mysqli_fetch_assoc($incidents))
     {
       if ($row_incident == FALSE) 
       {
@@ -103,5 +104,5 @@ require('authprodn.php');
 </body>
 </html>
 <?php
-mysql_free_result($incidents);
+((mysqli_free_result($incidents) || (is_object($incidents) && (get_class($incidents) == "mysqli_result"))) ? true : false);
 ?>

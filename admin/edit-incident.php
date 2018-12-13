@@ -21,7 +21,7 @@
 
   if (isset($_REQUEST['incident_id']) || isset($_REQUEST['order_id']))
   {
-    $incident_id =  trim($_REQUEST['incident_id']);
+    $incident_id =  isset($_REQUEST['incident_id'])?trim($_REQUEST['incident_id']):"";;
     $order_id = trim($_REQUEST['order_id']);
     if (strlen(trim($incident_id)) > 0)
     {

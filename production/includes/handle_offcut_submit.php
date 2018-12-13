@@ -1,34 +1,35 @@
 <?php
-require_once('../includes/mailord.php'); 
+require_once('../includes/mailord.php');
+mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"])); 
 
 /********************************* function ***********************************/
 function handle_offcut_submit() {
   global $DBConn;
-
   $my_debug = 1;
-
+  //print_r($_POST);
   $number_of_offcuts = $_POST['number_of_offcuts'];
   $the_date = date("Y-m-d");
-  if (isset($_SESSION["MM_Username"])) {
+  if (isset($_SESSION["MM_Username"])) 
+  {
     $current_user = $_SESSION["MM_Username"];
     $query_user = "SELECT AcctName FROM signboom_user WHERE email = '$current_user'";
-    $result_user = mysql_query($query_user, $DBConn) or die(mysql_error());
-    $row_user = mysql_fetch_assoc($result_user);
+    $result_user = mysqli_query( $DBConn, $query_user) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+    $row_user = mysqli_fetch_assoc($result_user);
     $the_username = $row_user['AcctName'];
   }
   else
   {
     $the_username = 'UNKNOWN';
   }
-
   // For each of the offcuts on that page....
   for ($k = 0; $k <= $number_of_offcuts; $k++) 
   {
-    $the_offcut_id = $_POST['offcut_id_'.$k];
+    //echo $_POST['offcut_id_'.$k].'<br>';
+    $the_offcut_id = isset($_POST['offcut_id_'.$k])?$_POST['offcut_id_'.$k]:"";
     $send_query = 0;
 
     // If there is an offcut on that row...
-    if ($the_offcut_id != 0) 
+    if ($the_offcut_id  != 0) 
     {
       // Read information the user has just submitted for that offcut.
       if (isset($_POST['claimed_'.$k]))
@@ -42,8 +43,8 @@ function handle_offcut_submit() {
 
       // Check what status the offcut was at previously (in the database).
       $get_query = "SELECT * FROM signboom_offcuts WHERE OffcutId = $the_offcut_id";
-      $result = mysql_query($get_query, $DBConn) or die(mysql_error());
-      $row = mysql_fetch_assoc($result);
+      $result = mysqli_query( $DBConn, $get_query) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+      $row = mysqli_fetch_assoc($result);
       $old_claimed = $row['Claimed'];
       $old_used = $row['Used'];
       $material = $row['Material'];
@@ -83,7 +84,7 @@ function handle_offcut_submit() {
       if ($send_query) 
       {
         //echo "<script language=\"javascript\">alert(\"Update Query: $update_query\");</script>";
-        $result = mysql_query($update_query, $DBConn) or die(mysql_error());
+        $result = mysqli_query( $DBConn, $update_query) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
 
         // If an offcut is claimed or used, email Len and Alison and other production staff. 
         include('includes/send_offcut_email.php'); // This code also forces the necessary page refresh
@@ -96,8 +97,8 @@ function handle_offcut_submit() {
 } // end of function handle_offcut_submit()
 
 /********************************* main code ***********************************/
-
-   if ($_POST['update_offcuts']) {
+    
+   if (isset($_POST['update_offcuts'])) {
      handle_offcut_submit();
    }
 

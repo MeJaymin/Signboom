@@ -1,5 +1,5 @@
 <?php
-
+require_once '../helpers/db_helper.php';
 function addToOrdersList($the_order_id, &$orders_list)
 {
   // Add this order to a list of all orders which have just had a file proofed/packed.
@@ -21,12 +21,12 @@ function sendEmails($queue, $orders_list)
     {
       // Check whether all files in this order have been proofed/packed.
       $query_jobs_test = "SELECT id, currentqueue FROM signboom_linedetail WHERE orderid = $the_order_id";
-      $jobs_test = mysql_query($query_jobs_test, $DBConn);
+      $jobs_test = mysqli_query( $DBConn, $query_jobs_test);
       if ($jobs_test === false)
       {
         echo "Query for current queue Failed!<br>";
       }
-      while ($row_jobs = mysql_fetch_assoc($jobs_test))
+      while ($row_jobs = mysqli_fetch_assoc($jobs_test))
       {
         if ($row_jobs['currentqueue'] == $queue)
         {
@@ -40,10 +40,10 @@ function sendEmails($queue, $orders_list)
   
       // Check if email for this stage has been sent
       $query_order_test = "SELECT * FROM signboom_ordermast WHERE ID = $the_order_id";
-      $result = mysql_query($query_order_test, $DBConn); 
+      $result = mysqli_query( $DBConn, $query_order_test); 
       if ($result === false)
         echo "Query for proofed email Failed!<br>";
-      $row_order = mysql_fetch_array($result);
+      $row_order = mysqli_fetch_array($result);
       $refnum = $row_order['refnum'];
 
       if ($queue == 'Proof')
@@ -64,7 +64,7 @@ function sendEmails($queue, $orders_list)
         $vancouver_time = $now - (3 * 60 * 60); // subtract 3 hours off for time difference
         $order_completion_time = date('Y-m-d H:i:s', $vancouver_time);
         $update_query = "UPDATE signboom_ordermast SET timecompleted = '$order_completion_time', ordercompleted = 'yes' WHERE ID = $the_order_id";
-        $result = mysql_query($update_query, $DBConn) or die(mysql_error());
+        $result = mysqli_query( $DBConn, $update_query) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
       }
 
       if ($row_order[$field] == 'no')
@@ -75,7 +75,7 @@ function sendEmails($queue, $orders_list)
         // Prepare and send an email to customer.
         $account_name = $row_order['AcctName'];
 	$query_user = "SELECT * FROM signboom_user WHERE AcctName = '$account_name'";
-        $info_user = mysql_query($query_user, $DBConn);
+        $info_user = mysqli_query( $DBConn, $query_user);
     
 	$message = array();
         $message[1]['content_type'] = 'text/html; charset=iso-8859-1';
@@ -83,16 +83,16 @@ function sendEmails($queue, $orders_list)
         $message[1]['no_base64'] = TRUE;
         $message[1]['data'] = bldhtml($result, $detail, $info_user, $intro);
         $out = mp_new_message($message);
-        mail(mysql_result($result,0,'email'), $the_email_title, $out[0], "From: signboom@signboom.com"."\r\n".$out[1]);
+        mail(mysqli_result($result, 0, 'email'), $the_email_title, $out[0], "From: signboom@signboom.com"."\r\n".$out[1]);
         //mail('alison@usablewebdesigns.com', $the_email_title, $out[0], "From: signboom@signboom.com"."\r\n".$out[1]);
-        mysql_free_result($rsUser);
-        mysql_free_result($result);
+        ((mysqli_free_result($rsUser) || (is_object($rsUser) && (get_class($rsUser) == "mysqli_result"))) ? true : false);
+        ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
 
         echo "<div style=\"text-align: center; font-weight: bold; color:#00AAEA; padding-top: 15px; padding-bottom: 15px;\">The customer has been sent an email indicating that all jobs in order " . $the_order_id . " have been $what_we_did.</div>";
 
         // Update status of that order in the database.
         $set_query = "UPDATE signboom_ordermast SET $field = 'yes' WHERE ID = $the_order_id";
-        mysql_query($set_query, $DBConn) or die(mysql_error());
+        mysqli_query( $DBConn, $set_query) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
       }
 
     } //end foreach loop

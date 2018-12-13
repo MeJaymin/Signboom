@@ -1,6 +1,6 @@
 <?php
 
-mysql_select_db($database_DBConn, $DBConn);
+mysqli_select_db( $DBConn, $database_DBConn);
 $current_page = $_SERVER["PHP_SELF"];
 $my_debug = 0;
 

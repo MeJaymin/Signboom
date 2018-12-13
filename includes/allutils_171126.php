@@ -44,6 +44,15 @@
   $i = 0;
   while ($row = mysqli_fetch_array($result,  MYSQLI_BOTH)) { 
     $i++;
+    if(!isset($fcategory[$i]))
+    {
+      $fcategory[$i] = new stdClass();
+      $fcategory[$i]->ID = "";
+      $fcategory[$i]->code = "";
+      $fcategory[$i]->shortname = "";
+      $fcategory[$i]->description = "";
+      $fcategory[$i]->printable = "";
+    }
     $fcategory[$i]->ID = $row['ID'];
     $fcategory[$i]->code = $row['code'];
     $fcategory[$i]->shortname = $row['shortname'];
@@ -71,6 +80,12 @@
     // handle switch to new group, by putting in separator, and remembering new group
     if ($row['SortGroup'] != $product_group) {
       $i++;
+      if(!isset($fproduct[$i]))
+      {
+        $fproduct[$i] = new stdClass();
+        $fproduct[$i]->category= $row['Category'];
+        $fproduct[$i]->id = 0;
+      }
       /* the values below let the javascript code know to put a separator into the list */
       $fproduct[$i]->category= $row['Category'];
       $fproduct[$i]->id = 0; 
@@ -79,6 +94,29 @@
 
     // add product to the selector
     $i++;
+    if(!isset($fproduct[$i]))
+    {
+      $fproduct[$i] = new stdClass();
+      $fproduct[$i]->category= $row['Category'];
+      $fproduct[$i]->id = "";
+      $fproduct[$i]->code = "";
+      $fproduct[$i]->name = "";
+      $fproduct[$i]->description = "";
+      $fproduct[$i]->descr_image = "";
+      $fproduct[$i]->descr_text = "";
+      $fproduct[$i]->descr_finishing = "";
+      $fproduct[$i]->descr_limitations = "";
+      $fproduct[$i]->descr_extras = "";
+      $fproduct[$i]->printwidth = "";
+      $fproduct[$i]->printlength = "";
+      $fproduct[$i]->costdisc = "";
+      $fproduct[$i]->costnon = "";
+      $fproduct[$i]->costwaste = "";
+      $fproduct[$i]->costink = "";
+      $fproduct[$i]->sort_group = "";
+      $fproduct[$i]->sort_order = "";
+      $fproduct[$i]->batch_day = "";
+    }
     $fproduct[$i]->category= $row['Category'];
     $fproduct[$i]->id = $row['Id'];
     $fproduct[$i]->code = $row['Code'];
@@ -94,7 +132,7 @@
     $fproduct[$i]->costdisc = $row['CostDisc'];
     $fproduct[$i]->costnon = $row['CostNon'];
     $fproduct[$i]->costwaste = $row['CostWaste'];
-    $fproduct[$i]->costink = $row['CostInk'];
+    $fproduct[$i]->costink = isset($row['CostInk'])?$row['CostInk']:"";
     $fproduct[$i]->sort_group = $row['SortGroup'];
     $fproduct[$i]->sort_order = $row['SortOrder'];
     $fproduct[$i]->batch_day = $row['BatchDay'];
@@ -109,6 +147,13 @@
   $i = 0;
   while ($row = mysqli_fetch_array($result,  MYSQLI_BOTH)) { 
     $i++;
+    if(!isset($foptioncategory[$i]))
+    {
+      $foptioncategory[$i] = new stdClass();
+      $foptioncategory[$i]->id = "";
+      $foptioncategory[$i]->code = "";
+      $foptioncategory[$i]->name = "";
+    }
     $foptioncategory[$i]->id = $row['Id'];
     $foptioncategory[$i]->code = $row['Code'];
     $foptioncategory[$i]->name = $row['Name'];
@@ -122,6 +167,27 @@
   $i = 0;
   while ($row = mysqli_fetch_array($result,  MYSQLI_BOTH)) { 
     $i++;
+    if(!isset($ffinishingoption[$i]))
+    {
+      $ffinishingoption[$i] = new stdClass();
+      $ffinishingoption[$i]->id = "";
+      $ffinishingoption[$i]->category = "";
+      $ffinishingoption[$i]->sort_group= "";
+      $ffinishingoption[$i]->option_set = "";
+      $ffinishingoption[$i]->option_type = "";
+      $ffinishingoption[$i]->sort_order = "";
+      $ffinishingoption[$i]->option_name = "";
+      $ffinishingoption[$i]->description = "";
+      $ffinishingoption[$i]->code = "";
+      $ffinishingoption[$i]->extra_time = "";
+      $ffinishingoption[$i]->units = "";
+      $ffinishingoption[$i]->units_per_hour = "";
+      $ffinishingoption[$i]->reference = "";
+      $ffinishingoption[$i]->fixed_cost = "";
+      $ffinishingoption[$i]->variable_cost = "";
+      $ffinishingoption[$i]->batch_day = "";
+      $ffinishingoption[$i]->laminate_product_code = "";
+    }
     $ffinishingoption[$i]->id = $row['Id'];
     $ffinishingoption[$i]->category = $row['Category'];
     $ffinishingoption[$i]->sort_group= $row['SortGroup'];
@@ -151,6 +217,10 @@
   $i = 0;
   while ($row = mysqli_fetch_array($result,  MYSQLI_BOTH)) { 
     $i++;
+    if(!isset($fproductoption[$i]))
+    {
+      $fproductoption[$i] = new stdClass();
+    }
     $fproductoption[$i]->id = $row['Id'];
     $fproductoption[$i]->product_code = $row['ProductCode'];
     $fproductoption[$i]->finishing_option_code = $row['FinishingOptionCode'];

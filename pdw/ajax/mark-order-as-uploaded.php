@@ -10,8 +10,8 @@
     if (ctype_digit($order_id) && ($order_id > 0))
     {
       $query = "UPDATE signboom_ordermast SET Uploaded = 'Yes', UploadCompletionTime = '$now' WHERE ID = $order_id";
-      mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
-      $result = mysql_query($query, $DBConn) or die(mysql_error());
+      mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+      $result = mysqli_query( $DBConn, $query) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
       if ($result)
         echo "OK";
       else

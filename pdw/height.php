@@ -1,6 +1,6 @@
 <?php 
 require('authadmin.php');
-
+mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
 /*
         signboom_linedetail.readydatetime AS readydatetime, signboom_linedetail.readydate AS readydate, 
 	signboom_linedetail.filename AS filename, 
@@ -28,8 +28,9 @@ End_Of_Query;
 // what is cost column? per item or line total? before or after discount?
 // try to parse out type of finishing from filename; if filename doesn't parse, leave it empty
 
-$jobs = mysql_query($query_jobs, $DBConn) or die(mysql_error());
-$num_jobs = mysql_num_rows($jobs);
+$jobs = mysqli_query( $DBConn, $query_jobs) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+$num_jobs = mysqli_num_rows($jobs);
+$my_debug="";
 if ($my_debug) echo "Number of files found by query: $num_jobs<br>";
 
 $total_product_cost = 0;
@@ -39,7 +40,7 @@ $rush_orders = array();
 for ($i = 0; $i < $num_jobs; $i++) 
 {
   // Grab a job from the query results.
-  $row = mysql_fetch_assoc($jobs);
+  $row = mysqli_fetch_assoc($jobs);
   if ($row == FALSE) echo "Could not read job from database.";
 
   $row['cost'] = ltrim($row['cost'], "$"); // remove dollar sign before saving cost, so we can add cost up
@@ -81,7 +82,7 @@ for ($i = 0; $i < $num_jobs; $i++)
   $job_array[] = $row; 
 
 } // end of for loop  
-mysql_free_result($jobs);
+((mysqli_free_result($jobs) || (is_object($jobs) && (get_class($jobs) == "mysqli_result"))) ? true : false);
 
 $page_title = 'Details: Sorted by Height';
 include('templates/details.html.php');

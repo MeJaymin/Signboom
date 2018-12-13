@@ -8,10 +8,12 @@ if (strlen(trim($account_name)) > 0)
 }
 else 
 */
-
-if (strlen(trim($_POST['$order_id'])) > 0)
+if(isset($_POST['$order_id']))
 {
-  $order_id = trim($_POST['order_id']);
+  if (strlen(trim($_POST['$order_id'])) > 0)
+  {
+    $order_id = trim($_POST['order_id']);
+  }
 }
 /*
 else if (strlen(trim($_POST['$file_id'])) > 0)
@@ -30,11 +32,13 @@ else if (strlen(trim($_POST['$file_id'])) > 0)
   }
 }
 */
-
-if (strlen($order_id) > 0)
+if(isset($order_id))
 {
-  // bring up single order page for that order
-  header("Location: orderitem.php?order_id=" . $order_id);
+  if (strlen($order_id) > 0)
+  {
+    // bring up single order page for that order
+    header("Location: orderitem.php?order_id=" . $order_id);
+  }
 }
 
 /** Added by zCon **/
@@ -83,7 +87,7 @@ if(isset($_POST['find_order']))
 </div>
 
 <div style="width: 600px; margin: 0px auto;">
-  <div style="color: #cc0000; font-weight: bold;"><?php echo $message; ?></div>
+  <div style="color: #cc0000; font-weight: bold;"><?php echo (isset($message))?$message:""; ?></div>
   <!-- Form which passes search request information in to be handled. -->
   <form name="main_form" action=<?php echo $_SERVER['PHP_SELF']; ?> method="POST">
     <!--
@@ -108,7 +112,7 @@ if(isset($_POST['find_order']))
 </html>
 
 <?php
-mysql_free_result($orders);
-mysql_free_result($jobs);
-mysql_free_result($result);
+/*((mysqli_free_result($orders) || (is_object($orders) && (get_class($orders) == "mysqli_result"))) ? true : false);
+((mysqli_free_result($jobs) || (is_object($jobs) && (get_class($jobs) == "mysqli_result"))) ? true : false);
+((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);*/
 ?>

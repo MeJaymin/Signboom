@@ -46,6 +46,22 @@ function getOrderDetails($the_order_id, &$detail)
     $row_detail_options .= getOptionName($rowdtl['RK']);
     $row_detail_options .= getOptionName($rowdtl['RO']);
 
+    if(!isset($detail[$i]))
+    {
+        $detail[$i] = new stdClass();
+        $detail[$i]->code = $rowdtl['product'];
+        $detail[$i]->options = $row_detail_options;
+        $detail[$i]->quantity = $rowdtl['quantity'];
+        $detail[$i]->width =$rowdtl['itemwidth'];
+        $detail[$i]->height = $rowdtl['itemheight'];
+        $detail[$i]->filename = $rowdtl['filename'];
+        $detail[$i]->total =$rowdtl['cost'];
+        $detail[$i]->dctcost = $rowdtl['dctcost']; //Discountable cost
+        $detail[$i]->sqfootage = $rowdtl['squarefootage'];
+        $detail[$i]->printedarea = $rowdtl['printedarea'];
+        $detail[$i]->wastearea = $rowdtl['wastearea'];
+        $detail[$i]->wastecost = $rowdtl['wastecost'];
+    }
     // Save all the details of the file.
     $detail[$i]->code = $rowdtl['product'];
     $detail[$i]->options = $row_detail_options;
@@ -61,5 +77,6 @@ function getOrderDetails($the_order_id, &$detail)
     $detail[$i]->wastecost = $rowdtl['wastecost'];
   }
   while ($rowdtl = mysqli_fetch_assoc($rsdetail));
+  //die('inside get detail function');
 }
 ?>

@@ -27,7 +27,7 @@ else
 include('includes/date_picker.htm');
 include('includes/dashboard_completed_orders.php');
 include('includes/dashboard_ontime_orders.php');
-mysql_select_db($database_DBConn, $DBConn);
+mysqli_select_db( $DBConn, $database_DBConn);
 $my_debug = 0;
 
 calculateAllOnTime();
@@ -68,7 +68,7 @@ calculateAllCompleted();
     <!-- Div to group the four inputs and the two tables those inputs apply to. -->
     <div style="display: inline-block; background-color: #EEEEEE; padding: 10px; text-align: center; border: solid 1px #CCCCCC;">
 
-    <form name="filter_controls" method="get" action="<?php echo $PHP_SELF;?>">
+    <form name="filter_controls" method="get" action="">
 
       <div style="float: left; margin-bottom: 25px;">
       <b>Type:</b> 
@@ -335,7 +335,7 @@ calculateAllCompleted();
 </body>
 </html>
 <?php
-mysql_free_result($orders);
-mysql_free_result($jobs);
-mysql_free_result($completed_jobs);
+/*((mysqli_free_result($orders) || (is_object($orders) && (get_class($orders) == "mysqli_result"))) ? true : false);
+((mysqli_free_result($jobs) || (is_object($jobs) && (get_class($jobs) == "mysqli_result"))) ? true : false);
+((mysqli_free_result($completed_jobs) || (is_object($completed_jobs) && (get_class($completed_jobs) == "mysqli_result"))) ? true : false);*/
 ?>

@@ -1,9 +1,13 @@
 <?php 
 require('authprodn.php');
-
+mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+// Create connection
+/*$conn = new mysqli('localhost', 'root', 'root', 'signboom_v1p5');*/
 $query_offcuts = "SELECT * FROM signboom_offcuts WHERE Used = 0 ORDER BY Material ASC, Length ASC, DateAdded ASC";
-$offcuts = mysql_query($query_offcuts, $DBConn) or die("Offcuts: Could not read offcuts from database:" . mysql_error() . "<br><br>" . $query_offcuts);
-$number_of_offcuts = mysql_num_rows($offcuts);
+/*$offcuts = $conn->query($query_offcuts);*/
+
+$offcuts = mysqli_query( $DBConn, $query_offcuts) or die("Offcuts: Could not read offcuts from database:" . mysqli_error($GLOBALS["___mysqli_ston"]) . "<br><br>" . $query_offcuts);
+$number_of_offcuts = mysqli_num_rows($offcuts);
 
 // Handle any ticks user has made in checkboxes.
 include('includes/javascript_clicked_offcuts.htm');
@@ -34,7 +38,7 @@ include('includes/javascript_clicked_offcuts.htm');
   </div>
 
   <!-- Form which passes tickbox ticks back into PHP to be handled. -->
-  <form name="offcuts_form" action=<?php echo $_SERVER['PHP_SELF'] ?> method="POST">
+  <form name="offcuts_form" action="" method="POST">
     <input name="number_of_offcuts" id="number_of_offcuts" type="hidden" value="<?php echo $number_of_offcuts; ?>">
 
     <table class="evenodd" border="0" align="center" cellpadding="5">
@@ -65,7 +69,7 @@ include('includes/javascript_clicked_offcuts.htm');
       // Display the offcuts.
       for ($i = 0; $i < $number_of_offcuts; $i++) 
       {
-        $row = mysql_fetch_assoc($offcuts);
+        $row = mysqli_fetch_assoc($offcuts);
         if ($row == FALSE)
 	{
           echo "Could not read offcut information from database.";
@@ -152,6 +156,6 @@ include('includes/javascript_clicked_offcuts.htm');
 </body>
 </html>
 <?php
-mysql_free_result($jobs);
+/*((mysqli_free_result($jobs) || (is_object($jobs) && (get_class($jobs) == "mysqli_result"))) ? true : false);*/
 ?>
 

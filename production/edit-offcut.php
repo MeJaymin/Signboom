@@ -1,14 +1,15 @@
 <?php 
   require('authprodn.php'); 
   require('../admin/helper-functions.php');
+  mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
   $button_name = 'submit_edit_offcut';
   $button_value = 'Edit Offcut Information';
 
   $products = array();
   $products[] = '';
   $query_products = "SELECT Code FROM signboom_allproducts WHERE (Category != 'STANDS') && (Category != 'ACCESS') ORDER BY Code";
-  $result_products = mysql_query($query_products, $DBConn) or die(mysql_error());
-  while ($row_product = mysql_fetch_array($result_products, MYSQL_BOTH))
+  $result_products = mysqli_query( $DBConn, $query_products) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+  while ($row_product = mysqli_fetch_array($result_products,  MYSQLI_BOTH))
   {
     $products[] = $row_product['Code'];
   }
@@ -34,7 +35,7 @@
         {
           $query_update = "UPDATE signboom_offcuts SET Material = '$material', Width = '$width', Length = '$length', Quantity = '$quantity', PaidFor = '$paid_for', Description = '$description' WHERE OffcutId = $offcut_id";
           //echo "Query: $query_update<br><br>";
-          $result_update = mysql_query($query_update, $DBConn) or die(mysql_error());
+          $result_update = mysqli_query( $DBConn, $query_update) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
 	  // Refresh the page.
 	  //echo '<script type="text/javascript">';
           //echo 'window.location.href="http://signboom.com/production/select-offcut.php?message=Your edits have been saved.';
@@ -55,8 +56,8 @@
           exit;
         }
         $query = "SELECT * FROM signboom_offcuts WHERE OffcutId = $offcut_id";
-        $result = mysql_query($query, $DBConn) or die(mysql_error());
-        $row = mysql_fetch_array($result, MYSQL_BOTH);
+        $result = mysqli_query( $DBConn, $query) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+        $row = mysqli_fetch_array($result,  MYSQLI_BOTH);
         $date_added = $row['DateAdded'];
         $person_added = $row['PersonAdded'];
         $material = $row['Material'];

@@ -1,9 +1,9 @@
 <?php 
   require('authprodn.php'); 
-
   // Get a list of all offcuts (which have not yet been used) from the database.
+  mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
   $query = "SELECT * FROM signboom_offcuts WHERE Used != 1 ORDER BY Material, DateAdded"; 
-  $result = mysql_query($query, $DBConn) or die(mysql_error());
+  $result = mysqli_query( $DBConn, $query) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -18,7 +18,7 @@
 <body>
 
   <div style="width: 1200px; margin: 0px auto; text-align: center;">
-    <div style="float: left; margin-top: 20px;"><img src="../../images/logo3d.gif" width="308" height="54"></div>
+    <div style="float: left; margin-top: 20px;"><img src="../images/logo3d.gif" width="308" height="54"></div>
     <div style="float: right;"><h1>Order Processing System: Offcuts</h1></div>
     <?php include('menu.html');?>
     <h1>Select Offcut to Edit</h1>
@@ -28,7 +28,7 @@
 
   <?php
   $product = "";
-  while ($row = mysql_fetch_array($result, MYSQL_BOTH)) 
+  while ($row = mysqli_fetch_array($result,  MYSQLI_BOTH)) 
   { 
     if ($product == "") 
     {
@@ -47,7 +47,7 @@
   echo '</div>';
 
   // Free memory. 
-  mysql_free_result($result);
+  ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
   ?>
 
   </div>

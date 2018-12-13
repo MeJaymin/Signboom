@@ -67,14 +67,15 @@ WHERE (signboom_linedetail.currentqueue != 'Deleted') AND
       (signboom_ordermast.readydateconfirmed = 0)
 End_Of_Query_3;
 
-      $sql_unconfirmed = $sql . " AND ((signboom_ordermast.date_created < NOW() - INTERVAL 27 HOUR) OR ((signboom_ordermast.rushtype = 'HOT') AND (signboom_ordermast.readydate = 'Call')))"; // 27 = 24 hours passed + 3 hour time difference 
-      $result_unconfirmed = mysql_query($sql_unconfirmed, $DBConn);
+      $sql_unconfirmed = $sql . " AND ((signboom_ordermast.date_created < NOW() - INTERVAL 27 HOUR) OR ((signboom_ordermast.rushtype = 'HOT') AND (signboom_ordermast.readydate = 'Call')))"; // 27 = 24 hours passed + 3 hour time difference
+      $result_unconfirmed = mysqli_query($conn, $sql); 
+      /*$result_unconfirmed = mysqli_query( $DBConn, $sql_unconfirmed); */
       if (!$result_unconfirmed)
       {
         echo "Error #601 has occured while querying the database: $queue_name. Please contact Alison Taylor to investigate this.<br>";
         return false;
       }
-      $row_unconfirmed = mysql_fetch_array($result_unconfirmed); 
+      $row_unconfirmed = mysqli_fetch_array($result_unconfirmed);  
       if ($row_unconfirmed['SquareFeet'] > 0)
       {
         $flag_this_total = true;
@@ -109,27 +110,31 @@ WHERE (signboom_linedetail.currentqueue = '$queue_name') AND
       (signboom_linedetail.orderid = signboom_ordermast.ID) 
 End_Of_Query_5;
     }
-
-    $result = mysql_query($sql, $DBConn);
+    //echo $sql; die;
+    $conn = new mysqli('localhost', 'root', 'root', 'signboom_v1p5');
+    $result = mysqli_query($conn, $sql);
+    //print_r($result); die;
+    /*$result = mysqli_query( $DBConn, $sql); */
     if (!$result)
     {
       echo "Error #602 has occured while querying the database: $queue_name:<br>$sql<br>. Please contact Alison Taylor to investigate this.<br> $sql";
       return false;
     }
-    $row = mysql_fetch_array($result); 
+    $row = mysqli_fetch_array($result); 
     $total = $row['SquareFeet'];
     if (($queue_name == 'RIP') || ($queue_name == 'Print') || ($queue_name == 'Lam') || ($queue_name == 'Kiss') || 
         ($queue_name == 'CNC') || ($queue_name == 'Finish') || ($queue_name == 'Pack'))
     {
       // Test for late orders, orders due today, and hot orders. 
       $sql_today_late = $sql  . " AND ((signboom_ordermast.readydatetime < NOW() - INTERVAL 3 HOUR) OR (DATE(signboom_ordermast.readydatetime) = CURDATE()) OR  (signboom_ordermast.rushtype = 'HOT'))";
-      $result_today_late = mysql_query($sql_today_late, $DBConn);
+      $result_today_late = mysqli_query($conn, $sql);
+      /*$result_today_late = mysqli_query( $DBConn, $sql_today_late); */
       if (!$result_today_late)
       {
         echo "Error #603 has occured while querying the database: $queue_name.<br>$sql_today_late<br>Please contact Alison Taylor to investigate this.<br>";
         return false;
       }
-      $row_today_late = mysql_fetch_array($result_today_late); 
+      $row_today_late = mysqli_fetch_array($result_today_late);  
       if ($row_today_late['SquareFeet'] > 0)
         $flag_this_total = true;
     }
@@ -162,7 +167,9 @@ End_Of_Query_6;
 
   // Get ordered and categorized list of which products are active in system.
   // We'll use this to control the order of the rows and the content in the first column.
-  $result = mysql_query($sql, $DBConn);
+  $conn = new mysqli('localhost', 'root', 'root', 'signboom_v1p5');
+  /*$result = mysqli_query( $DBConn, $sql);*/
+  $result = mysqli_query($conn, $sql);
   if (!$result)
   {
     echo "Error #604 has occured while querying the database: $queue_name. Please contact Alison Taylor to investigate this.<br>";
@@ -172,7 +179,7 @@ End_Of_Query_6;
   // Create an indexed 2D array where we still store the counts for each product.
   // Start out with counts of zero for each.
   // In the process, build an array of active categories.
-  while ($row = mysql_fetch_array($result))
+  while ($row = mysqli_fetch_array($result))
   {
     $product_code = $row['ProductCode'];
     $category = $row['Category'];
@@ -183,7 +190,7 @@ End_Of_Query_6;
       $array_product_totals[$queue_name][$product_code] = 0;
     }
   }
-  mysql_data_seek($result, 0);
+  mysqli_data_seek($result,  0);
   return $result;
 }
 
@@ -291,8 +298,11 @@ GROUP BY ProductCode
 ORDER BY CategoryOrder ASC, ProductCode ASC
 End_Of_Query_10;
       }
-
-      $result = mysql_query($sql, $DBConn);
+      //echo $sql; die;
+      $conn = new mysqli('localhost', 'root', 'root', 'signboom_v1p5');
+      //$result = mysqli_query($conn, $sql);
+      $result = mysqli_query($conn, $sql); 
+      //print_r($result); die;
       if (!$result)
       {
         echo "Error #605 has occured while querying the database: $queue_name. Please contact Alison Taylor to investigate this.<br>";
@@ -302,7 +312,7 @@ End_Of_Query_10;
       // Now we need to store the data from this query in our 2D array $array_product_totals.
       $category = '';
       $category_subtotal = 0;
-      while ($row_product = mysql_fetch_array($result)) 
+      while ($row_product = mysqli_fetch_array($result)) 
       {
         if ($category == '') $category = $row_product['Category'];
         if ($row_product['Category'] != $category)
@@ -356,20 +366,20 @@ function printRow($product_code, $product_name, $cell_class)
   }
 
   //printf('<td class="'. $cell_class . '"><a href="jobs.php?product=' . $product_code . '&queue=Proof">%.0f</a></td>', $array_product_totals['Proof'][$product_code]);
-  printf('<td class="'. $cell_class . '"><a href="jobs.php?product=' . $product_code . '&queue=RIP">%.0f</a></td>', $array_product_totals['RIP'][$product_code]);
-  printf('<td class="'. $cell_class . '"><a href="jobs.php?product=' . $product_code . '&queue=Print">%.0f</a></td>', $array_product_totals['Print'][$product_code]);
-  printf('<td class="'. $cell_class . '"><a href="jobs.php?product=' . $product_code . '&queue=Lam">%.0f</a></td>', $array_product_totals['Lam'][$product_code]);
-  printf('<td class="'. $cell_class . '"><a href="jobs.php?product=' . $product_code . '&queue=Kiss">%.0f</a></td>', $array_product_totals['Kiss'][$product_code]);
-  printf('<td class="'. $cell_class . '"><a href="jobs.php?product=' . $product_code . '&queue=CNC">%.0f</a></td>', $array_product_totals['CNC'][$product_code]);
+  printf('<td class="'. $cell_class . '"><a href="jobs.php?product=' . $product_code . '&queue=RIP">%.0f</a></td>', isset($array_product_totals['RIP'][$product_code])?$array_product_totals['RIP'][$product_code]:"");
+  printf('<td class="'. $cell_class . '"><a href="jobs.php?product=' . $product_code . '&queue=Print">%.0f</a></td>', isset($array_product_totals['Print'][$product_code])?$array_product_totals['Print'][$product_code]:"");
+  printf('<td class="'. $cell_class . '"><a href="jobs.php?product=' . $product_code . '&queue=Lam">%.0f</a></td>', isset($array_product_totals['Lam'][$product_code])?$array_product_totals['Lam'][$product_code]:"");
+  printf('<td class="'. $cell_class . '"><a href="jobs.php?product=' . $product_code . '&queue=Kiss">%.0f</a></td>', isset($array_product_totals['Kiss'][$product_code])?$array_product_totals['Kiss'][$product_code]:"");
+  printf('<td class="'. $cell_class . '"><a href="jobs.php?product=' . $product_code . '&queue=CNC">%.0f</a></td>', isset($array_product_totals['CNC'][$product_code])?$array_product_totals['CNC'][$product_code]:"");
   printf('<td class="'. $cell_class . '"><a href="jobs.php?product=' . $product_code . '&queue=Finish">%.0f</a></td>', $array_product_totals['Finish'][$product_code]);
-  printf('<td class="'. $cell_class . '"><a href="jobs.php?product=' . $product_code . '&queue=Pack">%.0f</a></td>', $array_product_totals['Pack'][$product_code]);
+  printf('<td class="'. $cell_class . '"><a href="jobs.php?product=' . $product_code . '&queue=Pack">%.0f</a></td>', isset($array_product_totals['Pack'][$product_code])?$array_product_totals['Pack'][$product_code]:"");
 
 
   if ($cell_class == 'dark_grey_cell')
   {
-    printf('<td class="dark_grey_cell"><a href="orders.php?product=' . $product_code . '&queue=Pending">%.0f</a></td>', $array_product_totals['Pending'][$product_code]);
-    printf('<td class="dark_grey_cell"><a href="orders.php?product=' . $product_code . '&queue=Ready">%.0f</a></td>', $array_product_totals['Ready'][$product_code]);
-    printf('<td class="dark_grey_cell"><a href="orders.php?product=' . $product_code . '&queue=Invoice">%.0f</a></td>', $array_product_totals['Invoice'][$product_code]);
+    printf('<td class="dark_grey_cell"><a href="orders.php?product=' . $product_code . '&queue=Pending">%.0f</a></td>', isset($array_product_totals['Pending'][$product_code])?$array_product_totals['Pending'][$product_code]:"");
+    printf('<td class="dark_grey_cell"><a href="orders.php?product=' . $product_code . '&queue=Ready">%.0f</a></td>', isset($array_product_totals['Ready'][$product_code])?$array_product_totals['Ready'][$product_code]:"");
+    printf('<td class="dark_grey_cell"><a href="orders.php?product=' . $product_code . '&queue=Invoice">%.0f</a></td>', isset($array_product_totals['Invoice'][$product_code])?$array_product_totals['Invoice'][$product_code]:"");
   }
   else
   {
@@ -481,7 +491,7 @@ if (!$success)
 
     // print information for every product/category in $result_product_list...
     $category = '';
-    while ($product_info = mysql_fetch_array($result_product_list)) 
+    while ($product_info = mysqli_fetch_array($result_product_list) ) 
     {
       $product_code = $product_info['ProductCode'];
       $product_name = str_replace(' ', '&nbsp;', $product_info['ProductName']);
@@ -515,5 +525,5 @@ if (!$success)
 </html>
 
 <?php
-mysql_free_result($result_product_list);
+ ((mysqli_free_result($result_product_list) || (is_object($result_product_list) && (get_class($result_product_list) == "mysqli_result"))) ? true : false); 
 ?>

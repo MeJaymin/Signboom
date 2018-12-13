@@ -41,11 +41,11 @@
         <ul class="vertical">
           <li>
             <label for="incident_id">Incident ID:</label>
-            <input type="text" name="incident_id" id="incident_id" value="<?php echo $incident_id; ?>">
+            <input type="text" name="incident_id" id="incident_id" value="<?php if(isset($incident_id)) echo $incident_id; ?>">
           </li>
           <li>
             <label for="order_id">Order ID:</label>
-            <input type="text" name="order_id" id="order_id" value="<?php echo $order_id; ?>">
+            <input type="text" name="order_id" id="order_id" value="<?php if(isset($order_id)) echo $order_id; ?>">
           </li>
           <li>
             <input style="float: right;" type="submit" name="submit_incident" 

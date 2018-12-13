@@ -49,7 +49,7 @@
   </style>
 </head>
 
-<?
+<?php
 
   $MM_redirectLoginFailed = "login.php";
  
@@ -145,8 +145,13 @@
   $Qry = sprintf("SELECT * FROM signboom_shipto WHERE acctid=".$acctID); 
   mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
   $result = mysqli_query( $DBConn, $Qry) or die(mysqli_error($GLOBALS["___mysqli_ston"])); 
-  
   $i = 0;
+  if(!isset($shipto))
+  {
+    $shipto[$i] = new stdClass();
+  }
+  //print_r($shipto); die;
+  
   $shipto[$i]->ID = 0;
   $shipto[$i]->name = "New Address";
   $shipto[$i]->address = "";
@@ -156,6 +161,17 @@
   $shipto[$i]->country = "";
    while ($row = mysqli_fetch_array($result,  MYSQLI_BOTH)) {
     $i++;
+    if(!isset($shipto[$i]))
+    {
+      $shipto[$i] = new stdClass();
+      $shipto[$i]->ID = "";
+      $shipto[$i]->name = "";
+      $shipto[$i]->address = "";
+      $shipto[$i]->city = "";
+      $shipto[$i]->state = "";
+      $shipto[$i]->zip = "";
+      $shipto[$i]->country = "";
+    }
     $shipto[$i]->ID = $row['ID'];
     $shipto[$i]->name = $row['name'];
     $shipto[$i]->address = $row['address'];
@@ -223,48 +239,49 @@ function UpdateCustomer($UserEmail)
 
     global $database_DBConn;
 */
-	$arrUsers = $_POST['arrUsers'];
-	$selectUser = $_POST['selectUser'];
-	$selectLevel = $_POST['selectLevel'];
-	$firstName = $_POST['firstName'];
-	$lastName = $_POST['lastName'];
-	$email = $_POST['email'];
-	$userName = $_POST['userName'];
-	$btnDisable = $_POST['btnDisable'];
-	$userPass = $_POST['userPass'];
-	$confPass = $_POST['confPass'];
-	$userLevel = $_POST['userLevel'];
-	//$oldcity = $_POST['oldcity'];
-	//$oldst = $_POST['oldst'];
-	$selectProvState = $_POST['selectProvState'];
-	$city = $_POST['city'];
-	$cityerr = $_POST['cityerr'];
-	$statusMsg = $_POST['statusMsg'];
-	$editmode = $_POST['editmode'];
-	$dbName = $_POST['dbName'];
-	$errMsg = $_POST['errMsg'];
-	$debug = $_POST['debug'];
-	$dbWrite = $_POST['dbWrite'];
-	$company = $_POST['company'];
-	$address = $_POST['address'];
-	$url = $_POST['url'];
-	$dct = $_POST['dct'];
-	$pstnum = $_POST['pstnum'];
-	$provstate = $_POST['provstate'];
-	$city = $_POST['city'];
-	$phone1 = $_POST['phone1'];
-	$phone2 = $_POST['phone2'];
-	$country = $_POST['country'];
-	$postalzip = $_POST['postalzip'];
-	$hintq = $_POST['hintq'];
-	$hinta = $_POST['hinta'];
-	$htmlmail = $_POST['htmlmail'];
-	$defcourier = $_POST['defcourier'];
-	$courieracct = $_POST['courieracct'];
-	$selectHintQ = $_POST['selectHintQ'];
-	$arrHintQ = $_POST['arrHintQ'];
-	$arrHintQ2 = $_POST['arrHintQ2'];
-	$hint_question = $_POST['hint_question'];
+  //  echo '<pre>'; print_r($_POST);
+  $arrUsers = isset($_POST['arrUsers'])?$_POST['arrUsers']:"";
+  $selectUser = isset($_POST['selectUser'])?$_POST['selectUser']:"";
+  $selectLevel = isset($_POST['selectLevel'])?$_POST['selectLevel']:"";
+  $firstName = isset($_POST['firstName'])?$_POST['firstName']:"";
+  $lastName = isset($_POST['lastName'])?$_POST['lastName']:"";
+  $email = isset($_POST['email'])?$_POST['email']:"";
+  $userName = isset($_POST['userName'])?$_POST['userName']:"";
+  $btnDisable = isset($_POST['btnDisable'])?$_POST['btnDisable']:"";
+  $userPass = isset($_POST['userPass'])?$_POST['userPass']:"";
+  $confPass = isset($_POST['confPass'])?$_POST['confPass']:"";
+  $userLevel = isset($_POST['userLevel'])?$_POST['userLevel']:"";
+  //$oldcity = $_POST['oldcity'];
+  //$oldst = $_POST['oldst'];
+  $selectProvState = isset($_POST['selectProvState'])?$_POST['selectProvState']:"";
+  $city = isset($_POST['city'])?$_POST['city']:"";
+  $cityerr = isset($_POST['cityerr'])?$_POST['cityerr']:"";
+  $statusMsg = isset($_POST['statusMsg'])?$_POST['statusMsg']:"";
+  $editmode = isset($_POST['editmode'])?$_POST['editmode']:"";
+  $dbName = isset($_POST['dbName'])?$_POST['dbName']:"";
+  $errMsg = isset($_POST['errMsg'])?$_POST['errMsg']:"";
+  $debug = isset($_POST['debug'])?$_POST['debug']:"";
+  $dbWrite = isset($_POST['dbWrite'])?$_POST['dbWrite']:"";
+  $company = isset($_POST['company'])?$_POST['company']:"";
+  $address = isset($_POST['address'])?$_POST['address']:"";
+  $url = isset($_POST['url'])?$_POST['url']:"";
+  $dct = isset($_POST['dct'])?$_POST['dct']:"";
+  $pstnum = isset($_POST['pstnum'])?$_POST['pstnum']:"";
+  $provstate = isset($_POST['provstate'])?$_POST['provstate']:"";
+  $city = isset($_POST['city'])?$_POST['city']:"";
+  $phone1 = isset($_POST['phone1'])?$_POST['phone1']:"";
+  $phone2 = isset($_POST['phone2'])?$_POST['phone2']:"";
+  $country = isset($_POST['country'])?$_POST['country']:"";
+  $postalzip = isset($_POST['postalzip'])?$_POST['postalzip']:"";
+  $hintq = isset($_POST['hintq'])?$_POST['hintq']:"";
+  $hinta = isset($_POST['hinta'])?$_POST['hinta']:"";
+  $htmlmail = isset($_POST['htmlmail'])?$_POST['htmlmail']:"";
+  $defcourier = isset($_POST['defcourier'])?$_POST['defcourier']:"";
+  $courieracct = isset($_POST['courieracct'])?$_POST['courieracct']:"";
+  $selectHintQ = isset($_POST['selectHintQ'])?$_POST['selectHintQ']:"";
+  $arrHintQ = isset($_POST['arrHintQ'])?$_POST['arrHintQ']:"";
+  $arrHintQ2 = isset($_POST['arrHintQ2'])?$_POST['arrHintQ2']:"";
+  $hint_question = isset($_POST['hint_question'])?$_POST['hint_question']:"";
 
     //EMAIL GLOBALS
     global $global_sender;
@@ -277,7 +294,7 @@ function UpdateCustomer($UserEmail)
     //////////////////////////////
 
     if ($firstName=="")
-	{
+  {
       $errMsg="Please enter a First Name.";
       return;
     }
@@ -287,10 +304,10 @@ function UpdateCustomer($UserEmail)
       return;
     }
 
-    if(ereg('[^_A-Za-z0-9-]', $userName)){
+    /*if(ereg('[^_A-Za-z0-9-]', $userName)){
      $errMsg="User Name must contain only letters and numbers.";
      return;
-    }
+    }*/
 
     //Process password if there is any information entered
     if (($userPass != "") OR ($confPass != "")) {
@@ -415,7 +432,7 @@ function UpdateCustomer($UserEmail)
     $myQuery .= "pstnum='" . $pstnum . "' ";
     $myQuery .= sprintf("WHERE email='%s'",  get_magic_quotes_gpc() ? $UserEmail : addslashes($UserEmail)); 
     mysql_select_db($database_DBConn, $DBConn);
-	//echo $myQuery; die;
+  // echo $myQuery; die;
     $result = mysql_query( $myQuery )  or die(mysql_error());
 
     $statusMsg="<font color=\"#00AAEA\">+ <b>Create Record</b></font>&nbsp;&nbsp;";
@@ -487,23 +504,23 @@ function UpdateCustomer($UserEmail)
   function GetDiscount($id) {
     global $database_DBConn, $DBConn;
     $qry = "SELECT * FROM signboom_discount WHERE Enabled = 1 AND ID = '".$id."'";
-    $rs = mysql_query($qry, $DBConn) or die(mysql_error());
-    if (mysql_num_rows($rs) == 0) return "Loyalty discount is not active on this account.  Please contact us to discuss.";
-    return mysql_result($rs,0,'Desc');
-  }
+    $rs = mysqli_query( $DBConn, $qry) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+    if (mysqli_num_rows($rs) == 0) return "Loyalty discount is not active on this account.  Please contact us to discuss.";
+    return mysqli_result($rs, 0, 'Desc');
+  } 
   
   function valcity($city, $st) {
     global $database_DBConn, $DBConn;
     if (GetCountry($st) == "United States") return true;
 
     $qry = sprintf("SELECT * FROM signboom_rates WHERE City='%s' and Province='%s'", $city, $st); 
-    mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
-    $rs = mysql_query($qry, $DBConn) or die(mysql_error());
-    $rscount = mysql_num_rows($rs);
-    mysql_free_result($rs);
+    mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+    $rs = mysqli_query( $DBConn, $qry) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+    $rscount = mysqli_num_rows($rs);
+    ((mysqli_free_result($rs) || (is_object($rs) && (get_class($rs) == "mysqli_result"))) ? true : false);
     if ($rscount == 0) return false;
     return true;
-  }
+  } 
 
   function valshipaddr() {
     global $database_DBConn, $DBConn;
@@ -538,15 +555,15 @@ function UpdateCustomer($UserEmail)
     global $Cities;
     global $database_DBConn, $DBConn;
     $Qry = sprintf("SELECT * FROM signboom_rates WHERE Province='%s' ORDER BY City", $st); 
-    mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
-    $result = mysql_query($Qry, $DBConn) or die(mysql_error());
+    mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+    $result = mysqli_query( $DBConn, $Qry) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
     $i = 0;
-    while ($row = mysql_fetch_array($result, MYSQL_BOTH)) {
+    while ($row = mysqli_fetch_array($result,  MYSQLI_BOTH)) {
       $Cities[$i] = $row['City'];
       $i++;
     }
-    mysql_free_result($result);
-  }
+    ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
+  } 
   
   //Adds a new shipping address with the company ID passed in $id.
   function AddShipping() {
@@ -554,7 +571,7 @@ function UpdateCustomer($UserEmail)
     global $acctID, $AcctName, $errMsg, $shipID;
     if (!(valshipaddr())) return;
     include ('Connections/DBConn.php');
-    mysql_select_db($database_DBConn, $DBConn);
+    mysqli_select_db( $DBConn, $database_DBConn);
   
     $updQ  = "INSERT INTO signboom_shipto ( ";
     $updQ .= "acctid, acctname, name, address, city, state, country, postalzip";
@@ -568,12 +585,12 @@ function UpdateCustomer($UserEmail)
     $updQ .= "'".GetCountry($_POST['shipState'])."', ";
     $updQ .= "'".strtoupper($_POST['shipZip'])."' ";
     $updQ .= ")";
-    mysql_select_db($database_DBConn, $DBConn);
-    $result = mysql_query($updQ)  or die(mysql_error());
-    $shipID = mysql_insert_id($DBConn);
+    mysqli_select_db( $DBConn, $database_DBConn);
+    $result = mysqli_query($GLOBALS["___mysqli_ston"], $updQ)  or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+    $shipID = ((is_null($___mysqli_res = mysqli_insert_id($DBConn))) ? false : $___mysqli_res);
     
     $errMsg="<font color=\"#00AAEA\"><b>Create Shipping Address Completed</b></font>&nbsp;&nbsp;";
-  }
+  } 
 
   function GetCountry($st) {
     global $arrProv;
@@ -609,7 +626,7 @@ function UpdateCustomer($UserEmail)
     global $acctID, $AcctName, $errMsg;
     
     include ('Connections/DBConn.php');
-    mysql_select_db($database_DBConn, $DBConn);
+    mysqli_select_db( $DBConn, $database_DBConn); 
   
     $updQ  = "UPDATE signboom_shipto SET ";
     $updQ .= "acctid='".$acctID."', ";
@@ -621,7 +638,7 @@ function UpdateCustomer($UserEmail)
     $updQ .= "country='".GetCountry($_POST['shipState'])."', ";
     $updQ .= "postalzip='".strtoupper($_POST['shipZip'])."' ";
     $updQ .= "WHERE (ID='".$_POST['shipID']."')";
-    mysql_select_db($database_DBConn, $DBConn);
+    mysqli_select_db( $DBConn, $database_DBConn); 
     $result = mysql_query($updQ)  or die(mysql_error());
   
     $shipID = $_POST['shipID'] ;
@@ -636,11 +653,11 @@ function UpdateCustomer($UserEmail)
     
     global $acctID, $AcctName, $errMsg;
     include ('Connections/DBConn.php');
-    mysql_select_db($database_DBConn, $DBConn);
+    mysqli_select_db( $DBConn, $database_DBConn);
   
     $updQ  = "DELETE FROM signboom_shipto WHERE (ID='".$_POST['shipID']."')" ;
-    mysql_select_db($database_DBConn, $DBConn);
-    $result = mysql_query($updQ)  or die(mysql_error());
+    mysqli_select_db( $DBConn, $database_DBConn);
+    $result = mysqli_query($GLOBALS["___mysqli_ston"], $updQ)  or die(mysqli_error($GLOBALS["___mysqli_ston"]));
   
     $shipID = 0 ;
     $errMsg="<font color=\"#00AAEA\"><b>Shipping Address Deleted</b></font>&nbsp;&nbsp;";
@@ -810,36 +827,36 @@ function UpdateCustomer($UserEmail)
 
     <div style="width: 430px;">
     <form name="form1" method="post" action="">
-      <span class="highlighted"><? echo $errMsg; ?></span><br><br>
+      <span class="highlighted"><?php echo $errMsg; ?></span><br><br>
       <b>Contact Information:</b>
       <hr>
       <br><br>
       <div style="text-align: right;">
-      <input name="acctid" type="hidden" id="acctid" value="<? echo $acctID; ?>">
-      <input name="acctname" type="hidden" id="acctname" value="<? echo $AcctName; ?>">
-      <input name="oldcity" type="hidden" id="oldcity" value="<? echo $city; ?>">
-      <input name="oldst" type="hidden" id="oldst" value="<? echo $provstate; ?>">
-      Account ID: <? echo stripslashes($AcctName); ?><br><br>
-	  First Name: <input name="firstName" type="text" id="firstName" value="<? echo stripslashes($firstName); ?>" size="32" maxlength="32"><br>
-      Last Name: <input name="lastName" type="text" id="lastName" value="<? echo stripslashes($lastName); ?>" size="32" maxlength="32"><br>
-      Company: <input name="company" type="text" id="firstName22" value="<? echo stripslashes($company); ?>" size="32" maxlength="35"><br>
-      Address: <input name="address" type="text" id="xaddress" value="<? echo stripslashes($address); ?>" size="32" maxlength="64"><br>
-      City: <input name="city" type="text" id="city" value="<? echo stripslashes($city); ?>" size="32" maxlength="25"><br>
+      <input name="acctid" type="hidden" id="acctid" value="<?php echo $acctID; ?>">
+      <input name="acctname" type="hidden" id="acctname" value="<?php echo $AcctName; ?>">
+      <input name="oldcity" type="hidden" id="oldcity" value="<?php echo $city; ?>">
+      <input name="oldst" type="hidden" id="oldst" value="<?php echo $provstate; ?>">
+      Account ID: <?php echo stripslashes($AcctName); ?><br><br>
+	  First Name: <input name="firstName" type="text" id="firstName" value="<?php echo stripslashes($firstName); ?>" size="32" maxlength="32"><br>
+      Last Name: <input name="lastName" type="text" id="lastName" value="<?php echo stripslashes($lastName); ?>" size="32" maxlength="32"><br>
+      Company: <input name="company" type="text" id="firstName22" value="<?php echo stripslashes($company); ?>" size="32" maxlength="35"><br>
+      Address: <input name="address" type="text" id="xaddress" value="<?php echo stripslashes($address); ?>" size="32" maxlength="64"><br>
+      City: <input name="city" type="text" id="city" value="<?php echo stripslashes($city); ?>" size="32" maxlength="25"><br>
       Province/State: 
       <select name="provstate"  id="provstate">
-      <?  if(count($arrProvState)){?>
-      <?    while( list($id, $val) = each($arrProvState) ){?>
-      <?      if($id == $provstate){?>
-                <option value="<?=$id;?>" selected><?=$val;?></option>
-      <?      }else{?>
-                <option value="<?=$id;?>"><?=$val;?></option>
-      <?      }?>
-      <?    }?>
-      <?  }else{?>
+      <?php  if(count($arrProvState)){?>
+      <?php    while( list($id, $val) = each($arrProvState) ){?>
+      <?php      if($id == $provstate){?>
+                <option value="<?php echo $id;?>" selected><?php echo $val;?></option>
+      <?php      }else{?>
+                <option value="<?php echo $id;?>"><?=$val;?></option>
+      <?php      }?>
+      <?php    }?>
+      <?php  }else{?>
             <option value="">None</option>
-      <?  }?>
+      <?php  }?>
       </select><br>
-      Postal/Zip Code: <input name="postalzip" type="text" id="postalzip2" value="<? echo stripslashes($postalzip); ?>" size="20" maxlength="16"><br>
+      Postal/Zip Code: <input name="postalzip" type="text" id="postalzip2" value="<?php echo stripslashes($postalzip); ?>" size="20" maxlength="16"><br>
       <?php
       /*
       echo 'Country: ';
@@ -850,11 +867,11 @@ function UpdateCustomer($UserEmail)
       <br>
       */
       ?>
-      Phone: <input name="phone1" type="text" id="phone1" value="<? echo stripslashes($phone1); ?>" size="20" maxlength="16"><br>
-      FAX Number: <input name="phone2" type="text" id="phone2" value="<? echo stripslashes($phone2); ?>" size="20" maxlength="16"><br>
-      Email Address: <input name="email" type="text" id="email" value="<? echo trim($email); ?>" size="32" maxlength="64"><br>
-      Web Site URL: <input name="url" type="text" id="url" value="<? echo stripslashes($url); ?>" size="32" maxlength="64"><br>
-      PST Number: <input name="pstnum" type="text" id="pstnum" value="<? echo stripslashes($pstnum); ?>" size="32" maxlength="10"><br>
+      Phone: <input name="phone1" type="text" id="phone1" value="<?php echo stripslashes($phone1); ?>" size="20" maxlength="16"><br>
+      FAX Number: <input name="phone2" type="text" id="phone2" value="<?php echo stripslashes($phone2); ?>" size="20" maxlength="16"><br>
+      Email Address: <input name="email" type="text" id="email" value="<?php echo trim($email); ?>" size="32" maxlength="64"><br>
+      Web Site URL: <input name="url" type="text" id="url" value="<?php echo stripslashes($url); ?>" size="32" maxlength="64"><br>
+      PST Number: <input name="pstnum" type="text" id="pstnum" value="<?php echo stripslashes($pstnum); ?>" size="32" maxlength="10"><br>
       </div>
 
       <br><br><br>
@@ -866,7 +883,7 @@ function UpdateCustomer($UserEmail)
       Please choose a question, and type in your answer to it.<br>
       If you forget your password, you'll need to answer this question.<br><br>
       Security Question:
-      <?
+      <?php
         // Identify hint question to be shown in drop-down list.
         // $ohintq is retrieved from the database. $hintq is the one they have just selected.
         // Either $hintq or $ohintq will be blank.  The other will have the hint question that should be displayed.
@@ -882,7 +899,7 @@ function UpdateCustomer($UserEmail)
       ?>
 
         <select name="selectHintQ">
-        <?
+        <?php
           //Let them choose new hint question if desired.
           if (count($arrHintQ)) {
             while (list($id, $val) = each($arrHintQ) ) {
@@ -899,7 +916,7 @@ function UpdateCustomer($UserEmail)
         </select>
 
       <br>
-      Answer: <input name="hinta" type="text" id="hinta" value="<? echo stripslashes($hinta); ?>" size="32" maxlength="32"><br><br>
+      Answer: <input name="hinta" type="text" id="hinta" value="<?php echo stripslashes($hinta); ?>" size="32" maxlength="32"><br><br>
       Please type your password twice, below.<br><br>
       Password: <input name="userPass" type="password" id="userPass" size="32" maxlength="20"><br>
       Confirm Password: <input name="confPass" type="password"  id="confPass" size="32" maxlength="20"><br>
@@ -912,10 +929,10 @@ function UpdateCustomer($UserEmail)
 
       <div style="text-align: right;">
       Would you like to receive order confirmations in HTML?<br>
-      <input name="htmlmail" type="radio" value="Yes" <? if ($htmlmail == "Yes") print " checked"; ?>>Yes
-      <input name="htmlmail" type="radio" value="No"<? if (!($htmlmail == "Yes")) print " checked"; ?>>No
+      <input name="htmlmail" type="radio" value="Yes" <?php if ($htmlmail == "Yes") print " checked"; ?>>Yes
+      <input name="htmlmail" type="radio" value="No"<?php if (!($htmlmail == "Yes")) print " checked"; ?>>No
       <br><br>
-      Your discount level: <? echo stripslashes(GetDiscount($dct)); ?><br>
+      Your discount level: <?php echo stripslashes(GetDiscount($dct)); ?><br>
       </div>
 
       <br><br>
@@ -947,15 +964,15 @@ function UpdateCustomer($UserEmail)
         }
         ?>
       </select><br>
-      <input name="shipID" type="hidden" id="shipID" value="<? echo $shipID; ?>">
-      <input name="lastshipcity" type="hidden" id="lastshipcity" value="<? echo $lastshipcity; ?>">
-      <input name="lastshipst" type="hidden" id="lastshipcity" value="<? echo $lastshipst; ?>">
-      Name: <input name="shipName" type="text" id="shipName" value="<? echo stripslashes($shipName); ?>" size="32" maxlength="64"><br>
-      Address: <input name="shipAddress" type="text" id="shipAddress" value="<? echo stripslashes($shipAddress); ?>" size="32" maxlength="64"><br>
-      City: <input name="shipCity" type="text" id="shipCity" value="<? echo stripslashes($shipCity); ?>" size="32" maxlength="64"><br>
+      <input name="shipID" type="hidden" id="shipID" value="<?php echo $shipID; ?>">
+      <input name="lastshipcity" type="hidden" id="lastshipcity" value="<?php echo $lastshipcity; ?>">
+      <input name="lastshipst" type="hidden" id="lastshipcity" value="<?php echo $lastshipst; ?>">
+      Name: <input name="shipName" type="text" id="shipName" value="<?php echo stripslashes($shipName); ?>" size="32" maxlength="64"><br>
+      Address: <input name="shipAddress" type="text" id="shipAddress" value="<?php echo stripslashes($shipAddress); ?>" size="32" maxlength="64"><br>
+      City: <input name="shipCity" type="text" id="shipCity" value="<?php echo stripslashes($shipCity); ?>" size="32" maxlength="64"><br>
       Province/State:
       <select name="shipState" id="shipState">
-        <?  
+        <?php  
         if (count($arrProvState)) {
           reset($arrProvState);
           while (list($id, $val) = each($arrProvState) ){
@@ -971,7 +988,7 @@ function UpdateCustomer($UserEmail)
         ?>
       </select>
       <br>
-      Postal/Zip Code: <input name="shipZip" type="text" id="shipZip" value="<? echo stripslashes($shipZip); ?>" size="20" maxlength="64">
+      Postal/Zip Code: <input name="shipZip" type="text" id="shipZip" value="<?php echo stripslashes($shipZip); ?>" size="20" maxlength="64">
       <br><br>
       </div>
       <div style="text-align: center;">
@@ -980,7 +997,7 @@ function UpdateCustomer($UserEmail)
       </div>
 
  
-      <input name="dct" type="hidden" value="<? echo $dct; ?>">
+      <input name="dct" type="hidden" value="<?php echo $dct; ?>">
       </form>
       </div>
 

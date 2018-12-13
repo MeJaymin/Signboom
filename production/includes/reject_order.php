@@ -22,7 +22,7 @@
      if ($order_to_reject != '')
      {
        $query_hide_files = "UPDATE signboom_linedetail SET currentqueue='Rejected' WHERE orderid = '$order_to_reject'";
-       $result2 = mysql_query($query_hide_files, $DBConn);
+       $result2 = mysqli_query( $DBConn, $query_hide_files);
        echo "<script language=\"javascript\">alert(\"Order " . $order_to_reject . " has been rejected.\");</script>";
        $order_rejected = 'yes';
      }
@@ -36,7 +36,7 @@
 ?>
 
    &nbsp;&nbsp;
-   <form style="display: inline-block" name="reject_form" action="<?php echo $PHP_SELF; ?>" method="post">
+   <form style="display: inline-block" name="reject_form" action="" method="post">
     <input name="order_id" id="order_id" type="hidden" value="<?php echo $order_id; ?>">
     <input type="hidden" name="order_to_reject" id="order_to_reject" value="">
     <input style="margin-left: 20px;" name="reject_order" type="submit" onclick="ConfirmReject('<?php echo $order_id?>')" value="Reject Order <?php echo $order_id?>">

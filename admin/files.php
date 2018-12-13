@@ -21,11 +21,14 @@
       // The preg replaces all characters up through space and all past ~ along with 
       // the above reserved characters. 
       $reserved = preg_quote('\/:*?"<>|', '/');
-      $filename = preg_replace("/([\\x00-\\x20\\x7f-\\xff{$reserved}])/e", "_", $original_filename);
+      /*$filename = preg_replace_callback("/([\\x00-\\x20\\x7f-\\xff{$reserved}])/e", "_", $original_filename);*/
+      $filename = preg_replace_callback("/([\\x00-\\x20\\x7f-\\xff{$reserved}])/", "_", $original_filename);
 
       // If that file is not yet saved on the server, save it. 
+      //echo $full_path; die;
       $target_path = $full_path . '/' . $filename;
-	  
+	     //echo $target_path; die;
+      $error_message = "";
       if (file_exists($target_path))
       {
         // That file is already on the server.
@@ -81,6 +84,6 @@
   include ('templates/files.php'); 
   
   /* Free memory. */
-  ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
+  /*((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);*/
 ?>
 

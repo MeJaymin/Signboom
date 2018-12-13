@@ -5,8 +5,8 @@ function getOptionQueue($finishing_option)
 {
   global $DBConn;
   $query = "SELECT Queue FROM signboom_finishing WHERE Code = '$finishing_option'";
-  $result = mysql_query($query, $DBConn) or die();
-  $info = mysql_fetch_assoc($result);
+  $result = mysqli_query( $DBConn, $query) or die();
+  $info = mysqli_fetch_assoc($result);
   $queue = $info['Queue'];
   return $queue;
 }
@@ -64,8 +64,8 @@ SELECT signboom_allproducts.Category, signboom_linedetail.currentqueue,
        FROM signboom_linedetail, signboom_allproducts 
        WHERE (signboom_linedetail.id = $the_job_id) AND signboom_linedetail.product = signboom_allproducts.Code
 End_Of_Query;
-      $result = mysql_query($query, $DBConn) or die();
-      $details = mysql_fetch_assoc($result);
+      $result = mysqli_query( $DBConn, $query) or die();
+      $details = mysqli_fetch_assoc($result);
       $current_queue = $details['currentqueue'];
       $category = $details['Category'];
       $product = $details['product'];
@@ -253,7 +253,7 @@ End_Of_Query;
       if ($next_queue != '')
       {
         $update_query = "UPDATE signboom_linedetail SET currentqueue = '$next_queue' WHERE id = $the_job_id";
-        $result = mysql_query($update_query, $DBConn) or die(mysql_error());
+        $result = mysqli_query( $DBConn, $update_query) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
       }
 
     } //end of if there is a job on that row

@@ -3,7 +3,6 @@ require_once('../includes/mailord.php');
 
 function handle_submit_orders($queue) {
   global $DBConn; 
-
   $num_orders = $_POST['number_of_orders'];
 
   // For each of the orders on that page....
@@ -51,12 +50,12 @@ function handle_submit_orders($queue) {
       if ($next_queue == 'Complete')
       {
         $update_query = "UPDATE signboom_linedetail SET currentqueue = '$next_queue' WHERE orderid = $the_order_id";
-        $result = mysql_query($update_query, $DBConn) or die(mysql_error());
+        $result = mysqli_query( $DBConn, $update_query) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
       }
       else if ($next_queue == 'DateConfirmed')
       {
         $update_query = "UPDATE signboom_ordermast SET readydateconfirmed = '1' WHERE ID = $the_order_id";
-        $result = mysql_query($update_query, $DBConn) or die(mysql_error());
+        $result = mysqli_query( $DBConn, $update_query) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
 
 	// We are also storing the information against the line items in signboom_linedetails because
 	// the query for the dashboard totals of the Ready column was giving this error.
@@ -64,7 +63,7 @@ function handle_submit_orders($queue) {
 	// SET SQL_BIG_SELECTS=1 or SET MAX_JOIN_SIZE=# if the SELECT is okay"
 	// I didn't want to enable the big selects, because that would slow down the Queues page.
         $update_query_2 = "UPDATE signboom_linedetail SET readydateconfirmed = '1' WHERE orderid = $the_order_id";
-        $result_2 = mysql_query($update_query_2, $DBConn) or die(mysql_error());
+        $result_2 = mysqli_query( $DBConn, $update_query_2) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
       }
 
     } //end of if there is a job on that row

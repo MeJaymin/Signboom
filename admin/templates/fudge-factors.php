@@ -17,8 +17,8 @@
     <div id="content">
       <h1>Fudge Factors</h1>
       <div style="width: 600px; margin: 20px auto;">
-      <?php if ($updated) echo '<p class="highlighted">The fudge factors have been updated.</p>'; ?>
-      <?php if ($message) echo '<p class="highlighted">'. $message . '</p>'; ?>
+      <?php if (isset($updated)) echo '<p class="highlighted">The fudge factors have been updated.</p>'; ?>
+      <?php if (isset($message)) echo '<p class="highlighted">'. $message . '</p>'; ?>
       <form id="fudge_factors" name="fudge_factors" method="post" action="fudge-factors.php">
         <b>Setup Fee:</b> <input type="text" name="setup_fee" value="<?php echo $setup_fee; ?>">
         <br><br>

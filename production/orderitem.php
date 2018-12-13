@@ -7,19 +7,19 @@ include('includes/query_single_order_page.php');
 include('includes/query_finishing_options.php');
 
 // Handle any ticks user has made in checkboxes.
-include('includes/javascript_delete_functions.htm');
+//include('includes/javascript_delete_functions.htm');
 include('includes/date_picker.htm');
 
 // Look up price above which an order is considered "expensive" and should be flagged in production.
 $query_expensive = "SELECT expensive FROM signboom_parm WHERE ID = 1";
-$result_expensive = mysql_query($query_expensive, $DBConn);
+$result_expensive = mysqli_query( $DBConn, $query_expensive);
 if (!$result_expensive)
 {
   $message = "I can't find the parameter to use for flagging orders as 'expensive'.";
 }
 else
 {
-  $row = mysql_fetch_array($result_expensive); 
+  $row = mysqli_fetch_array($result_expensive); 
   $expensive = $row['expensive'];
 }
 
@@ -78,7 +78,7 @@ else
 
 <div style="margin: 0px auto; text-align: center;">
   <!-- Form which passes tickbox ticks back into PHP to be handled. -->
-  <form name="main_form" action=<?php echo $_SERVER['PHP_SELF'] ?> method="POST">
+  <form name="main_form" action="" method="POST">
     <input name="my_order_id" id="my_order_id" type="hidden" value="<?php echo $my_order_id; ?>">
 
     <table class="evenodd" border="0" align="center" cellpadding="5">
@@ -90,7 +90,7 @@ else
 
       // Display the files in this order.
       for ($i = 0; $i < $num_jobs; $i++) {
-        $row = mysql_fetch_assoc($jobs);
+        $row = mysqli_fetch_assoc($jobs);
         if ($row == FALSE)
           echo "Could not read job from database.";
         else
@@ -111,7 +111,7 @@ else
 </html>
 
 <?php
-mysql_free_result($orders);
-mysql_free_result($jobs);
-mysql_free_result($result);
+/*((mysqli_free_result($orders) || (is_object($orders) && (get_class($orders) == "mysqli_result"))) ? true : false);
+((mysqli_free_result($jobs) || (is_object($jobs) && (get_class($jobs) == "mysqli_result"))) ? true : false);
+((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);*/
 ?>

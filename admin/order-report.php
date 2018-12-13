@@ -1,6 +1,6 @@
 <?php 
   include ('authadmin.php'); 
-
+  mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
   // Variables for controlling period over which we are reporting.
   // If nothing specified, default to the current month.
   $period_specified = false;
@@ -10,13 +10,18 @@
     $start_date_time = $start_date . " 00:00:00";
     $end_date_time = $end_date . " 23:59:59";
     $period_specified = true;
-    if ($my_debug) echo "Period has been specified.<br>";
+    if (isset($my_debug)) echo "Period has been specified.<br>";
   }
   else
   {
+    $start_date = date("Y-m-d", mktime(0, 0, 0, date("m"),  1, date("Y"))); // 1st day of THIS month 
+    $end_date =   date("Y-m-d", mktime(0, 0, 0, date("m") + 1,  0, date("Y"))); // last day of THIS month = 0th of next month 
+    $start_date_time = date("Y-m-d H:i:s", mktime(0,   0,  0, date("m"),  1, date("Y")));  // start of start date 
+    $end_date_time =   date("Y-m-d H:i:s", mktime(23, 59, 59, date("m")+1,      0, date("Y")));  // end of end date 
+    if (isset($my_debug)) echo "No period has been specified.<br>";
     include('../production/includes/date_picker.htm');
   }
-  if ($my_debug) echo "Start Date: $start_date   End Date: $end_date<br>";
+  if (isset($my_debug)) echo "Start Date: $start_date   End Date: $end_date<br>";
 
 if ($period_specified):
 
@@ -69,11 +74,11 @@ $query_jobs = <<< End_Of_Query
 	   rigid_cutting ASC, rigid_lamination ASC, rigid_back_side ASC, 
 	   rigid_hanging ASC, rigid_edges ASC, rigid_ink_layers ASC, rigid_orientation ASC
 End_Of_Query;
-  if ($my_debug) echo "<br><br>Query: " . $query_jobs . "<br><br>";
+  if (isset($my_debug)) echo "<br><br>Query: " . $query_jobs . "<br><br>";
 
   $jobs = mysqli_query( $DBConn, $query_jobs) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
   $num_jobs = mysqli_num_rows($jobs);
-  if ($my_debug) echo "Number of files in results of query: $num_jobs<br>";
+  if (isset($my_debug)) echo "Number of files in results of query: $num_jobs<br>";
 
   // Create a nice filename.
   sscanf($start_date, "%d-%d-%d", $start_year, $start_month, $start_day);

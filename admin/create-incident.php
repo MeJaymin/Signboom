@@ -49,6 +49,8 @@
       $accountable = $row['Accountable'];
       $caused = $row['Caused'];
       $comments = $row['Comments'];
+      // Free memory. 
+      ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
     }
   }
   else
@@ -65,8 +67,5 @@
 
   // Display the product description in an editor. 
   include ('templates/edit-incident.php'); 
-
-  // Free memory. 
-  ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
 
 ?>

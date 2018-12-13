@@ -1,5 +1,5 @@
 <?php
-include 'helpers/db_helper.php';
+require_once 'helpers/db_helper.php';
 # 
 #     SAMPLE ARRAY {{{
 # 

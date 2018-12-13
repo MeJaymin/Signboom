@@ -4,7 +4,8 @@ ini_set("url_rewriter.tags","");
 ini_set(session.use_trans_sid, false);
 //session_save_path("/home/users/web/b516/as.signboom/phpsessions");
 //session_save_path("C:\xampp\tmp");
-session_save_path("/opt/lampp/temp/");
+//session_save_path("/opt/lampp/temp/");
+session_save_path("/var/www/html/");
 session_start();
  ?>
 <html>

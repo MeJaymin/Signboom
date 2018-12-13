@@ -9,11 +9,15 @@ require_once('helpers/db_helper.php');
 // *** Validate request to login to this site.
 //session_save_path("/home/users/web/b516/as.signboom/phpsessions");
 //session_save_path("C://xampp//tmp");
-session_save_path("/opt/lampp/temp/");
+//session_save_path("/opt/lampp/temp/");
+session_save_path("/var/www/html/");
 session_start();
-$accesscheck = $_REQUEST["accesscheck"];
+$accesscheck = isset($_REQUEST["accesscheck"])?$_REQUEST["accesscheck"]:"";
 $loginFormAction = $_SERVER['PHP_SELF'];
+if(isset($_SESSION['PrevUrl']))
+{
 unset($_SESSION['PrevUrl']);
+}
 if (isset($accesscheck)) {
   $GLOBALS['PrevUrl'] = $accesscheck;
   
@@ -22,18 +26,33 @@ if (isset($accesscheck)) {
   
   //$userid=$HTTP_COOKIE_VARS['userid'];
   //$userid=$_COOKIE['userid'];
-	if(isset($_COOKIE["$userid"]))
+	if(isset($_COOKIE["userid"]))
 	{
-		$userid=$_COOKIE["$userid"];
+		$userid=$_COOKIE["userid"];
 	}
 }
 
 if (isset($_POST['email'])) {
+  //print_r($_POST); die;
+  /*if(!empty($_POST['xferpage']) && $_POST['xferpage']=="")
+  {
+    echo '222';
+  }
+  die;*/
   $loginUsername=$_POST['email'];
   $password=$_POST['pw'];
   $MM_fldUserAuthorization = "userLevel";
   if ( (isset($_POST['xferpage'])) && (strlen($_POST['xferpage']) > 0)) {
-    $MM_redirectLoginSuccess = $_POST['xferpage'];
+    
+    if($_POST['xferpage']=="")
+    {
+      $MM_redirectLoginSuccess = $_POST['xferpage'];  
+    }
+    else
+    {
+      $MM_redirectLoginSuccess = "customer.php";  
+    }
+    //echo $MM_redirectLoginSuccess; die;
     unset($_SESSION['xferpage']);
     unset($_POST['xferpage']);
   } else {
@@ -66,10 +85,11 @@ if (isset($_POST['email'])) {
 	$_SESSION['MM_Username'] = $loginUsername;
     $_SESSION['MM_UserGroup'] = $loginStrGroup;	     
     $_SESSION['MM_Password'] = $password;	     
-	
-    if (isset($_SESSION['PrevUrl'])) {
+	   
+    if (!empty($_SESSION['PrevUrl'])) {
       $MM_redirectLoginSuccess = $_SESSION['PrevUrl'];	
     }
+    //echo $MM_redirectLoginSuccess; die;
     header("Location: " . $MM_redirectLoginSuccess );
   }
   else {

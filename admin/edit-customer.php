@@ -1,5 +1,5 @@
 <?php
-echo phpversion();
+// /echo phpversion();
 //echo "edit-customer.php"; die;
   include ('authadmin.php'); 
   include ('helper-functions.php'); 
@@ -25,7 +25,8 @@ echo phpversion();
   $created = false;
   $edited = false;
   $edit_mode = "edit";
-
+  $account_name ="";
+  $email_address ="";
   if (isset($_REQUEST['account_name']) || isset($_REQUEST['email_address']))
   {
     $account_name =  trim($_REQUEST['account_name']);

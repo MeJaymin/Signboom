@@ -27,7 +27,7 @@
     $product_enabled = mysqli_real_escape_string($GLOBALS["___mysqli_ston"], $_POST['product_enabled']);
     $product_category = mysqli_real_escape_string($GLOBALS["___mysqli_ston"], $_POST['product_category']);
     $product_batch_day = mysqli_real_escape_string($GLOBALS["___mysqli_ston"], $_POST['product_batch_day']);
-    $product_description = mysqli_real_escape_string($GLOBALS["___mysqli_ston"], $_POST['product_description']);
+    $product_description = mysqli_real_escape_string($GLOBALS["___mysqli_ston"], isset($_POST['product_description'])?$_POST['product_description']:"");
     $product_descr_image = mysqli_real_escape_string($GLOBALS["___mysqli_ston"], $_POST['product_descr_image']);
     $product_descr_text= mysqli_real_escape_string($GLOBALS["___mysqli_ston"], $_POST['product_descr_text']);
     $product_descr_finishing = mysqli_real_escape_string($GLOBALS["___mysqli_ston"], $_POST['product_descr_finishing']);
@@ -106,6 +106,8 @@
       $product_cost_disc= $row['CostDisc'];
       $product_sort_group = $row['SortGroup'];
       $product_sort_order = $row['SortOrder'];
+      // Free memory. 
+      ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
     }
   }
   else
@@ -136,7 +138,6 @@
   // Display the product description in an editor. 
   include ('templates/edit-product.php'); 
 
-  // Free memory. 
-  ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
+  
 
 ?>

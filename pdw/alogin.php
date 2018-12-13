@@ -15,7 +15,8 @@ function loginmsg()
 
 //session_save_path("/home/users/web/b516/as.signboom/phpsessions");
 //session_save_path("C://xampp//tmp");
-session_save_path("/opt/lampp/temp/");
+//session_save_path("/opt/lampp/temp/");
+session_save_path("/var/www/html/");
 session_start();
 
 /*  
@@ -34,24 +35,35 @@ if (isset($_POST['Submit']))
 
 $invalidauth = false;
 
-if (isset($_SESSION['MM_UserName']))
+if (isset($_SESSION['MM_UserName']) && isset($_SESSION['MM_Password']))
 {
     // level 1 is signboom admin, level 4 gives access to drag and drop system (but not yet regular order system)
-    if ((authenticate($_SESSION["MM_UserName"], $_SESSION["MM_Password"], 1))  ||
+    if(isset($_SESSION["MM_UserName"]))
+    {
+    	if ((authenticate($_SESSION["MM_UserName"], $_SESSION["MM_Password"], 1))  ||
         (authenticate($_SESSION["MM_UserName"], $_SESSION["MM_Password"], 4)))
-	{
-		$fwd = $_SESSION['page_forward'];
-		unset($_SESSION['page_forward']);
-		//if (strlen($fwd) == 0) $fwd = "admin.php";
-		if (strlen($fwd) == 0) $fwd = "index.php";
-		header("Location: ".$fwd);
-		exit();
-    }
-    else
-	{
-		$invalidauth = true;
-		unset($_SESSION['MM_UserName']);  
-		unset($_SESSION['MM_Password']);
+		{
+			if(isset($_SESSION['page_forward']))
+			{
+				$fwd = $_SESSION['page_forward'];
+				unset($_SESSION['page_forward']);
+				//if (strlen($fwd) == 0) $fwd = "admin.php";
+				if (strlen($fwd) == 0) $fwd = "index.php";
+			}
+			else
+			{
+				$fwd = "index.php";
+			}
+			
+			header("Location: ".$fwd);
+			exit();
+	    }
+	    else
+		{
+			$invalidauth = true;
+			unset($_SESSION['MM_UserName']);  
+			unset($_SESSION['MM_Password']);
+	    }
     }
 }
 

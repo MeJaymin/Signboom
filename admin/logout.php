@@ -2,7 +2,8 @@
 //error_reporting(0);
 //session_save_path("/home/users/web/b516/as.signboom/phpsessions");
 	//session_save_path("C://xampp//tmp");
-	session_save_path("/opt/lampp/temp/");
+	//session_save_path("/opt/lampp/temp/");
+	session_save_path("/var/www/html/");
 	session_start(); 
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">

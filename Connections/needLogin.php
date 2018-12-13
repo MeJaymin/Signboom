@@ -1,7 +1,8 @@
 <?php
 //session_save_path("/home/users/web/b516/as.signboom/phpsessions");
 //session_save_path("C://xampp//tmp");
-session_save_path("/opt/lampp/temp/");
+//session_save_path("/opt/lampp/temp/");
+session_save_path("/var/www/html/");
 session_start();
 $MM_authorizedUsers = "";
 $MM_donotCheckaccess = "true";
@@ -38,7 +39,7 @@ if (isset($userGoTo)) {
 	$MM_restrictGoTo = "login.php";
 }
 
-if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("",$MM_authorizedUsers, $_SESSION['MM_Username'], $_SESSION['MM_UserGroup'])))) {   
+if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("",$MM_authorizedUsers, $_SESSION['MM_Username'], isset($_SESSION['MM_UserGroup'])?$_SESSION['MM_UserGroup']:"")))) {   
   $MM_qsChar = "?";
   $MM_referrer = $_SERVER['PHP_SELF'];
   if (strpos($MM_restrictGoTo, "?")) $MM_qsChar = "&";

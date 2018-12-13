@@ -55,22 +55,22 @@
     <!-- <form action=<? // =$PHP_SELF;?> method="POST"> -->
 	<form action=<?php echo $_SERVER['PHP_SELF']; ?> method="POST">
       <!--ACCOUNT SIGNUP-->
-        <b><?=$statusMsg;?></b><br>
+        <b><?php echo $statusMsg;?></b><br>
         *First Name: 
-        <input type="text" maxlength="32" size="32" name="firstName" value="<?=$firstName;?>"><br>
+        <input type="text" maxlength="32" size="32" name="firstName" value="<?php echo $firstName;?>"><br>
         *Last Name: 
-        <input type="text" maxlength="32" size="32" name="lastName" value="<?=$lastName;?>"><br>
+        <input type="text" maxlength="32" size="32" name="lastName" value="<?php echo $lastName;?>"><br>
         *Email Address:
-        <input type="text" size="32" maxlength="64" name="email" value="<?=$email;?>"><br>
+        <input type="text" size="32" maxlength="64" name="email" value="<?php echo $email;?>"><br>
         *Company Name:
-        <input type="text" size="32" maxlength="35" name="company" value="<?=$company;?>"><br>
+        <input type="text" size="32" maxlength="35" name="company" value="<?php echo $company;?>"><br>
         *Street Address:
-        <input type="text" size="32" maxlength="64" name="address" value="<?=$address;?>"><br>
+        <input type="text" size="32" maxlength="64" name="address" value="<?php echo $address;?>"><br>
         *City:
-        <input type="text" size="32" maxlength="25" name="city" value="<?=$city;?>"><br>
+        <input type="text" size="32" maxlength="25" name="city" value="<?php echo $city;?>"><br>
         *Prov/State:
         <select name="selectProvState">
-        <?
+        <?php
           if (count($arrProvState)) {
             while (list($id, $val) = each($arrProvState) ) {
               if ($id == $HTTP_POST_VARS['selectProvState']) {
@@ -85,7 +85,7 @@
         </select><br>
         *Country:
         <select name="selectCountry">
-          <?  
+          <?php  
           if (count($arrCountry)) {
             while (list($id, $val) = each($arrCountry) ) {
               if ($id == $HTTP_POST_VARS['selectCountry']) {
@@ -100,15 +100,15 @@
           ?>
         </select><br>
         *Postal/Zip:
-        <input type="text" size="20" maxlength="16" name="postalzip" value="<?=$postalzip;?>"><br>
+        <input type="text" size="20" maxlength="16" name="postalzip" value="<?php echo $postalzip;?>"><br>
         *Phone:
-        <input type="text" size="20" maxlength="16" name="phone1" value="<?=$phone1;?>"><br>
+        <input type="text" size="20" maxlength="16" name="phone1" value="<?php $phone1;?>"><br>
         Fax:
-        <input type="text" size="20" maxlength="16" name="phone2" value="<?=$phone2;?>"><br>
+        <input type="text" size="20" maxlength="16" name="phone2" value="<?php $phone2;?>"><br>
         Website:
-        <input type="text" size="32" maxlength="64" name="url" value="<?=$url;?>"><br>
+        <input type="text" size="32" maxlength="64" name="url" value="<?php $url;?>"><br>
         PST Number:
-        <input type="text" size="32" maxlength="10" name="PST" value="<?=$PST;?>"><br><br>
+        <input type="text" size="32" maxlength="10" name="PST" value="<?php $PST;?>"><br><br>
         *Password:
         <input type="password" size="20" maxlength="20" name="epassword1" value=""><br>
         *Re-enter Password:
@@ -116,7 +116,7 @@
         *Password Security Question:<br>
         If you forget your password, you'll need to answer this question.<br>
         <select name="selectHintQ">
-        <?
+        <?php
           if (count($arrHintQ)) {
             while (list($id, $val) = each($arrHintQ) ) {
               if ($id == $HTTP_POST_VARS['selectHintQ']) {
@@ -129,11 +129,11 @@
             printf("<option value=\"\">None</option>\n");
           }?>
         </select>
-        <input type="text" size="12" name="hinta" value="<?=$hinta;?>"><br><br>
+        <input type="text" size="12" name="hinta" value="<?php $hinta;?>"><br><br>
         <input type="button" value="Cancel" name="btnCancel" onClick="window.close()">
         <input type="submit" name="btnSave" value="Sign Up">
-        <input type="hidden" name="userProvState" value="<?=$selectProvState;?>">
-        <input type="hidden" name="userCountry" value="<?=$selectCountry;?>">
+        <input type="hidden" name="userProvState" value="<?php $selectProvState;?>">
+        <input type="hidden" name="userCountry" value="<?php $selectCountry;?>">
         <input name="oldcity" type="hidden" id="oldcity" value="<? echo $oldcity; ?>">
         <input name="oldst" type="hidden" id="oldst" value="<? echo $oldst; ?>">
 
@@ -142,7 +142,7 @@
     </div>
 
      <!*********** CITY LOCATOR CODE *****************->
-      <?
+      <?php
       if ($cityerr) {
         printf("<div id=\"citydiv\" style=\"visibility:visible;\">\n");
       } else {

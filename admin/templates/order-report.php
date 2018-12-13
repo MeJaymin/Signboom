@@ -25,10 +25,10 @@
         </ul>
         <br>
         <form id="my_form" name="my_form" action="" method="get">
-          <b>Start Date:</b> <input style="width: 100px;" name="StartDate" value="<?echo $start_date ?>" > 
+          <b>Start Date:</b> <input style="width: 100px;" name="StartDate" value="<?php echo $start_date ?>" > 
           <input type=button value="Calendar" onclick="displayDatePicker('StartDate', this);">
           &nbsp;&nbsp;&nbsp;&nbsp;
-          <b>EndDate:</b> <input style="width: 100px;" name="EndDate" value="<? echo $end_date ?>" > 
+          <b>EndDate:</b> <input style="width: 100px;" name="EndDate" value="<?php echo $end_date ?>" > 
           <input type=button value="Calendar" onclick="displayDatePicker('EndDate', this);">
           <br><br>
           <input style="float: right;" class="button" type="submit" name="Display Report" value="Display Report">

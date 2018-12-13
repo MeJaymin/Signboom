@@ -9,16 +9,16 @@
     $end_date = $_GET['EndDate'];
     $start_date_time = $start_date . " 00:00:00";
     $end_date_time = $end_date . " 23:59:59";
-    if ($my_debug) echo "Period has been specified.<br>";
+    if (isset($my_debug)) echo "Period has been specified.<br>";
   }
   else {
     $start_date = date("Y-m-d", mktime(0, 0, 0, date("m"),  1, date("Y"))); // 1st day of THIS month 
     $end_date =   date("Y-m-d", mktime(0, 0, 0, date("m") + 1,  0, date("Y"))); // last day of THIS month = 0th of next month 
     $start_date_time = date("Y-m-d H:i:s", mktime(0,   0,  0, date("m"),  1, date("Y")));  // start of start date 
     $end_date_time =   date("Y-m-d H:i:s", mktime(23, 59, 59, date("m")+1,      0, date("Y")));  // end of end date 
-    if ($my_debug) echo "No period has been specified.<br>";
+    if (isset($my_debug)) echo "No period has been specified.<br>";
   }
-  if ($my_debug) echo "Start Date: $start_date   End Date: $end_date<br>";
+  if (isset($my_debug)) echo "Start Date: $start_date   End Date: $end_date<br>";
 
 $query_jobs = <<< End_Of_Query
   (SELECT signboom_ordermast.ID AS orderid, signboom_linedetail.id AS jobid, 
@@ -36,11 +36,12 @@ $query_jobs = <<< End_Of_Query
   ) 
   ORDER BY product ASC, orderid ASC, jobid ASC
 End_Of_Query;
-  if ($my_debug) echo "<br><br>Query: " . $query_jobs . "<br><br>";
+  if (isset($my_debug)) echo "<br><br>Query: " . $query_jobs . "<br><br>";
 
+  mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
   $jobs = mysqli_query( $DBConn, $query_jobs) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
   $num_jobs = mysqli_num_rows($jobs);
-  if ($my_debug) echo "Number of files in results of query: $num_jobs<br>";
+  if (isset($my_debug)) echo "Number of files in results of query: $num_jobs<br>";
 
   $total_printed_area_sqft = 0.0;
   $total_waste_area_sqft = 0.0;
@@ -109,13 +110,16 @@ End_Of_Query;
   }
 
   // SPECIAL CASE - FINAL PRODUCT 
-  $ratio = $product_waste_area_sqft / $product_printed_area_sqft * 100;
-  $temp = sprintf("<tr><td>%s</td><td style=\"text-align: right;\">%.0f</td><td style=\"text-align: right;\">%.0f</td><td style=\"text-align: right;\">%.0f</td><td style=\"text-align: right;\">%.2f</td><td>%s</td></tr>", $current_product_name, $product_printed_area_sqft, $product_waste_area_sqft, $ratio, $product_waste_cost, $notes_for_this_product);
-  $data .= $temp;
+  if(isset($product_printed_area_sqft) && isset($product_waste_area_sqft))
+  {
+     $ratio = isset($product_waste_area_sqft) / $product_printed_area_sqft * 100;
+      $temp = sprintf("<tr><td>%s</td><td style=\"text-align: right;\">%.0f</td><td style=\"text-align: right;\">%.0f</td><td style=\"text-align: right;\">%.0f</td><td style=\"text-align: right;\">%.2f</td><td>%s</td></tr>", $current_product_name, $product_printed_area_sqft, $product_waste_area_sqft, $ratio, $product_waste_cost, $notes_for_this_product);
+    $data .= $temp;
+  }
 
   // Display the parameters
   include ('templates/waste-report.php'); 
   
   // Free memory. 
-  ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
+  /*((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);*/
 ?>

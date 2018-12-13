@@ -18,17 +18,17 @@
     $reference_number = $row['refnum'];
     $shipping_type = $row['shiptype'];
     $account_name = $row['AcctName'];
-    $uploaded = $row['uploaded'];
+    $uploaded = isset($row['uploaded'])?$row['uploaded']:"";
 
-    $ship_attn = $row['shipattn'];
-    $ship_company = $row['shipcompany'];
-    $ship_address = $row['shipaddress'];
-    $ship_city = $row['shipcity'];
-    $ship_province = $row['shipprov'];
-    $ship_postal_code = $row['shipzip'];
-    $ship_country = $row['shipcountry'];
-    $remember_this_address = $row['shiptoadd'];
-    $shipping_label = $row['documentname'];
+    $ship_attn = isset($row['shipattn'])?$row['shipattn']:"";
+    $ship_company = isset($row['shipcompany'])?$row['shipcompany']:"";
+    $ship_address = isset($row['shipaddress'])?$row['shipaddress']:"";
+    $ship_city = isset($row['shipcity'])?$row['shipcity']:"";
+    $ship_province = isset($row['shipprov'])?$row['shipprov']:"";
+    $ship_postal_code = isset($row['shipzip'])?$row['shipzip']:"";
+    $ship_country = isset($row['shipcountry'])?$row['shipcountry']:"";
+    $remember_this_address = isset($row['shiptoadd'])?$row['shiptoadd']:"";
+    $shipping_label = isset($row['documentname'])?$row['documentname']:"";
 
     $first_order = $row['firstorder'];
     $returning_customer = $row['returningcustomer'];
@@ -60,8 +60,8 @@
 
     // Grab the details of the job.
     $query = "SELECT * FROM signboom_linedetail WHERE id = '$job_id'";
-    $result = mysql_query($query, $DBConn) or die();
-    $details = mysql_fetch_assoc($result);
+    $result = mysqli_query( $DBConn, $query) or die();
+    $details = mysqli_fetch_assoc($result);
     // These fields are particular to type of job.
     $media = $details['product'];
     $options = $details['options'];
@@ -101,8 +101,8 @@
       if ($the_finishing_code != "") {
         // TO DO: Replace query below with use of the array_options table built in query_finishing_options.php
         $query = "SELECT * FROM signboom_finishing WHERE Code = '$the_finishing_code'";
-        $result = mysql_query($query, $DBConn) or die();
-        $option_information = mysql_fetch_assoc($result);
+        $result = mysqli_query( $DBConn, $query) or die();
+        $option_information = mysqli_fetch_assoc($result);
         $option_name = $option_information['OptionName'];
         $option_list .= $option_name . "\\n\\n";
       }
@@ -204,7 +204,7 @@
       $other_name = $array_options[$other];
     else
       $other_name = "";
-
+      $queue="";
      if (($queue == 'Files') || ($queue == 'Pack'))
      {
        if ($ready_date != $current_ready_date) 

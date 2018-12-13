@@ -30,6 +30,7 @@
   }
 
   // Include 'mark as uploaded' button for single-order job pages when files originally failed to upload.
+  $include_change_upload_in_footer="";
   if (($include_change_upload_in_footer) && ($uploaded != "Yes"))
     include('includes/change_upload_status.php');  
   ?>

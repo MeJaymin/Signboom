@@ -5,23 +5,23 @@
 	  $date_added = date('Y-m-d');
 	  $person = $_SESSION["MM_Username"];
 	  $query_user = "SELECT AcctName FROM signboom_user WHERE email = '$person'";
-	  $result_user = mysql_query($query_user, $DBConn) or die(mysql_error());
-          $row_user  = mysql_fetch_array($result_user, MYSQL_BOTH);
+	  $result_user = mysqli_query( $DBConn, $query_user) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+          $row_user  = mysqli_fetch_array($result_user,  MYSQLI_BOTH);
           $person_added = $row_user['AcctName'];
         }
         else // editing offcut information; not allowed to change date and person
         {
-	  $date_added = mysql_real_escape_string($_POST['date_added']); 
-          $person_added = mysql_real_escape_string($_POST['person_added']);
+	  $date_added = mysqli_real_escape_string($GLOBALS["___mysqli_ston"], $_POST['date_added']); 
+          $person_added = mysqli_real_escape_string($GLOBALS["___mysqli_ston"], $_POST['person_added']);
         }
 
         //Read the rest of the data from what was posted.
-        $material = mysql_real_escape_string($_POST['material']);
-        $width = mysql_real_escape_string($_POST['width']);
-        $length = mysql_real_escape_string($_POST['length']);
-        $quantity = mysql_real_escape_string($_POST['quantity']);
-        $paid_for = mysql_real_escape_string($_POST['paid_for']);
-        $description = mysql_real_escape_string($_POST['description']);
+        $material = mysqli_real_escape_string($GLOBALS["___mysqli_ston"], $_POST['material']);
+        $width = mysqli_real_escape_string($GLOBALS["___mysqli_ston"], $_POST['width']);
+        $length = mysqli_real_escape_string($GLOBALS["___mysqli_ston"], $_POST['length']);
+        $quantity = mysqli_real_escape_string($GLOBALS["___mysqli_ston"], $_POST['quantity']);
+        $paid_for = mysqli_real_escape_string($GLOBALS["___mysqli_ston"], $_POST['paid_for']);
+        $description = mysqli_real_escape_string($GLOBALS["___mysqli_ston"], $_POST['description']);
 
 	if (strlen(trim($quantity)) == 0)  $quantity = '1';
 

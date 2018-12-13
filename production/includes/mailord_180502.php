@@ -1,4 +1,5 @@
 <?php
+require_once '../helpers/db_helper.php';
 # 
 #     SAMPLE ARRAY {{{
 # 
@@ -170,34 +171,34 @@ function mp_new_message(&$message_array)/*{{{*/
     $msg .= '  </tr>';
     $msg .= '  <tr>';
     $msg .= '    <td>Name:</td>';
-    $msg .= '    <td>&nbsp;'.mysql_result($rsUser,0,'firstName')." ".mysql_result($rsUser,0,'lastName').'</td>';
+    $msg .= '    <td>&nbsp;'.mysqli_result($rsUser, 0, 'firstName')." ".mysqli_result($rsUser, 0, 'lastName').'</td>';
     $msg .= '  </tr>';
     $msg .= '  <tr>';
     $msg .= '    <td>Company:</td>';
-    $msg .= '    <td>&nbsp;'.mysql_result($rsUser,0,'company').'</td>';
+    $msg .= '    <td>&nbsp;'.mysqli_result($rsUser, 0, 'company').'</td>';
     $msg .= '  </tr>';
     $msg .= '  <tr>';
     $msg .= '    <td>Phone:</td>';
-    $msg .= '    <td>&nbsp;'.mysql_result($rsUser,0,'phone1').' OR '.mysql_result($rsUser,0,'phone2'). '</td>';
+    $msg .= '    <td>&nbsp;'.mysqli_result($rsUser, 0, 'phone1').' OR '.mysqli_result($rsUser, 0, 'phone2'). '</td>';
     $msg .= '  </tr>';
     $msg .= '  <tr>';
     $msg .= '    <td>Account:</td>';
-    $msg .= '    <td>&nbsp;'.mysql_result($rsUser,0,'AcctName').'</td>';
+    $msg .= '    <td>&nbsp;'.mysqli_result($rsUser, 0, 'AcctName').'</td>';
     $msg .= '  </tr>';
     $msg .= '  <tr>';
     $msg .= '    <td>Ship To:</td>';
-    $msg .= '    <td>&nbsp;'.mysql_result($rsmaster,0,'shipcompany').'</td>';
+    $msg .= '    <td>&nbsp;'.mysqli_result($rsmaster, 0, 'shipcompany').'</td>';
     $msg .= '  </tr>';
     $msg .= '  <tr>';
     $msg .= '    <td>&nbsp;</td>';
-    $msg .= '    <td>&nbsp;'.mysql_result($rsmaster,0,'shipaddress').'</td>';
+    $msg .= '    <td>&nbsp;'.mysqli_result($rsmaster, 0, 'shipaddress').'</td>';
     $msg .= '  </tr>';
     $msg .= '  <tr>';
     $msg .= '    <td>&nbsp;</td>';
-    $msg .= '    <td>&nbsp;'.mysql_result($rsmaster,0,'shipcity').', '.mysql_result($rsmaster,0,'shipprov').' '.mysql_result($rsmaster,0,'shipzip').'</td>';
+    $msg .= '    <td>&nbsp;'.mysqli_result($rsmaster, 0, 'shipcity').', '.mysqli_result($rsmaster, 0, 'shipprov').' '.mysqli_result($rsmaster, 0, 'shipzip').'</td>';
     $msg .= '  </tr>';
 
-    if (strlen(trim(mysql_result($rsmaster,0,'documentname'))) > 0)
+    if (strlen(trim(mysqli_result($rsmaster, 0, 'documentname'))) > 0)
     {
       $msg .= '  <tr>';
       $msg .= '    <td>Shipping Label:</td>';
@@ -207,19 +208,19 @@ function mp_new_message(&$message_array)/*{{{*/
 
     $msg .= '  <tr>';
     $msg .= '    <td>Ready Date:</td>';
-    $msg .= '    <td>'.mysql_result($rsmaster,0,'readydate').'</td>';
+    $msg .= '    <td>'.mysqli_result($rsmaster, 0, 'readydate').'</td>';
     $msg .= '  </tr>';
     $msg .= '  <tr>';
     $msg .= '    <td>Order Number:</td>';
-    $msg .= '    <td>'.mysql_result($rsmaster,0,'ID').'&nbsp;</td>';
+    $msg .= '    <td>'.mysqli_result($rsmaster, 0, 'ID').'&nbsp;</td>';
     $msg .= '  </tr>';
     $msg .= '  <tr>';
     $msg .= '    <td>Reference Number:</td>';
-    $msg .= '    <td>'.mysql_result($rsmaster,0,'refnum').'&nbsp;</td>';
+    $msg .= '    <td>'.mysqli_result($rsmaster, 0, 'refnum').'&nbsp;</td>';
     $msg .= '  </tr>';
     $msg .= '  <tr>';
     $msg .= '    <td>Customer Notes:</td>';
-    $msg .= '    <td>'.mysql_result($rsmaster,0,'customernotes').'&nbsp;</td>';
+    $msg .= '    <td>'.mysqli_result($rsmaster, 0, 'customernotes').'&nbsp;</td>';
     $msg .= '  </tr>';
     $msg .= '  <tr>';
     $msg .= '  <tr>';
@@ -278,7 +279,7 @@ function mp_new_message(&$message_array)/*{{{*/
     // either the customer's discount level, or an order-size based email, whichever is
     // a better deal for the customer. Then we convert that to a percentage (here) and 
     // then (below) apply that percentage evenly to each row in the billing summary.
-    $discount_dollars = mysql_result($rsmaster,0,'discount');
+    $discount_dollars = mysqli_result($rsmaster, 0, 'discount');
     $discount_amount = substr($discount_dollars, 1);
     $discount_percentage = $discount_amount / $order_cost;
 
@@ -333,47 +334,47 @@ function mp_new_message(&$message_array)/*{{{*/
 
     $msg .= '    <tr>';
     $msg .= '      <td colspan="3">Setup Fee: </td>';
-    $msg .= '      <td style="text-align: right;">'.getcurrency(substr(mysql_result($rsmaster,0,'setupfee'), 1)).'&nbsp;</td>';
+    $msg .= '      <td style="text-align: right;">'.getcurrency(substr(mysqli_result($rsmaster, 0, 'setupfee'), 1)).'&nbsp;</td>';
     $msg .= '    </tr>';
     $msg .= '    <tr>';
 
-    if (mysql_result($rsmaster,0,'promodiscount') != "0.00" ) {
+    if (mysqli_result($rsmaster, 0, 'promodiscount') != "0.00" ) {
           $msg .= '  <tr>';
           $msg .= '    <td>Promo Discount: </td>';
-          $msg .= '      <td>&nbsp;'.mysql_result($rsmaster,0,'promocode').'</td>';
+          $msg .= '      <td>&nbsp;'.mysqli_result($rsmaster, 0, 'promocode').'</td>';
           $msg .= '      <td>&nbsp;</td>';
-          $msg .= '    <td style="text-align: right;">-$'.mysql_result($rsmaster,0,'promodiscount').'&nbsp;</td>';
+          $msg .= '    <td style="text-align: right;">-$'.mysqli_result($rsmaster, 0, 'promodiscount').'&nbsp;</td>';
           $msg .= '  </tr>';
     }
 
-    if (mysql_result($rsmaster,0,'rushfee') != "$0.00" ) {
+    if (mysqli_result($rsmaster, 0, 'rushfee') != "$0.00" ) {
       $msg .= '  <tr>';
       $msg .= '    <td colspan="3">Rush Charges: </td>';
-      $msg .= '    <td style="text-align: right;">'.mysql_result($rsmaster,0,'rushfee').'&nbsp;</td>';
+      $msg .= '    <td style="text-align: right;">'.mysqli_result($rsmaster, 0, 'rushfee').'&nbsp;</td>';
       $msg .= '  </tr>';
     }
     $msg .= '      <td>Freight: </td>';
-    $msg .= '      <td>&nbsp;'.mysql_result($rsmaster,0,'shiptype').'</td>';
+    $msg .= '      <td>&nbsp;'.mysqli_result($rsmaster, 0, 'shiptype').'</td>';
     $msg .= '      <td>&nbsp;</td>';
-    $msg .= '      <td style="text-align: right;">'.mysql_result($rsmaster,0,'freight').'&nbsp;</td>';
+    $msg .= '      <td style="text-align: right;">'.mysqli_result($rsmaster, 0, 'freight').'&nbsp;</td>';
     $msg .= '    </tr>';
-    if (mysql_result($rsmaster,0,'pst') != "$0.00" ) {
+    if (mysqli_result($rsmaster, 0, 'pst') != "$0.00" ) {
           $msg .= '  <tr>';
           $msg .= '    <td colspan="3">PST: </td>';
-          $msg .= '    <td style="text-align: right;">'.mysql_result($rsmaster,0,'pst').'&nbsp;</td>';
+          $msg .= '    <td style="text-align: right;">'.mysqli_result($rsmaster, 0, 'pst').'&nbsp;</td>';
           $msg .= '  </tr>';
     }
-    if (mysql_result($rsmaster,0,'gst') != "$0.00" ) {
+    if (mysqli_result($rsmaster, 0, 'gst') != "$0.00" ) {
           $msg .= '  <tr>';
           $msg .= '    <td colspan="3">GST: </td>';
-          $msg .= '    <td style="text-align: right;">'.mysql_result($rsmaster,0,'gst').'&nbsp;</td>';
+          $msg .= '    <td style="text-align: right;">'.mysqli_result($rsmaster, 0, 'gst').'&nbsp;</td>';
           $msg .= '  </tr>';
     }
     $msg .= '  <tr>';
-    $totchg = substr(trim(mysql_result($rsmaster,0,'ordertotal')),1);
+    $totchg = substr(trim(mysqli_result($rsmaster, 0, 'ordertotal')),1);
     $totchg = ($totchg == 0) ? "Call for Quote" : "$".sprintf("%01.2f", $totchg);
     $msg .= '    <td colspan="3">Total: </td>';
-    $msg .= '    <td style="text-align: right;">'.mysql_result($rsmaster,0,'ordertotal').'&nbsp;</td>';
+    $msg .= '    <td style="text-align: right;">'.mysqli_result($rsmaster, 0, 'ordertotal').'&nbsp;</td>';
     $msg .= '  </tr>';
     $msg .= '  </table>';
     //*************** End of Billing Summary Table *********************/
@@ -396,9 +397,9 @@ function mp_new_message(&$message_array)/*{{{*/
     global $database_DBConn, $DBConn;
     if ($id == 0) return "None";
     $qry = "SELECT ProductType FROM signboom_product WHERE ID = ".$id;
-    $rs = mysql_query($qry, $DBConn) or die(mysql_error());
-    if (mysql_num_rows($rs) == 0) return "Not Available";
-    $msg = mysql_result($rs,0,'ProductType');
+    $rs = mysqli_query( $DBConn, $qry) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+    if (mysqli_num_rows($rs) == 0) return "Not Available";
+    $msg = mysqli_result($rs, 0, 'ProductType');
     return $msg;
   }
 
@@ -406,18 +407,18 @@ function mp_new_message(&$message_array)/*{{{*/
     global $database_DBConn, $DBConn;
     if ($id == 0) return "None";
     $qry = "SELECT * FROM signboom_feature WHERE ID = ".$id;
-    $rs = mysql_query($qry, $DBConn) or die(mysql_error());
-    if (mysql_num_rows($rs) == 0) return "Not Available";
-    $msg = mysql_result($rs,0,'Desc');
+    $rs = mysqli_query( $DBConn, $qry) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+    if (mysqli_num_rows($rs) == 0) return "Not Available";
+    $msg = mysqli_result($rs, 0, 'Desc');
     return $msg;
   } 
 
   function GetDiscount($id) {
     global $database_DBConn, $DBConn;
     $qry = "SELECT * FROM signboom_discount WHERE Enabled = 1 AND ID = '".$id."'";
-    $rs = mysql_query($qry, $DBConn) or die(mysql_error());
-    if (mysql_num_rows($rs) == 0) return 0;
-    return mysql_result($rs,0,'Dct');
+    $rs = mysqli_query( $DBConn, $qry) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+    if (mysqli_num_rows($rs) == 0) return 0;
+    return mysqli_result($rs, 0, 'Dct');
   } 
 
   function stripname($f) {

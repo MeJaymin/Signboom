@@ -33,7 +33,7 @@
 
       <?php
         if (strcmp($edit_mode, "edit") == 0)
-          echo "<h1>Edit Incident $incided_id</h1>";
+          echo "<h1>Edit Incident $incident_id</h1>";
         else
           echo '<h1>Create New Incident</h1>';
       ?>
@@ -65,7 +65,7 @@
           <input type="hidden" name="incident_id" value="<?php echo $incident_id; ?>">
 
           <ul class="vertical">
-	    <?php if (!$hide_incident_id): ?>
+	    <?php if (!isset($hide_incident_id)): ?>
             <li>
               <label for="incident_id">Incident ID:</label>
               <input type="text" name="incident_id" maxlength="10" DISABLED value="<?php echo $incident_id; ?>">
@@ -73,7 +73,7 @@
 	    <?php endif; ?>
             <li>
               <label for="incident_date">Date:</label>
-              <input type="text" style="width: 100px;" name="incident_date" value="<?echo $incident_date; ?>" > 
+              <input type="text" style="width: 100px;" name="incident_date" value="<?php echo $incident_date; ?>" > 
               <input type=button value="Calendar" onclick="displayDatePicker('incident_date', this);">
             </li>
             <li>

@@ -5,6 +5,7 @@
     <td class="heading">Ready</td>
 <?php 
 /* TO DO */
+$order_page ="";
 if ($order_page == "LATES") { 
     echo '<td class="heading">Completed Date</td>';
 }
@@ -36,7 +37,9 @@ if ($order_page == "LATES") {
     }
     else
     {
-      $span = 8;
+      /*@Author: Jaymin*/
+      echo ' <td class="heading">Queue</td>';
+      $span = 9;
     }
     ?>
   </tr>

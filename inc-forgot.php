@@ -9,7 +9,7 @@
     <br><br><br>
     <!-- <form action=<?//=$PHP_SELF;?> method="POST"> -->
 	<form action=<?php echo $_SERVER['PHP_SELF'] ;?> method="POST">
-      <? if($state==0)
+      <?php if($state==0)
       {?>
         <!--ENTER EMAIL ADDRESS-->
           Your Email Address: 
@@ -20,14 +20,14 @@
           <br><br>
           <input type="button" value="Cancel" onClick="window.close()">
           <input type="submit" name="btnNext" value="Next >">
-      <?}
-      elseif($state==1)
+      <?php }
+      else if($state==1)
       {
-		$email = $_POST['email'];
+		    $email = $_POST['email'];
 		  ?>
         <!--ENTER ANSWER-->
           Please answer your security question...<br><br>
-          <? echo $hint_question; ?>
+          <?php echo $hint_question; ?>
           <br>
           <input type="text" name="txtHinta" size="20" maxlength="32">
           <br><br>
@@ -35,9 +35,9 @@
           <input type="submit" name="btnNext" value="Next >">
           <!-- <input type="hidden" name="email" value="<?//=$email;?>"> -->
 		  <input type="hidden" name="email" value="<?php echo $email;?>">
-      <?}?>
-    <input type="hidden" name="state" value="<?=$state;?>">
-    <input type="hidden" name="hintq" value="<?=$hintq;?>">
+      <?php }?>
+    <input type="hidden" name="state" value="<?php echo $state;?>">
+    <input type="hidden" name="hintq" value="<?php echo $hintq;?>">
     </form>
     </div>
 

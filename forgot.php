@@ -1,4 +1,4 @@
-<?
+<?php
   require_once( "includes/inc-mysql.php" );
   require_once( "includes/inc-signboom.php" );
   require_once( "includes/utils.php" );
@@ -51,9 +51,9 @@ function makeRandomPassword() {
 	$USRhinta=strtolower($_POST['txtHinta']);
 	
     $myquery="SELECT * FROM signboom_user WHERE email='$email'";
-    $result=mysql_query($myquery);
+    $result=mysqli_query($GLOBALS["___mysqli_ston"], $myquery); 
 
-    while($myrow=mysql_fetch_array($result)){
+    while($myrow=mysqli_fetch_array($result)){ 
       $hinta=$myrow['hinta'];
       $userName=$myrow['userName'];
       $userPass=$myrow['userPass'];
@@ -78,7 +78,7 @@ function makeRandomPassword() {
 
       $myquery="UPDATE signboom_user SET userPass='$encpass' WHERE email='$email'";
 
-      $result=mysql_query($myquery);
+      $result=mysqli_query($GLOBALS["___mysqli_ston"], $myquery); 
 
 //////////////////////////
 //MAIL USER
@@ -115,9 +115,9 @@ function makeRandomPassword() {
 
 //GET ACCOUNT
     $myQuery="SELECT * FROM signboom_user WHERE email='$email'";
-    $result=mysql_query($myQuery);
+    $result=mysqli_query($GLOBALS["___mysqli_ston"], $myQuery); 
 
-    if(0==mysql_num_rows($result)){ //ERROR NOT FOUND
+    if(0==mysqli_num_rows($result)){ //ERROR NOT FOUND 
       $errMsg="No account was found for email address $email.";
 //DEBUG
       if($debug){
@@ -126,7 +126,7 @@ function makeRandomPassword() {
       return(-1);
     }
 
-    while($myrow=mysql_fetch_array($result)){
+    while($myrow=mysqli_fetch_array($result)){ 
       $ID=$myrow['ID'];
       $hintq=$myrow['hintq'];
     }
@@ -167,12 +167,13 @@ function makeRandomPassword() {
 ////////////////////////////////////
   //if(isset($btnNext)){
 	if(isset($_POST['btnNext'])){
-	$state = $_POST['state'];
+  $state = $_POST['state'];
     switch($state){
       case 0:
 		//$res = checkEmail($_POST['email']);
 		//echo "res : " . $res; die;
         if($result=checkEmail($_POST['email'])){
+          //print_r($result); die;
           switch($result){
             case 1:
               $errMsg="Please enter your email address.";

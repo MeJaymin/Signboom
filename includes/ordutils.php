@@ -37,6 +37,17 @@
   $i = 0;
   while ($row = mysqli_fetch_array($result,  MYSQLI_BOTH)) { 
     $i++;
+    if(!isset($shipto[$i]))
+    {
+      $shipto[$i] = new stdClass();
+      $shipto[$i]->ID = "";
+      $shipto[$i]->name = "";
+      $shipto[$i]->address = "";
+      $shipto[$i]->city = "";
+      $shipto[$i]->state = "";
+      $shipto[$i]->zip = "";
+      $shipto[$i]->country = "";
+    }
     $shipto[$i]->ID = $row['ID'];
     $shipto[$i]->name = $row['name'];
     $shipto[$i]->address = $row['address'];
@@ -53,6 +64,14 @@
   $i = 0;
   while ($row = mysqli_fetch_array($result,  MYSQLI_BOTH)) { 
     $i++;
+    if(!isset($discount[$i]))
+    {
+      $discount[$i] = new stdClass();
+      $discount[$i]->ID = "";
+      $discount[$i]->Desc = "";
+      $discount[$i]->Footage = "";
+      $discount[$i]->Dct = "";
+    }
     $discount[$i]->ID = $row['ID'];
     $discount[$i]->Desc = $row['Desc'];
     $discount[$i]->Footage = $row['Footage'];
@@ -74,12 +93,33 @@
 
   // Get full province name from two digit code
   function GetProv($prov, $arrProvState) {
-      if(count($arrProvState)) {
-      while( list($id, $val) = each($arrProvState) ){
+      if(count($arrProvState)) 
+      {
+        /*echo '<pre>';
+        echo $prov;
+        print_r($arrProvState); */
+        foreach($arrProvState as $akey => $aval)
+        {
+            /*echo $prov.'<br>';
+            echo $akey.'-->'.$aval.'<br>';*/
+            if($akey != '0')
+            {
+              if($akey == $prov)  
+              {
+                echo $aval;  
+              } 
+            }
+          
+          /*if($akey == $prov)  
+          {
+            return ($aval);  
+          }*/
+        }
+      /*while( list($id, $val) = each($arrProvState) ){
         if ($id === $prov) {
           return ($val);
         }
-      }
+      }*/
     }
     return "";
   }

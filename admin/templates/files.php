@@ -13,12 +13,12 @@
 
   <div id="page">
 
-    <?php include ('templates/banner-menu.php'); ?>
+    <?php include ('banner-menu.php'); ?>
 
     <div id="content">
       <h1>Upload Files</h1>
       <div style="width: 600px; margin: 20px auto;">
-      <?php if ($message) echo '<p class="highlighted">'. $message . '</p>'; ?>
+      <?php if (isset($message)) echo '<p class="highlighted">'. $message . '</p>'; ?>
       <p>This is the place to upload any files that you want to link to in the product or finishing
       option pages. Once you've uploaded the file here, visit the <b>Products</b> or <b>Finishin</b>g page 
       and create a link to that file in the information about that item.</p>

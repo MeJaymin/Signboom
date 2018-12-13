@@ -137,6 +137,8 @@
         $units_of_measure = $row['Units'];
         $units_per_hour = $row['UnitsPerHour'];
         $reference = $row['Reference'];
+        // Free memory. 
+        ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
       }
     }
   }
@@ -164,8 +166,5 @@
 
   // Display the finishing option description in an editor. 
   include ('templates/edit-finishing-option.php'); 
-
-  // Free memory. 
-  ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
 
 ?>

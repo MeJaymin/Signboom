@@ -1,5 +1,5 @@
 <?php
-include 'helpers/db_helper.php';
+include_once 'helpers/db_helper.php';
 // text message build
   
   function bldmsg($rs, $dtl, $rsUser) {
@@ -29,7 +29,7 @@ include 'helpers/db_helper.php';
 
     $order_cost = 0.0;
     for ($i = 1; $i <= 10; $i++) { 
-      if ($dtl[$i]->code != "") {
+      if (isset($dtl[$i]->code) && $dtl[$i]->code != "") {
         $msg = $msg . "Product: "  . $dtl[$i]->code     . "\n";
         $msg = $msg . "Options: "  . $dtl[$i]->options  . "\n";
         $msg = $msg . "Quantity: " . $dtl[$i]->quantity . "\n";
@@ -38,9 +38,12 @@ include 'helpers/db_helper.php';
         $tmp = substr(strrchr($dtl[$i]->filename, "\\"), 1);
         $msg .= "Filename: " . ($tmp ? $tmp : $dtl[$i]->filename) . " ";
         // If there is a second filename, put it on the same line.
-        $tmp = substr(strrchr($dtl[$i]->filename2, "\\"), 1);
-        if ($dtl[$i]->filename2 != "") $msg .= " and " . $tmp;
-        $msg .= "\n\n";
+        if(isset($dtl[$i]->filename2))
+        {
+          $tmp = substr(strrchr($dtl[$i]->filename2, "\\"), 1);
+          if ($dtl[$i]->filename2 != "") $msg .= " and " . $tmp;
+          $msg .= "\n\n";
+        }
       }
     }
 
@@ -69,7 +72,7 @@ include 'helpers/db_helper.php';
     // as we do in the bldhtml() function which sends html confirmation emails.
     $linecode = "";
     for ($i = 1; $i <= 10; $i++) { 
-      if ($linecode != $dtl[$i]->code) {
+      if (isset($dtl[$i]->code) && $linecode != $dtl[$i]->code) {
         if ($linecode != "") {
           // This is a new medium.  Print out results for previous medium.
           $msg .= str_pad($linecode, 10);
@@ -90,7 +93,7 @@ include 'helpers/db_helper.php';
         $lineamt = 0;
       }
 
-      if ($dtl[$i]->code != "") {
+      if (isset($dtl[$i]->code) && $dtl[$i]->code != "") {
         $lineamt += (substr($dtl[$i]->total, 1));
         $wsfootage = trim($dtl[$i]->sqfootage);
         $linesfootage += $wsfootage;

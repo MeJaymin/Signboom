@@ -4,9 +4,9 @@ $aft_today = date('Y-m-d 15:00:00', time());
 
 /************ Build array of all existing product categories.  ************/
 $query_categories = 'SELECT code FROM signboom_category WHERE 1';
-$result_categories = mysql_query($query_categories, $DBConn) or die("queryDashboard: Could not read categories from database:" . mysql_error() . "<br><br>" . $query_categories);
+$result_categories = mysqli_query( $DBConn, $query_categories) or die("queryDashboard: Could not read categories from database:" . mysqli_error($GLOBALS["___mysqli_ston"]) . "<br><br>" . $query_categories);
 $array_categories = array();
-while ($row_category = mysql_fetch_array($result_categories))
+while ($row_category = mysqli_fetch_array($result_categories))
 {
   $category_name = $row_category['code'];
   $array_categories[] = $category_name;
@@ -154,8 +154,8 @@ End_Of_Query_9;
     $query_jobs = $query_part_1 . $query_part_2 . $query_part_3 . " ORDER BY signboom_allproducts.Category ASC, signboom_linedetail.product ASC, AdhesiveLamination ASC, RigidLamination ASC, AdhesivePrintSpeed ASC, BannerPrintSpeed ASC, RigidPrintSpeed ASC, AdhesiveInkFinish ASC, BannerInkFinish ASC, RigidInkFinish ASC, jobid ASC ";
     // WAS $query_jobs = $query_part_1 . $query_part_2 . $query_part_3 . " ORDER BY ProdnSortGroup ASC, ProdnSortOrder ASC, AdhesiveLamination ASC, RigidLamination ASC, AdhesiveCutting ASC, BannerCutting ASC, RigidCutting ASC, jobid ASC ";
 
-  $jobs = mysql_query($query_jobs, $DBConn) or die("queryDashboard: Could not read orders from database:" . mysql_error() . "<br><br>" . $query_jobs);
-  $number_of_rows = mysql_num_rows($jobs);
+  $jobs = mysqli_query( $DBConn, $query_jobs) or die("queryDashboard: Could not read orders from database:" . mysqli_error($GLOBALS["___mysqli_ston"]) . "<br><br>" . $query_jobs);
+  $number_of_rows = mysqli_num_rows($jobs);
   $num_jobs = $number_of_rows;
 
 ?>

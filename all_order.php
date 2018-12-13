@@ -8,7 +8,7 @@
   include ('includes/allutils_171126.php');
   include('includes/testmode.php');
 
-  session_start();
+  //session_start();
 
   if (isset($_SESSION['MM_Username'])) {
     $email = $_SESSION['MM_Username'];
@@ -16,7 +16,7 @@
 
   $loginUsername = $_SESSION['MM_Username'];
   setcookie("userid", $loginUsername, time() + (3600 * 24 * 60));
-  $oproduct = $_POST['oproduct'];
+  $oproduct = isset($_POST['oproduct'])?$_POST['oproduct']:"";
 
   $upload_server = "http://upload.signboom.com";
 ?>
@@ -47,6 +47,7 @@
   <script src="script/su-141109.js" LANGUAGE="JavaScript" TYPE="text/javascript"></script>
   <script src="script/allorder_180518c.js" LANGUAGE="JavaScript" TYPE="text/javascript"></script>
   <script src="script/format.js" LANGUAGE="JavaScript" TYPE="text/javascript"></script>
+  <script src="//mozilla.github.io/pdf.js/build/pdf.js"></script>
 
   <!--INTERNET EXPLORER SPECIFIC STYLING CODE FOLLOWS-->
   <?php
@@ -150,9 +151,9 @@
 
   </style>
 
-  <script language="JavaScript" type="text/JavaScript">
-  <!--
-  var categoryArray= new Array();
+  <script type="text/javascript">
+  
+  var categoryArray = new Array();
   var productArray = new Array();
   var optionCategoryArray = new Array();
   var finishingOptionArray = new Array();
@@ -182,12 +183,14 @@
   discountArray[0][1] = "";
 
   <?php
+    $defSetup="";
+    $defcutoff="";
     echol ('var acctpst = "'.$acctpst.'";');
     echol ('var account_discount_global = "'.$acctdct.'";');
     echol ('var defFreight = "'.$defFreightCharge.'";');
     echol ('var defZone = "'.$defZone.'";');
     echol ('var defZoneAdd = "'.$defZoneAdd.'";');
-    echol ('var stdSetup = "'.$defSetup.'";');
+    echol ('var stdSetup = "'.isset($defSetup)?$defSetup:"".'";');
     echol ('lastcity = "'.$acctcity.'";');
     echol ('laststate = "'.$acctprov.'";');
     echol ('freightcharge = parseFloat("'.$defFreightCharge.'");');
@@ -213,24 +216,78 @@
     foreach ($fproduct as $p) {
       $i++;
       echol ('productArray['.$i.'] = new Array();');
-      echol ('productArray['.$i.'][IdIdx] = "'.$p->id.'";');
-      echol ('productArray['.$i.'][CodeIdx] = "'.$p->code.'";');
-      echol ('productArray['.$i.'][NameIdx] = "'.$p->name.'";');
-      echol ('productArray['.$i.'][DescIdx] = "'.addcslashes($p->description, "\0..\057\072..\100\133..\140\173..\377").'";');
-      echol ('productArray['.$i.'][DescrImageIdx] = "'.addcslashes($p->descr_image, "\0..\057\072..\100\133..\140\173..\377").'";');
-      echol ('productArray['.$i.'][DescrTextIdx] = "'.addcslashes($p->descr_text, "\0..\057\072..\100\133..\140\173..\377").'";');
-      echol ('productArray['.$i.'][DescrFinishingIdx] = "'.addcslashes($p->descr_finishing, "\0..\057\072..\100\133..\140\173..\377").'";');
-      echol ('productArray['.$i.'][DescrLimitationsIdx] = "'.addcslashes($p->descr_limitations, "\0..\057\072..\100\133..\140\173..\377").'";');
-      echol ('productArray['.$i.'][DescrExtrasIdx] = "'.addcslashes($p->descr_extras, "\0..\057\072..\100\133..\140\173..\377").'";');
-      echol ('productArray['.$i.'][CategoryIdx] = "'.$p->category.'";');
-      echol ('productArray['.$i.'][PrintWidthIdx] = "'.$p->printwidth.'";');
-      echol ('productArray['.$i.'][PrintLengthIdx] = "'.$p->printlength.'";');
-      echol ('productArray['.$i.'][CostDiscIdx] = "'.$p->costdisc.'";');
-      echol ('productArray['.$i.'][CostNonIdx] = "'.$p->costnon.'";');
-      echol ('productArray['.$i.'][CostWasteIdx] = "'.$p->costwaste.'";');
-      echol ('productArray['.$i.'][SortGroupIdx]    = "'.$p->sort_group.'";');
-      echol ('productArray['.$i.'][SortOrderIdx]    = "'.$p->sort_order.'";');
-      echol ('productArray['.$i.'][BatchDayIdx]    = "'.$p->batch_day.'";');
+      if(isset($p->id))
+      {
+        echol ('productArray['.$i.'][IdIdx] = "'.$p->id.'";');
+      }
+      if(isset($p->code))
+      {
+        echol ('productArray['.$i.'][CodeIdx] = "'.$p->code.'";');
+      }
+      if(isset($p->name))
+      {
+        echol ('productArray['.$i.'][NameIdx] = "'.$p->name.'";');
+      }
+      if(isset($p->description))
+      {
+        echol ('productArray['.$i.'][DescIdx] = "'.addcslashes($p->description, "\0..\057\072..\100\133..\140\173..\377").'";');
+      }
+      if(isset($p->descr_image))
+      {
+        echol ('productArray['.$i.'][DescrImageIdx] = "'.addcslashes($p->descr_image, "\0..\057\072..\100\133..\140\173..\377").'";');
+      }
+      if(isset($p->descr_text))
+      {
+        echol ('productArray['.$i.'][DescrTextIdx] = "'.addcslashes($p->descr_text, "\0..\057\072..\100\133..\140\173..\377").'";');
+      }
+      if(isset($p->descr_finishing))
+      {
+        echol ('productArray['.$i.'][DescrFinishingIdx] = "'.addcslashes($p->descr_finishing, "\0..\057\072..\100\133..\140\173..\377").'";');
+      }
+      if(isset($p->descr_limitations))
+      {
+        echol ('productArray['.$i.'][DescrLimitationsIdx] = "'.addcslashes($p->descr_limitations, "\0..\057\072..\100\133..\140\173..\377").'";');
+      }
+      if(isset($p->descr_extras))
+      {
+        echol ('productArray['.$i.'][DescrExtrasIdx] = "'.addcslashes($p->descr_extras, "\0..\057\072..\100\133..\140\173..\377").'";');
+      }
+      if(isset($p->category))
+      {
+        echol ('productArray['.$i.'][CategoryIdx] = "'.$p->category.'";');
+      }
+      if(isset($p->printwidth))
+      {
+        echol ('productArray['.$i.'][PrintWidthIdx] = "'.$p->printwidth.'";');
+      }
+      if(isset($p->printlength))
+      {
+        echol ('productArray['.$i.'][PrintLengthIdx] = "'.$p->printlength.'";');
+      }
+      if(isset($p->costdisc))
+      {
+        echol ('productArray['.$i.'][CostDiscIdx] = "'.$p->costdisc.'";');
+      }
+      if(isset($p->costnon))
+      {
+        echol ('productArray['.$i.'][CostNonIdx] = "'.$p->costnon.'";');
+      }
+      if(isset($p->costwaste))
+      {
+        echol ('productArray['.$i.'][CostWasteIdx] = "'.$p->costwaste.'";');
+      }
+      if(isset($p->sort_group))
+      {
+        echol ('productArray['.$i.'][SortGroupIdx]    = "'.$p->sort_group.'";');
+      }
+      if(isset($p->sort_order))
+      {
+        echol ('productArray['.$i.'][SortOrderIdx]    = "'.$p->sort_order.'";');
+      }
+      if(isset($p->batch_day))
+      {
+        echol ('productArray['.$i.'][BatchDayIdx]    = "'.$p->batch_day.'";');
+      }
     }
     echol ('var numberOfProducts = "'.$i.'";');
 
@@ -339,12 +396,22 @@
 
     $i = 0;
     if (count($arrProvState)) {
-      while( list($id, $val) = each($arrProvState) ) {
+      //print_r($arrProvState);
+      /*while( list($id, $val) = each($arrProvState) ) {
         $i++;
         echol ('psArray['.$i.'] = new Array();');
         echol ('psArray['.$i.'][0] = "'.$id.'";');
         echol ('psArray['.$i.'][1] = "'.$val.'";');
+      }*/
+      $l=0;
+      foreach($arrProvState as $k => $v)
+      {
+        $l++;
+        echol ('psArray['.$l.'] = new Array();');
+        echol ('psArray['.$l.'][0] = "'.$k.'";');
+        echol ('psArray['.$l.'][1] = "'.$v.'";'); 
       }
+      //print_r($psArray);
     }
   ?>
 
@@ -358,9 +425,9 @@
 
 </head>
 
-<body<?php echo $body_class;?>>
+<body<?php echo isset($body_class)?$body_class:"";?>
 
-<?php echo $team_indicator;?>
+<?php echo isset($team_indicator)?$team_indicator:"";?>
 
   <div id="new_container" style="width: 1010px; margin: 10px auto;">
   <form action="" method="post" enctype="multipart/form-data" name="orderForm" id="orderForm">
@@ -439,7 +506,7 @@
         <tr>
           <td style="padding-right: 40px;">
              <a href="index.php"><img border="0" src="images/logo3d.jpg" width="308" height="54" alt="Signboom.com: Your online print engine"></a><br>
-	     <? if ($loginUsername == 'downloads@signboom.com') echo "<br><div style=\"background-color: yellow; font-size: 20pt; font-weight: bold; text-align: center;\">INCIDENT</div>"; ?>
+	     <?php if ($loginUsername == 'downloads@signboom.com') echo "<br><div style=\"background-color: yellow; font-size: 20pt; font-weight: bold; text-align: center;\">INCIDENT</div>"; ?>
           </td>
           <td>
             <a href="index.php" onClick="this.blur()"
@@ -574,7 +641,7 @@
         <td><a class="in_table" href="how_to_create_pdf.php" target="_blank">PDF Print File</a></td>
       </tr>
 
-<?
+<?php
   for ($i = 1; $i <= 10; $i++) {
 
     echol ('<tr>');
@@ -622,7 +689,7 @@
     echol ('<div id="totlinecost'.$i.'" style="color: #666666;">&nbsp;</div>');
     echol ('</td>');
     echol ('<td>');
-    echol ('<input name="file'.$i.'" type="file" id="file'.$i.'" class="myinput" onChange="ValName(file'.$i.')">');
+    echol ('<input name="file'.$i.'" type="file" id="file'.$i.'" class="myinput" data-id='.$i.'  onChange="ValName(file'.$i.')">');
     echol ('</td>');
     echol ('</tr>');
     echol ('<input name="tlin'.$i.'" type="hidden" id="tlin'.$i.'">');
@@ -657,7 +724,7 @@
           <div id="namebox">
             Company:
             <select class="select263" name="stcompany" id="stcompany" onChange="ChangeAddr()">
-              <option value="0" selected><? print $acctcompany; ?></option>
+              <option value="0" selected><?php print $acctcompany; ?></option>
               <option value="N">New Address</option>
               <?php
                 for ($i = 1; $i <= count($shipto); $i++) {
@@ -669,27 +736,27 @@
 
           <div id="txtaddrbox">
             Address: <input name="txtaddr" type="text" id="txtaddr" class="myinput" onFocus="this.blur();"
-              value="<? print ($acctaddr); ?>" size="40" maxlength="64"><br>
+              value="<?php print ($acctaddr); ?>" size="40" maxlength="64"><br>
           </div>
 
           <div id="txtcitybox">
             City: <input name="txtcity" type="text" id="txtcity" class="myinput" onFocus="this.blur();"
-              value="<? print ($acctcity); ?>" size="40" maxlength="32">
+              value="<?php print ($acctcity); ?>" size="40" maxlength="32">
           </div>
 
           <div id="provstatebox">
             Province: <input name="txtprovstate" type="text" id="txtprovstate" class="myinput"
-              value="<? print GetProv($acctprov, $arrProvState); ?>" size="40" maxlength="32" readonly="yes">
+              value="<?php print GetProv($acctprov, $arrProvState); ?>" size="40" maxlength="32" readonly="yes">
           </div>
 
           <div id="countrybox">
             Country: <input name="txtcountry" type="text" id="txtcountry" class="myinput"
-              value="<? print ($acctcountry); ?>" size="40" maxlength="32" readonly="yes">
+              value="<?php print ($acctcountry); ?>" size="40" maxlength="32" readonly="yes">
           </div>
 
           <div id="postalcodebox">
             Postal Code: <input name="txtzipcode" type="text" id="txtzipcode" class="myinput" onFocus="this.blur();"
-              value="<? print ($acctzip); ?>" size="40" maxlength="10">
+              value="<?php print ($acctzip); ?>" size="40" maxlength="10">
           </div>
 
           <div id="addaddressbox">
@@ -764,13 +831,13 @@
            <td>Pickup - Packed for Courier</td>
            <td><input name="ckpack" type="checkbox" id="ckpack" class="myinput" onClick="CheckDelivery('PACK')" value="checkbox">
            <td><input name="packcost" type="text" id="packcost" class="myinput"
-                 value="<?php print ('$'.number_format($packfee, 2)); ?>" size=8" readonly="yes">
+                 value="<?php $packfee = floatval($packfee); echo '$'.$packfee =number_format($packfee, 2, '.', ''); ?>" size=8" readonly="yes">
          </tr>
          <tr>
            <td>Ship Prepaid Ground (FOB)</td>
            <td><input name="ckppd" type="checkbox" id="ckppd" class="myinput" onClick="CheckDelivery('PPD')" value="checkbox" checked>
            <td><input name="ppdcost" type="text" id="ppdcost" class="myinput"
-                 value="<?php print ('$'.number_format($defFreightCharge, 2)); ?>" size=8" readonly="yes">
+                 value="<?php echo '$'.$defFreightCharge; /*print ('$'.number_format($defFreightCharge, 2));*/ ?>" size=8" readonly="yes">
          </tr>
       </table>
       </fieldset>

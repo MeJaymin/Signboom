@@ -3,8 +3,8 @@
 $date_time = date('Y-m-d H:i:s');
 
 $query_user = "SELECT firstName, lastName, email FROM signboom_user WHERE AcctName = '$the_username'";
-$result_user = mysql_query($query_user, $DBConn) or die(mysql_error());
-$row_user = mysql_fetch_assoc($result_user);
+$result_user = mysqli_query( $DBConn, $query_user) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+$row_user = mysqli_fetch_assoc($result_user);
 $name = $row_user['firstName'] . ' ' . $row_user['lastName'];
 $email_address = $row_user['email'];
 $headers = 'From: signboom@signboom.com';

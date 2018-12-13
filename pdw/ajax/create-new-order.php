@@ -23,9 +23,9 @@
 
   // Get information about that account from signboom_user database.
   $query_select = "SELECT ID, email, team FROM signboom_user WHERE AcctName = '$account_name'";
-  mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
-  $result_select = mysql_query($query_select, $DBConn) or die(mysql_error());
-  while ($row = mysql_fetch_array($result_select, MYSQL_BOTH)) 
+  mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+  $result_select = mysqli_query( $DBConn, $query_select) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+  while ($row = mysqli_fetch_array($result_select,  MYSQLI_BOTH)) 
   { 
     $user_id = $row['ID'];
     $email_address = $row['email'];
@@ -103,10 +103,10 @@ INSERT INTO signboom_ordermast SET
 End_Of_Query;
 
 //echo "g: $query";
-  mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
-  $result = mysql_query($query, $DBConn) or die(mysql_error());
+  mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+  $result = mysqli_query( $DBConn, $query) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
 
-  $new_order_id = mysql_insert_id($DBConn);
+  $new_order_id = ((is_null($___mysqli_res = mysqli_insert_id($DBConn))) ? false : $___mysqli_res);
   echo $new_order_id;
   return true;
 

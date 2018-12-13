@@ -1353,7 +1353,6 @@
     SetError("");
 
     if (!validatepage()) return;
-
     GetFreightCharges();  //Set global variable freightcharge in here (see orderutil.js)
 
   }

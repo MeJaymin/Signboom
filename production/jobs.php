@@ -10,14 +10,14 @@ include('includes/send_email.php');
 
 // Look up price above which an order is considered "expensive" and should be flagged in production.
 $query_expensive = "SELECT expensive FROM signboom_parm WHERE ID = 1";
-$result_expensive = mysql_query($query_expensive, $DBConn);
+$result_expensive = mysqli_query( $DBConn, $query_expensive);
 if (!$result_expensive)
 {
   $message = "I can't find the parameter to use for flagging orders as 'expensive'.";
 }
 else
 {
-  $row = mysql_fetch_array($result_expensive); 
+  $row = mysqli_fetch_array($result_expensive); 
   $expensive = $row['expensive'];
 }
 
@@ -28,7 +28,7 @@ else
 
 <head>
 
-  <title><?php echo $queue; ?></title>
+  <title><?php echo isset($queue)?$queue:""; ?></title>
 
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <link href="production-new.css?v=<?php echo mktime(); ?>" rel="stylesheet" type="text/css">
@@ -48,8 +48,10 @@ else
 
 <div style="width: 1200px; margin: 0px auto; text-align: center;">
 
-  <div style="float: left; margin-top: 20px;"><img src="../../images/logo3d.gif" width="308" height="54"></div>
-  <div style="float: right;"><h1>Order Processing System: <?php echo $product . ' ' . $queue; ?> (Files)</h1></div>
+  <div style="float: left; margin-top: 20px;"><img src="../images/logo3d.gif" width="308" height="54"></div>
+  <div style="float: right;"><h1>Order Processing System: <?php 
+   $queue=""; 
+  echo isset($product)?$product:"" . ' ' . isset($queue)?$queue:""; ?> (Files)</h1></div>
   <br style="clear: both;">
   <?php include('menu.html');?>
   <br><br>
@@ -89,7 +91,7 @@ else
     <?php
 
 
-      if ($_POST['update_jobs']) handle_submit_jobs($queue);
+      if (isset($_POST['update_jobs'])) handle_submit_jobs($queue);
       include('includes/query_queues.php');  
 
       include('includes/jobs_table_heading.html');
@@ -98,7 +100,7 @@ else
       $todays_date = date('Y-m-d');
 
       for ($i = 0; $i < $num_jobs; $i++) {
-        $row = mysql_fetch_assoc($jobs);
+        $row = mysqli_fetch_assoc($jobs);
         if ($row == FALSE)
           echo "Could not read job from database.";
         else
@@ -126,6 +128,6 @@ else
 </html>
 
 <?php
-mysql_free_result($jobs);
+((mysqli_free_result($jobs) || (is_object($jobs) && (get_class($jobs) == "mysqli_result"))) ? true : false);
 ?>
 

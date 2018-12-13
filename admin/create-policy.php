@@ -19,6 +19,7 @@
   $edited = false;
   $created = false;
   $edit_mode = "create";
+  $policy_id = "";
   if (isset($_POST['submit_create_policy'])) 
   {
     $policy_category = mysqli_real_escape_string($GLOBALS["___mysqli_ston"], $_POST['policy_category']);
@@ -53,21 +54,21 @@
       $policy_title = $row['Title'];
       $policy_display = $row['Display'];
       $policy_details = $row['Policy'];
+      // Free memory. 
+      ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
     }
   }
   else
   {
     $policy_id = "";
-    $policy_category = $row['Category'];
-    $policy_title = $row['Title'];
-    $policy_display = $row['Display'];
-    $policy_details = $row['Policy'];
+    $policy_category = isset($row['Category'])?$row['Category']:"";
+    $policy_title = isset($row['Title'])?$row['Title']:"";
+    $policy_display = isset($row['Display'])?$row['Display']:"";
+    $policy_details = isset($row['Policy'])?$row['Policy']:"";
   }
 
   // Display the product description in an editor. 
   include ('templates/edit-policy.php'); 
 
-  // Free memory. 
-  ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
 
 ?>

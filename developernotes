@@ -1,3 +1,53 @@
 1.admin done
 2.production a small bug it is redirecting to live site
 3. pdw done
+
+
+File need to be changed while going live
+admin
+auth.php
+pageauth.php
+pdw/alogin.php
+pdw/pageauth.php
+prodcution/prodauth.php
+production/logout.php
+production/offcuts.php
+production/client.php
+
+main site
+inc-mysql.php
+utils.php - changed function
+edit-customer in front end was already not working
+bug found when clicking on gree links in front end it is showing create account instead of my account only on this page
+
+
+Changes
+in Signboom_offcuts table default value table was expecting while inserting any values then it was expecting default value for date so I have changed the code and added date in code itself in create-offcut.php
+
+Ask jennifer for demo pdf files
+
+
+Issues
+When I am in ready queue and I am confirming one order while in live it goes to different queues and while in local i found code bug. Need to test it
+
+While In Files Queue date is not cmimh properly and also Options are coming in checkboxes instead of Name of Queue
+
+
+While in production logout is not working from before
+
+
+build_message.php-- I have changed awhole lot of code here..for file uploading
+
+
+Doubts - After FIle uploading, does mail really works here?
+Doubts _ I have not test confirmation email section as we already have
+seperate tasks for confirmation email, as of now I just have kept the older version
+----
+Doubts - In pdw/dashboard.php, what I found is I have commented one line of including file, that file he is including is probably not there.
+While in same file date_picker was also not ther I have copied from production includes folder.
+
+Completed so far
+admin done
+main-ordering system done
+production done
+pdw - remaining

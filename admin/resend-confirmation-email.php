@@ -1,9 +1,8 @@
 <?php 
   include ('authadmin.php'); 
   include ('helper-functions.php');
-  include 'helpers/db_helper.php'; 
+  //include 'helpers/db_helper.php'; 
   mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
-
   //require_once('../Connections/DBConn.php'); 
   require_once('../includes/mailord.php'); 
   include('../includes/utils.php');

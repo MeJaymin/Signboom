@@ -19,6 +19,7 @@
   $created = false;
   $edited = false;
   $edit_mode = "edit";
+  $policy_id="";
   if (isset($_REQUEST['id']))
   {
     $policy_id = $_REQUEST['id'];

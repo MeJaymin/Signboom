@@ -1,6 +1,6 @@
 <?php 
 require('authadmin.php');
-
+mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
 $query_jobs = <<< End_Of_Query
 (SELECT signboom_ordermast.ID AS orderid, signboom_linedetail.id AS jobid, 
         signboom_linedetail.product AS product, signboom_ordermast.ordertype AS ordertype,
@@ -17,8 +17,9 @@ $query_jobs = <<< End_Of_Query
 ORDER BY product ASC
 End_Of_Query;
 
-$jobs = mysql_query($query_jobs, $DBConn) or die(mysql_error());
-$num_jobs = mysql_num_rows($jobs);
+$jobs = mysqli_query( $DBConn, $query_jobs) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+$num_jobs = mysqli_num_rows($jobs);
+$my_debug="";
 if ($my_debug) echo "Number of files found by query: $num_jobs<br>";
 
 $product_footage = 0;
@@ -34,7 +35,7 @@ for ($i = 0; $i < $num_jobs; $i++)
 {
 
   // Grab a job from the query results.
-  $row = mysql_fetch_assoc($jobs);
+  $row = mysqli_fetch_assoc($jobs);
   if ($row == FALSE) echo "Could not read job from database.";
 
   $row['cost'] = ltrim($row['cost'], "$"); // remove dollar sign before saving cost, so we can add cost up
@@ -93,7 +94,7 @@ $this_product['squarefootage'] = sprintf('%.3f', $product_footage);
 $this_product['cost'] = sprintf('$%.2f', $product_cost);
 $product_information[] = $this_product;
 
-mysql_free_result($jobs);
+((mysqli_free_result($jobs) || (is_object($jobs) && (get_class($jobs) == "mysqli_result"))) ? true : false);
 
 // Now calculate rush costs for orders placed through regular order system.
 $order_rush_fees = 0;
@@ -101,12 +102,12 @@ for ($j = 0; $j < count($rush_orders); $j++)
 {
   $order_id = $rush_orders[$j];
   $query_rush_order = "SELECT rushfee FROM signboom_ordermast WHERE ID = $order_id";
-  $rush_order = mysql_query($query_rush_order, $DBConn) or die(mysql_error());
-  $row = mysql_fetch_assoc($rush_order);
+  $rush_order = mysqli_query( $DBConn, $query_rush_order) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+  $row = mysqli_fetch_assoc($rush_order);
   $rush_fee = ltrim($row['rushfee'], "$"); // remove dollar sign before saving cost, so we can add cost up
   //echo "order $order_id rush fee $rush_fee<br>";
   $order_rush_fees += $rush_fee;
-  mysql_free_result($rush_order);
+  ((mysqli_free_result($rush_order) || (is_object($rush_order) && (get_class($rush_order) == "mysqli_result"))) ? true : false);
 }
 
 $total_total = $total_cost + $total_rush_fees + $order_rush_fees;

@@ -7,8 +7,12 @@
 
   // SESSION HANDLER
   //session_save_path("/home/users/web/b516/as.signboom/phpsessions");
-  session_save_path("/opt/lampp/temp/");
-  session_start();
+  /*session_save_path("/opt/lampp/temp/");*/
+  session_save_path("/var/www/html/");
+  if(!session_start())
+  {
+    session_start();
+  }
 
   if (isset($_GET['account'])) {
     $account = $_GET['account'];
@@ -25,7 +29,7 @@
 
   <div style="margin: 0px auto; width: 380px;">
     <div style="text-align: center;">
-    <img src="../../images/logo3d.gif" width="308" height="54"><br>
+    <img src="../images/logo3d.gif" width="308" height="54"><br>
     <p style="font-size:22px; font-weight:bold;">Client Contact Information<br>
 
   <?php
@@ -35,16 +39,16 @@
 
       // Connect to the database.
       include('../Connections/DBConn.php');
-
+      mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
       // Query the user database for all clients.
       $myQuery = "SELECT * FROM signboom_user WHERE AcctName='$account'";
-      $result = mysql_query($myQuery);
-      $num_rows = mysql_num_rows($result);
+      $result = mysqli_query($GLOBALS["___mysqli_ston"], $myQuery);
+      $num_rows = mysqli_num_rows($result);
       if ($num_rows == 0) {
         echo "Could not find client $account in database.<br>";
       }
       else {
-        while($myrow = mysql_fetch_array($result)) {
+        while($myrow = mysqli_fetch_array($result)) {
           echo "<b>Account Id:</b> " . $myrow['ID'] . "<br>";
           echo "<b>Account Name:</b> " . $myrow['AcctName'] . "<br>";
           echo "<b>First Name:</b> " . $myrow['firstName'] . "<br>";
@@ -69,7 +73,7 @@
       }
   
       // Disconnect from the database.
-      mysql_close ($DBConn);
+      ((is_null($___mysqli_res = mysqli_close($DBConn))) ? false : $___mysqli_res);
     }
     else {
         echo "No client specified.</p></div>";

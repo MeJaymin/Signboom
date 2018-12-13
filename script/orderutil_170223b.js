@@ -39,8 +39,89 @@
       NameAlert(f);
       return false;
     }
+    // @Author: Jaymin
+    // @Description: Now function will call to calculate height width
+    //  of selected file in inches(mm too)
+    // @Date: 11/12/2018
+    var current_id= f.getAttribute('data-id');
+    var selectedFileAttr = f.id;
+    convertToBase64(selectedFileAttr, current_id);
     return true;
   }
+
+// @Author: Jaymin
+// @Description: Convert selected file to base64 string
+// @Date: 11/12/18
+
+function convertToBase64(selectedFileAttr,current_id) 
+{
+    //Read File
+    var selectedFile = document.getElementById(selectedFileAttr).files;
+    //Check File is not Empty
+    if (selectedFile.length > 0) 
+    {
+        // Select the very first file from list
+        var fileToLoad = selectedFile[0];
+        // FileReader function for read the file.
+        var fileReader = new FileReader();
+        var base64;
+        // Onload of file read the file content
+        fileReader.onload = function(fileLoadedEvent) {
+            base64 = fileLoadedEvent.target.result;
+            // Print data in console
+            var base64result = base64.split(',');
+            var base64string = base64result[1];
+            console.log(base64string);
+            calculateHeightWidth(base64string, current_id);
+        };
+        // Convert data to base64
+        fileReader.readAsDataURL(fileToLoad);
+    }
+}
+// @Author: Jaymin
+// @Description: Calculate height and width of selected file in mm and inches
+// @Date: 11/12/18
+function calculateHeightWidth(base64string,current_id)
+{
+  var pdfData = atob(base64string);
+  // Loaded via <script> tag, create shortcut to access PDF.js exports.
+  var pdfjsLib = window['pdfjs-dist/build/pdf'];
+
+  // The workerSrc property shall be specified.
+  pdfjsLib.GlobalWorkerOptions.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.js';
+
+  // Asynchronous download of PDF
+  var loadingTask = pdfjsLib.getDocument({data: pdfData});
+  loadingTask.promise.then(function(pdf) {
+    console.log('PDF loaded');
+    
+    // Fetch the first page
+    var pageNumber = 1;
+    pdf.getPage(pageNumber).then(function(page) {
+      console.log('Page loaded');
+      var vp = page.getViewport(/* scale = */ 1.0);
+      console.log((vp.width / 72) + 'in x ' + (vp.height / 72) + 'in');
+      var inch_width = vp.width / 72;
+      var inch_height = vp.height / 72;
+      inch_width = Math.round(inch_width);
+      inch_height = Math.round(inch_height); 
+      //Now auto-populating fields by calculating from selected file
+      document.getElementById('widthi'+current_id).value = inch_width;
+      document.getElementById('heighti'+current_id).value = inch_height;
+
+      console.log("width inch "+inch_width+" height inch "+ inch_height);
+      var mm_width = inch_width*25.4;
+      var mm_height = inch_height*25.4;
+      mm_width = Math.round(mm_width);
+      mm_height = Math.round(mm_height);
+      console.log("width mm "+mm_width+" height mm "+ mm_height);
+    });
+  }, function (reason) {
+    // PDF loading error
+    console.error(reason);
+  });
+}
+
   function NameAlert(f) {
     alert("We can only accept Adobe PDF files on this order form.\nThis file must end with .pdf.\nIf you do not have a PDF version of this\nfile, please upload it to us through our\n Artwork Services page.\n\nThank You");
     //f.value = "";  //This only works on IE
@@ -443,6 +524,7 @@
 // This routine uses findfreight.php to retrieve freight charges dynamically via
 // the iframe 'workFrame'
   function GetFreightCharges() {
+    //alert("Maybe here");
     currcity = document.getElementById("txtcity").value;
     if (document.getElementById("txtprovstate")) {
       currstate = GetAbbrev(document.getElementById("txtprovstate").value);}
@@ -452,8 +534,8 @@
       freightcharge = 0;
     }
 
-    //alert(lastcity + ":" + currcity);
-    //alert(laststate+ ":" + currstate);
+    // alert(lastcity + ":" + currcity);
+    // alert(laststate+ ":" + currstate);
     if (((lastcity == currcity) && (laststate == currstate)) || (NotCanadaDest())) {
       lastcity = currcity;
       laststate = currstate;

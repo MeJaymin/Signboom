@@ -21,16 +21,24 @@ if(isset($_REQUEST['product']))
 
 // Look up price above which an order is considered "expensive" and should be flagged in production.
 $query_expensive = "SELECT expensive FROM signboom_parm WHERE ID = 1";
-$result_expensive = mysql_query($query_expensive, $DBConn);
+$result_expensive = mysqli_query( $DBConn, $query_expensive);
 if (!$result_expensive)
 {
   $message = "I can't find the parameter to use for flagging orders as 'expensive'.";
 }
 else
 {
-  $row = mysql_fetch_array($result_expensive); 
+  $row = mysqli_fetch_array($result_expensive); 
   $expensive = $row['expensive'];
 }
+
+$order="";
+$queue="";
+if(isset($_GET['queue']))
+{
+  $queue=$_GET['queue'];
+}
+$product="";
 ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -98,13 +106,17 @@ else
       $today = date("m/d/Y");
       $todays_date = date('Y-m-d');
 
-      if ($_POST['update_orders']) handle_submit_orders($queue);
+      if (isset($_POST['update_orders'])) 
+      {
+        $queue = $_POST['queue'];
+        handle_submit_orders($queue);
+      }
       include('includes/query_queues.php');
 
       // All the orders are shown on one page.
       for ($j = 0, $i = 0; $i < $num_jobs; $i++) {
 
-        $row_orders = mysql_fetch_assoc($jobs);
+        $row_orders = mysqli_fetch_assoc($jobs);
         if ($row_orders == FALSE) echo "Could not read order from database.";
     
         // Display each order only once.  Put all results on one page.
@@ -127,5 +139,5 @@ else
 </body>
 </html>
 <?php
-mysql_free_result($orders);
+/*((mysqli_free_result($orders) || (is_object($orders) && (get_class($orders) == "mysqli_result"))) ? true : false);*/
 ?>

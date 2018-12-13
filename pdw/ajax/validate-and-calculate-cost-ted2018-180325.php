@@ -34,9 +34,9 @@
     // If we do that, we would compare due_date against (today + cutoff_days + extra_days)
 
     $query = "SELECT cutofftime FROM signboom_parm WHERE ID = 1"; 
-    mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
-    $result = mysql_query($query, $DBConn) or die(mysql_error());
-    while ($row = mysql_fetch_array($result, MYSQL_BOTH)) 
+    mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+    $result = mysqli_query( $DBConn, $query) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+    while ($row = mysqli_fetch_array($result,  MYSQLI_BOTH)) 
     { 
       $cutoff_time = $row['cutofftime'];
     }
@@ -78,9 +78,9 @@
     {
       $finishing_option_code = $finishing_options_array[$i];
       $query = "SELECT * FROM signboom_product_finishing WHERE ProductCode = '$product' AND FinishingOptionCode = '$finishing_option_code' AND Value = 2";
-      mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
-      $result = mysql_query($query, $DBConn) or die(mysql_error());
-      if (mysql_num_rows($result) == 0)
+      mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+      $result = mysqli_query( $DBConn, $query) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+      if (mysqli_num_rows($result) == 0)
         return false;
     }
 
@@ -103,7 +103,7 @@
 
     // Once we have PHP 5.1 and can set the default time zone, we can get rid of the -3 in the line below.
     $today_vancouver = mktime(date("H")-3, date("i"), date("s"), date("m"), date("d"), date("Y"));
-    $today = date("Y-m-d H:i:s", $today_vancouver);   // e.g.2001-03-10 17:16:18 (the MySQL DATETIME format)
+    $today = date("Y-m-d H:i:s", $today_vancouver);   // e.g.2001-03-10 17:16:18 (the mysql DATETIME format)
     $hour = date("H", $today_vancouver);
     $day = date("d", $today_vancouver);
     $month = date("m", $today_vancouver);
@@ -339,9 +339,9 @@
 
     // Check that this product/finishing code combination is valid for that client.
     $query = "SELECT Id FROM signboom_user_products WHERE AcctName = '$account_name' AND ProductCode = '$product_code' AND FinishingCode = '$finishing' AND (Enabled = 1 OR Enabled = 2)"; 
-    mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
-    $result = mysql_query($query, $DBConn) or die(mysql_error());
-    if (mysql_num_rows($result) == 0)
+    mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+    $result = mysqli_query( $DBConn, $query) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+    if (mysqli_num_rows($result) == 0)
     {
       $error_message = "There is an error in file name '" . $original_file_name . 
             "'.\n\nYou've specified a finishing option which is not valid, or which is not valid for that product. Please review the instructions at the top of this page for valid options." . $error_message_end;
@@ -574,9 +574,9 @@
       $option_name = $finishing_options_array[$i];  // e.g. AF-X
 
       $query = "SELECT * FROM signboom_finishing WHERE Code = '$option_name'"; 
-      mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
-      $result = mysql_query($query, $DBConn) or die(mysql_error());
-      while ($row = mysql_fetch_array($result, MYSQL_BOTH)) 
+      mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+      $result = mysqli_query( $DBConn, $query) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+      while ($row = mysqli_fetch_array($result,  MYSQLI_BOTH)) 
       { 
         $variable_cost = $row['Variable'];
         $fixed_cost = $row['Fixed'];
@@ -695,9 +695,9 @@
     $cutoff_days_for_hot = 3;
     $cutoff_days_for_rush = 6;
     $query = "SELECT cutofftime, inkcost, wastefactor, cutoffdaysrush, cutoffdayshot FROM signboom_parm WHERE ID = 1"; 
-    mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
-    $result = mysql_query($query, $DBConn) or die(mysql_error());
-    while ($row = mysql_fetch_array($result, MYSQL_BOTH)) 
+    mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+    $result = mysqli_query( $DBConn, $query) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+    while ($row = mysqli_fetch_array($result,  MYSQLI_BOTH)) 
     { 
       $cutoff_time = $row['cutofftime'];
       $ink_cost = $row['inkcost'];
@@ -705,47 +705,47 @@
       $cutoff_days_for_rush = $row['cutoffdaysrush'];
       $cutoff_days_for_hot = $row['cutoffdayshot'];
     } 
-    mysql_free_result($result);
+    ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
 
     //echo "cutoff time: $cutoff_time, ink cost: $ink_cost, waste factor: $waste_factor, cutoff days: rush = $cutoff_days_for_rush, hot = $cutoff_days_for_hot<br><br>";
 
     // These are customer specific. 
     // e.g. S70 = 70%,  S40 = 40%, 100 = 10%
     $query = "SELECT dct FROM signboom_user WHERE AcctName = '$account_name'"; 
-    mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
-    $result = mysql_query($query, $DBConn) or die(mysql_error());
-    if (mysql_num_rows($result) == 0)
+    mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+    $result = mysqli_query( $DBConn, $query) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+    if (mysqli_num_rows($result) == 0)
       //return -1; // indicate error
       exit(-1);
-    while ($row = mysql_fetch_array($result, MYSQL_BOTH)) 
+    while ($row = mysqli_fetch_array($result,  MYSQLI_BOTH)) 
     { 
       $discount_code = $row['dct'];
     } 
-    mysql_free_result($result);
+    ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
 
     //echo "discount code = $discount_code<br><br>";
 
     $discount_percent = 0;
     $query = "SELECT Dct FROM signboom_discount WHERE ID = '$discount_code'"; 
-    mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
-    $result = mysql_query($query, $DBConn) or die(mysql_error());
-    while ($row = mysql_fetch_array($result, MYSQL_BOTH)) 
+    mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+    $result = mysqli_query( $DBConn, $query) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+    while ($row = mysqli_fetch_array($result,  MYSQLI_BOTH)) 
     { 
       $discount_percent = $row['Dct'];
     } 
-    mysql_free_result($result);
+    ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
 
     //echo "discount percent = $discount_percent<br><br>";
 
     // Map this customer's 'product code' and 'finishing code' to the usual products and finishing options.
     $query = "SELECT * FROM signboom_user_products WHERE AcctName = '$account_name' AND ProductCode = '$product_code' AND FinishingCode = '$finishing_code'"; 
-    mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
-    $result = mysql_query($query, $DBConn) or die(mysql_error());
-    if (mysql_num_rows($result) == 0)
+    mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+    $result = mysqli_query( $DBConn, $query) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+    if (mysqli_num_rows($result) == 0)
       //return -1; // indicate error
       exit(-1);
     $finishing_options_array = array();
-    while ($row = mysql_fetch_array($result, MYSQL_BOTH)) 
+    while ($row = mysqli_fetch_array($result,  MYSQLI_BOTH)) 
     { 
       $product = $row['Code']; // this maps LOL to COR04, for example
       $category = $row['Category']; // Adhesive Media, Flexible Media or Rigid Media.
@@ -827,12 +827,12 @@
     $printwidth =  48.0; // default
     $printlength = 96.0; // default
     $query = "SELECT * FROM signboom_allproducts WHERE Code = '$product'";
-    mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
-    $result = mysql_query($query, $DBConn) or die(mysql_error());
-    if (mysql_num_rows($result) == 0)
+    mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+    $result = mysqli_query( $DBConn, $query) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+    if (mysqli_num_rows($result) == 0)
       //return -1; // indicate error
       exit(-1);
-    while ($row = mysql_fetch_array($result, MYSQL_BOTH)) 
+    while ($row = mysqli_fetch_array($result,  MYSQLI_BOTH)) 
     { 
       $category = $row['Category'];
       $printwidth = $row['Width'];
@@ -841,7 +841,7 @@
       $product_cost_nondiscountable = $row['CostNon'];
       $product_cost_discountable = $row['CostDisc'];
     } 
-    mysql_free_result($result);
+    ((mysqli_free_result($result) || (is_object($result) && (get_class($result) == "mysqli_result"))) ? true : false);
 
     //echo "product $product: width = $printwidth, length = $printlength, cost waste = $product_cost_waste, cost nondisc = $product_cost_nondiscountable, cost disc = $product_cost_discountable<br><br>";
 
@@ -1028,16 +1028,16 @@
 
       // Get most recently used (highest) linenum for that orderid from database
       $query = "SELECT linenum FROM signboom_linedetail WHERE orderid = $order_id ORDER BY linenum DESC";
-      mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
-      $result = mysql_query($query, $DBConn) or die(mysql_error());
-      if (mysql_num_rows($result) == 0)
+      mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+      $result = mysqli_query( $DBConn, $query) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+      if (mysqli_num_rows($result) == 0)
       {
         $line_number = 1;
       }
       else
       {
         // first response contains highest line number used so far
-        $row = mysql_fetch_array($result, MYSQL_BOTH); 
+        $row = mysqli_fetch_array($result,  MYSQLI_BOTH); 
         $line_number = $row['linenum'] + 1; // add one to get next line number to use
       }
 
@@ -1050,8 +1050,8 @@
 
       // Add new line item into linedetail database table
       $query = "INSERT INTO signboom_linedetail SET orderid = $order_id, linenum = $line_number, product = '$product', options = '$options', quantity = $quantity, itemheight = $wsheight, itemwidth = $wswidth, filename = '$file_name', cost = '$cost_line_total_formatted', dctcost = '$cost_discountable_formatted', proofed = 'no', printed = 'no', finished = 'no', packed = 'no', squarefootage = $sign_sqfootage_formatted, printedarea = $printed_sqfootage_formatted, wastearea = $waste_sqfootage_formatted, wastecost = $cost_waste, inkcost = $cost_ink, AF = '$af', AL = '$al', AI = '$ai', AP = '$ap', AK = '$ak', BF = '$bf', BB = '$bb', BI = '$bi', BP = '$bp', BK = '$bk', RF = '$rf', RL = '$rl', RB = '$rb', RH = '$rh', RE = '$re', RI = '$ri', RP = '$rp', RK = '$rk', RO = '$ro', EventLocationCode = '$event_location_code', readydate = '$readydate', readydatetime = '$readydatetime', rushtype = '$service_type', rushcost = '$service_cost_formatted'";
-      mysql_select_db($database_DBConn, $DBConn) or die(mysql_error());
-      $result = mysql_query($query, $DBConn) or die(mysql_error());
+      mysqli_select_db( $DBConn, $database_DBConn) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
+      $result = mysqli_query( $DBConn, $query) or die(mysqli_error($GLOBALS["___mysqli_ston"]));
 
       if ($result)
       {

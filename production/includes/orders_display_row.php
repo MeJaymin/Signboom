@@ -5,7 +5,7 @@
       $date_created = $row_orders['date_created'];
       $ready_date_with_time = $row_orders['readydate'];
       sscanf($ready_date_with_time, "%s %s", $ready_date, $time);
-      $readydateconfirmed = $row_orders['readydateconfirmed'];
+      $readydateconfirmed = isset($row_orders['readydateconfirmed'])?$row_orders['readydateconfirmed']:"";
       $reference_number = $row_orders['refnum'];
       $customer_notes = $row_orders['customernotes'];
       $email = $row_orders['email'];
@@ -13,7 +13,7 @@
       $rush_type = $row_orders['rushtype'];
       $uploaded = $row_orders['Uploaded'];
       $cost = str_replace('$', '', $row_orders['cost']); // from subtotal field in ordermast database
-      $time_completed = $row_orders['timecompleted'];
+      $time_completed = isset($row_orders['timecompleted'])?$row_orders['timecompleted']:"";
 
       $ship_attn = $row_orders['shipattn'];
       $ship_company = $row_orders['shipcompany'];
@@ -69,7 +69,7 @@
 	if (($rush_type == 'HOT') && ($ready_date_with_time == 'Call'))
 	  $lineitem_class = "lineitem_unconfirmed";
       }
-
+      $stage ="";
       if ($stage == "UPLOADING") {
         // On Uploading page want to include time, so don't do the parsing.
         $order_date = $date_created;

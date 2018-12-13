@@ -22,9 +22,9 @@
      $order_to_delete = $_POST['order_to_delete'];
      if ($order_to_delete != '') {
        $query_hide_order = "UPDATE signboom_ordermast SET hidden='yes' WHERE ID = '$order_to_delete'";
-       $result1 = mysql_query($query_hide_order, $DBConn);
+       $result1 = mysqli_query( $DBConn, $query_hide_order);
        $query_hide_files = "UPDATE signboom_linedetail SET currentqueue='Deleted' WHERE orderid = '$order_to_delete'";
-       $result2 = mysql_query($query_hide_files, $DBConn);
+       $result2 = mysqli_query( $DBConn, $query_hide_files);
        echo "<script language=\"javascript\">alert(\"Order " . $order_to_delete . " has been deleted.\");</script>";
        $order_hidden = 'yes';
      }
@@ -36,13 +36,13 @@
 
      // Don't display the Delete button if the order is already deleted.
      $sql_delete_check = "SELECT hidden FROM signboom_ordermast WHERE ID = $order_id";
-     $result_delete_check = mysql_query($sql_delete_check, $DBConn);
+     $result_delete_check = mysqli_query( $DBConn, $sql_delete_check);
      if (!$result_delete_check)
      {
        echo "Error #701 has occured while querying the database: $sql_delete_check.<br>Please contact Alison Taylor to investigate this.<br>";
        return false;
      }
-     $row_delete_check = mysql_fetch_array($result_delete_check); 
+     $row_delete_check = mysqli_fetch_array($result_delete_check); 
      $order_hidden = $row_delete_check['hidden']; // This value is also used in reject_order.php
    }
 

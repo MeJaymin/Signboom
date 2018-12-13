@@ -26,13 +26,11 @@
   global $arrCountry;
   global $arrHintQ;
   global $arrProv;
-
   // no database connction - bail with error message
   if( 0 != ConnectDB( "signboom_v1p5" ) ){ // GLOBAL_DB_NAME
     print "DB connection failed.";
     exit;
   }
-
 ////////////////////////////////////
 // BEGIN FUNCTIONS
 ////////////////////////////////////
@@ -105,11 +103,10 @@ function saveUser()
 
     // Check that you can connect to database.
     if( 0 != ConnectDB( "signboom_v1p5" ) ) //GLOBAL_DB_NAME
-	{ 
+	 { 
       print "DB connection failed.";
       exit;
     }
-	
     // Ensure that a new account is not created with same email as an existing one.
     $email=((isset($GLOBALS["___mysqli_ston"]) && is_object($GLOBALS["___mysqli_ston"])) ? mysqli_real_escape_string($GLOBALS["___mysqli_ston"], trim($email)) : ((trigger_error("[MySQLConverterToo] Fix the mysql_escape_string() call! This code does not work.", E_USER_ERROR)) ? "" : ""));
     $myQuery="SELECT * FROM signboom_user WHERE email='$email'"; 
